@@ -1,8 +1,11 @@
 package lv.adventus.seb;
 
 import javax.xml.bind.*;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class JAXB2Marshaller {
@@ -42,18 +45,41 @@ public class JAXB2Marshaller {
       body.getAny().add(cci);
       request.setUnifiedServiceHeader(header);
       request.setUnifiedServiceBody(body);
-      marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "");
-      marshaller.marshal(request, new FileOutputStream(xmlDocument));
+      ByteArrayOutputStream ba = new ByteArrayOutputStream();
+      marshaller.marshal(request, ba);
 
-    } catch (IOException e) {
+// remove unneeded xmlns info in the case <xsdBasedRequest>false</ns2:xsdBasedRequest>,  JMS attribute "xsdBasedMessage" = false
+      String s = RemoveXmlns(ba.toString());
+
+// write to file      
+	  FileWriter fileWriter = new FileWriter(xmlDocument);
+	  fileWriter.write(s);
+	  fileWriter.flush();
+	  fileWriter.close();
+   }
+    catch (IOException e) {
       System.err.println(e.toString());
 
-    } catch (JAXBException e) {
+    }
+    catch (JAXBException e) {
 
       System.err.println(e.toString());
 
     }
 
+  }
+// removes all xmlns related characters from a string  
+  public String RemoveXmlns(String s)
+  {
+	  StringBuilder b = new StringBuilder(s);
+	  int pos = b.indexOf("xmlns");
+	  int pos2 = b.indexOf(">", pos);
+	  b.delete(pos-1, pos2);
+	  pos = b.indexOf(":");
+	  pos2 = b.lastIndexOf("<", pos);
+	  String remove = b.substring(pos2+1, pos+1);
+	  String result = b.toString().replaceAll(remove,"");
+	  return result;
   }
 
   public static void main(String[] argv) {
