@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:UnifiedServiceRequest xmlns="http://www.seb.ee/contactcenter" xmlns:ns2="http://www.seb.ee/integration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="">
+    <ns2:unifiedServiceHeader>
+        <ns2:requestId>cc02ed3ebc-38ec-319c-9328-063c6fc93b55</ns2:requestId>
+        <ns2:serviceName>contactcenter.FindCustomerByPhoneOrPersonalCode_2</ns2:serviceName>
+        <ns2:userId>35503186196</ns2:userId>
+        <ns2:officerId>admin</ns2:officerId>
+        <ns2:xsdBasedRequest>false</ns2:xsdBasedRequest>
+        <ns2:responseIsCompressed>false</ns2:responseIsCompressed>
+        <ns2:requestServerId>test server id</ns2:requestServerId>
+        <ns2:channel>ContactCenter</ns2:channel>
+        <ns2:clientApplication>IVR</ns2:clientApplication>
+        <ns2:clientApplicationVersion>IVR 1.0</ns2:clientApplicationVersion>
+        <ns2:countryCode>EE</ns2:countryCode>
+        <ns2:remoteHost>test remote host</ns2:remoteHost>
+    </ns2:unifiedServiceHeader>
+    <ns2:unifiedServiceBody>
+        <contactcenter.FindCustomerByPhoneOrPersonalCode_2_Input>
+            <FindCustomerQuery>
+                <idCode>35503186196</idCode>
+                <userPhoneNumber></userPhoneNumber>
+            </FindCustomerQuery>
+        </contactcenter.FindCustomerByPhoneOrPersonalCode_2_Input>
+    </ns2:unifiedServiceBody>
+</ns2:UnifiedServiceRequest>

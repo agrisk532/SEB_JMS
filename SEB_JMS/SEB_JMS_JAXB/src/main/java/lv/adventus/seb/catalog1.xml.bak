@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<{http://www.seb.ee/integration}UnifiedServiceResponse>
+  <unifiedServiceHeader>
+    <requestId>cc02ed3ebc-38ec-319c-9328-063c6fc93b55</requestId>
+    <serviceName>contactcenter.FindCustomerByPhoneOrPersonalCode_2</serviceName>
+    <userId>35503186196</userId>
+    <officerId>admin</officerId>
+    <xsdBasedRequest>false</xsdBasedRequest>
+    <responseIsCompressed>false</responseIsCompressed>
+    <authenticationMethod/>
+    <avatar/>
+    <brand/>
+    <channel>ContactCenter</channel>
+    <clientId/>
+    <countryCode>EE</countryCode>
+    <department>0</department>
+    <homeBackend/>
+    <info/>
+    <language>EE</language>
+    <numberOfRModules>0</numberOfRModules>
+    <representativeId/>
+    <representativeCustomerId/>
+    <sessionKey/>
+    <timeStamp>2016-01-25T11:11:25.382</timeStamp>
+  </unifiedServiceHeader>
+<unifiedServiceBody>
+<contactcenter:contactcenter.FindCustomerByPhoneOrPersonalCode_2_Output xmlns:cmn="http://www.seb.ee/common" xmlns:contactcenter="http://www.seb.ee/contactcenter">
+<contactcenter:FindCustomerResponse>
+    <contactcenter:customerId>4278</contactcenter:customerId>
+    <contactcenter:idCode>35503186196</contactcenter:idCode>
+    <contactcenter:firstName>SIIVO</contactcenter:firstName>
+    <contactcenter:lastName>KIRJUTUS</contactcenter:lastName>
+    <contactcenter:userPhoneNumber>6459847,25646381</contactcenter:userPhoneNumber>
+  </contactcenter:FindCustomerResponse>
+  </contactcenter:contactcenter.FindCustomerByPhoneOrPersonalCode_2_Output>
+  </unifiedServiceBody>
+  </UnifiedServiceResponse>
