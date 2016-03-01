@@ -38,7 +38,6 @@ public class JAXB2UnMarshaller {
       int pos = s.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
       int pos2 = s.indexOf(">", pos);
       s = s.replace(s.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
-
       
       InputStream stream = new ByteArrayInputStream(s.getBytes());
       
@@ -60,6 +59,14 @@ public class JAXB2UnMarshaller {
     			  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
     	  System.out.println(o.getFindCustomerResponse().getFirstName());
     	  
+    	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+  		  for (int i = 0; i < errors.getError().size(); i++) {
+			System.out.println(errors.getError().get(i).getErrorClass());
+			System.out.println(errors.getError().get(i).getErrorCode());
+			System.out.println(errors.getError().get(i).getErrorObject().getValue());
+		}
+    	  
+    	  
       }
       
    // ContactcenterCheckAuthenticationCode2Output
@@ -71,6 +78,14 @@ public class JAXB2UnMarshaller {
         	  System.out.println(o.getAuthenticationResponse().getAuthenticationCode());
         	  System.out.println(o.getAuthenticationResponse().getUsername());
         	  System.out.println(o.getAuthenticationResponse().getChallengeCode());
+        	  
+        	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+      		  for (int i = 0; i < errors.getError().size(); i++) {
+    			System.out.println(errors.getError().get(i).getErrorClass());
+    			System.out.println(errors.getError().get(i).getErrorCode());
+    			System.out.println(errors.getError().get(i).getErrorObject().getValue());
+    		}
+
           }
 
    // ContactcenterGiveDigipassChallenge2Output
@@ -83,7 +98,15 @@ public class JAXB2UnMarshaller {
       		System.out.println(o.getGiveChallengeResponse().getChallengeCode());
       		System.out.println(o.getGiveChallengeResponse().getUsername());
       		System.out.println(o.getGiveChallengeResponse().getIdCode());
-      	  }
+      		
+      	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+    		  for (int i = 0; i < errors.getError().size(); i++) {
+  			System.out.println(errors.getError().get(i).getErrorClass());
+  			System.out.println(errors.getError().get(i).getErrorCode());
+  			System.out.println(errors.getError().get(i).getErrorObject().getValue());
+  		}
+
+  	  }
       
    	  else
    	  {
@@ -111,9 +134,9 @@ public class JAXB2UnMarshaller {
 	}
   
   public static void main(String[] argv) {
-    //File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
+    File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
     //File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output.xml");
-    File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
+    //File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
     System.out.println(xmlDocument.exists()); // prints true if a file exists at that location
     System.out.println(xmlDocument.getAbsoluteFile());// prints "c:\\eclipse\\eclipse.ini"
     JAXB2UnMarshaller jaxbUnmarshaller = new JAXB2UnMarshaller();

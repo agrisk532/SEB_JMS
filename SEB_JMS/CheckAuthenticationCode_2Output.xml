@@ -32,4 +32,21 @@
   </contactcenter:AuthenticationResponse>
   </contactcenter:contactcenter.CheckAuthenticationCode_2_Output>
 </unifiedServiceBody>
+  <unifiedServiceErrors>
+	<Error>
+	<errorClass>VALIDATIONERROR</errorClass> 
+	<errorCode>NO_CUSTOMER_FOUND</errorCode>
+	<errorObject>userPhoneNumber</errorObject>
+	</Error>
+	<Error>
+	<errorClass>VALIDATIONERROR</errorClass>
+	<errorCode>ANOTHERERRORCODE </errorCode>
+	<errorObject>anotherField</errorObject>
+	</Error>
+	<Error>
+	<errorClass>TECHNICALERROR</errorClass>
+	<errorCode>TECHNICALERRORCODE </errorCode>
+	<errorObject>TechnicalErrorField</errorObject>
+	</Error>		
+	</unifiedServiceErrors>
 </UnifiedServiceResponse>
