@@ -1,3 +1,5 @@
+lv\adventus\seb\GiveDigipassChallenge.class
+lv\adventus\seb\FindCustomerByPhoneOrPersonalCode.class
 lv\adventus\seb\ContactcenterGiveDigipassChallenge2Input.class
 lv\adventus\seb\JAXB2UnMarshaller.class
 lv\adventus\seb\package-info.class
@@ -7,10 +9,12 @@ lv\adventus\seb\AuthenticationQuery.class
 lv\adventus\seb\UnifiedServiceBody.class
 lv\adventus\seb\ContactcenterCheckAuthenticationCode2Input.class
 lv\adventus\seb\Error.class
+lv\adventus\seb\ServicesBase.class
 lv\adventus\seb\GiveDigipassResponse.class
 lv\adventus\seb\UnifiedServiceRequest.class
 lv\adventus\seb\ContactcenterFindCustomerByPhoneOrPersonalCode2Output.class
 lv\adventus\seb\ContactcenterCheckAuthenticationCode2Output.class
+lv\adventus\seb\CheckAuthenticationCode.class
 lv\adventus\seb\ContactcenterFindCustomerByPhoneOrPersonalCode2Input.class
 lv\adventus\seb\ObjectFactory.class
 lv\adventus\seb\ContactcenterGiveDigipassChallenge2Output.class
