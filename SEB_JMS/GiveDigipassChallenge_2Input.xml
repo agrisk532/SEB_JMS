@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<UnifiedServiceRequest>
+    <unifiedServiceHeader>
+        <requestId>cc02ed3ebc-38ec-319c-9328-063c6fc93b55</requestId>
+        <serviceName>contactcenter.GiveDigipassChallenge_2_Input</serviceName>
+        <userId>35503186196</userId>
+        <officerId>admin</officerId>
+        <xsdBasedRequest>false</xsdBasedRequest>
+        <responseIsCompressed>false</responseIsCompressed>
+        <requestRemoteHost>test remote host</requestRemoteHost>
+        <requestServerId>test server id</requestServerId>
+        <channel>ContactCenter</channel>
+        <clientApplication>IVR</clientApplication>
+        <clientApplicationVersion>IVR 1.0</clientApplicationVersion>
+        <countryCode>EE</countryCode>
+        <language>EE</language>
+    </unifiedServiceHeader>
+    <unifiedServiceBody>
+        <contactcenter.GiveDigipassChallenge_2_Input>
+            <GiveDigipassQuery>
+                <customerId>1234</customerId>
+                <idCode>4321</idCode>
+            </GiveDigipassQuery>
+        </contactcenter.GiveDigipassChallenge_2_Input>
+    </unifiedServiceBody>
+</UnifiedServiceRequest>

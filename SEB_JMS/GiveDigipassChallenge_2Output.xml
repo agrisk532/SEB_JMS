@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UnifiedServiceResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <unifiedServiceHeader>
+    <requestId>cca482bddf-5a20-319a-aa39-14f270d6610f</requestId>
+    <serviceName>contactcenter.GiveDigipassChallenge_2</serviceName>
+    <userId>F85354</userId>
+    <officerId>admin</officerId>
+    <xsdBasedRequest>false</xsdBasedRequest>
+    <responseIsCompressed>false</responseIsCompressed>
+    <authenticationMethod/>
+    <avatar/>
+    <brand/>
+    <channel>ContactCenter</channel>
+    <clientId/>
+    <countryCode>EE</countryCode>
+    <department>0</department>
+    <homeBackend/>
+    <info/>
+    <language>EE</language>
+    <numberOfRModules>0</numberOfRModules>
+    <representativeId/>
+    <representativeCustomerId/>
+    <sessionKey/>
+    <timeStamp>2016-01-25T11:14:22.483</timeStamp>
+  </unifiedServiceHeader>
+<unifiedServiceBody>
+<contactcenter:contactcenter.GiveDigipassChallenge_2_Output xmlns:cmn="http://www.seb.ee/common" xmlns:contactcenter="http://www.seb.ee/contactcenter">
+<contactcenter:GiveChallengeResponse xmlns:contactcenter="http://www.seb.ee/contactcenter">
+    <contactcenter:customerId>F85354</contactcenter:customerId>
+    <contactcenter:challengeCode>1904</contactcenter:challengeCode>
+    <contactcenter:username>florida</contactcenter:username>
+    <contactcenter:idCode>38207031078</contactcenter:idCode>
+  </contactcenter:GiveChallengeResponse>
+  </contactcenter:contactcenter.GiveDigipassChallenge_2_Output>
+</unifiedServiceBody>
+</UnifiedServiceResponse>

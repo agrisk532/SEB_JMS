@@ -14,41 +14,67 @@ public class JAXB2Marshaller {
     try {
 
       JAXBContext jaxbContext = JAXBContext.newInstance("lv.adventus.seb");
-
       Marshaller marshaller = jaxbContext.createMarshaller();
-
       marshaller.setProperty("jaxb.formatted.output", new Boolean(true));
 
       ObjectFactory factory = new ObjectFactory();
-
+      UnifiedServiceRequest request = factory.createUnifiedServiceRequest();
       UnifiedServiceHeader header = factory.createUnifiedServiceHeader();
+      UnifiedServiceBody body = factory.createUnifiedServiceBody();
+
       header.setChannel("ContactCenter");
       header.setClientApplication("IVR");
       header.setClientApplicationVersion("IVR 1.0");
       header.setCountryCode("EE");
+      header.setLanguage("EE");
       header.setOfficerId("admin");
       header.setRequestId("cc02ed3ebc-38ec-319c-9328-063c6fc93b55");
-      header.setRemoteHost("test remote host");
+      header.setRequestRemoteHost("test remote host");
       header.setRequestServerId("test server id");
       header.setResponseIsCompressed(false);
-      header.setServiceName("contactcenter.FindCustomerByPhoneOrPersonalCode_2");
       header.setUserId("35503186196");
       header.setXsdBasedRequest(false);
-      UnifiedServiceBody body = factory.createUnifiedServiceBody();
-      UnifiedServiceRequest request = factory.createUnifiedServiceRequest();
-      ContactcenterFindCustomerByPhoneOrPersonalCode2Input cci = 
+      
+      // ContactcenterFindCustomerByPhoneOrPersonalCode2Input
+/*      
+      header.setServiceName("contactcenter.FindCustomerByPhoneOrPersonalCode_2");
+      ContactcenterFindCustomerByPhoneOrPersonalCode2Input cci1 = 
     		  factory.createContactcenterFindCustomerByPhoneOrPersonalCode2Input();
+      
       FindCustomerQuery fcq = factory.createFindCustomerQuery();
       fcq.setIdCode("35503186196");
       fcq.setUserPhoneNumber("");
-      cci.setFindCustomerQuery(fcq);
-      body.getAny().add(cci);
+      
+      cci1.setFindCustomerQuery(fcq);
+      body.getAny().add(cci1);
+*/            
+      // ContactcenterGiveDigipassChallenge2Input
+/*      
+      header.setServiceName("contactcenter.GiveDigipassChallenge_2_Input");
+      ContactcenterGiveDigipassChallenge2Input cci2 = factory.createContactcenterGiveDigipassChallenge2Input();
+      GiveDigipassQuery dq = factory.createGiveDigipassQuery();
+      dq.setCustomerId("1234");
+      dq.setIdCode("4321");
+      cci2.setGiveDigipassQuery(dq);
+      body.getAny().add(cci2);
+*/      
+      // ContactcenterCheckAuthenticationCode2Input
+      
+      header.setServiceName("contactcenter.CheckAuthenticationCode_2_Input");
+      ContactcenterCheckAuthenticationCode2Input cci3 = factory.createContactcenterCheckAuthenticationCode2Input();
+      AuthenticationQuery aq = factory.createAuthenticationQuery();
+      aq.setAuthenticationCode("5678");
+      aq.setChallengeCode("8765");
+      aq.setUsername("clientname");
+      cci3.setAuthenticationQuery(aq);
+      body.getAny().add(cci3);
+      
       request.setUnifiedServiceHeader(header);
       request.setUnifiedServiceBody(body);
       ByteArrayOutputStream ba = new ByteArrayOutputStream();
       marshaller.marshal(request, ba);
 
-// remove unneeded xmlns info in the case <xsdBasedRequest>false</ns2:xsdBasedRequest>,  JMS attribute "xsdBasedMessage" = false
+// remove unnecessary xmlns info in the case <xsdBasedRequest>false</ns2:xsdBasedRequest>,  JMS attribute "xsdBasedMessage" = false
       String s = RemoveXmlns(ba.toString());
 
 // write to file      
@@ -83,7 +109,9 @@ public class JAXB2Marshaller {
   }
 
   public static void main(String[] argv) {
-    String xmlDocument = "catalog.xml";
+    //String xmlDocument = "FindCustomerByPhoneOrPersonalCode_2Input.xml";
+	//String xmlDocument = "GiveDigipassChallenge_2Input.xml";
+	String xmlDocument = "CheckAuthenticationCode_2Input.xml";
     JAXB2Marshaller jaxbMarshaller = new JAXB2Marshaller();
     jaxbMarshaller.generateXMLDocument(new File(xmlDocument));
   }

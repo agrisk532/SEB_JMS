@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.seb.ee/integration"
+	xmlns:int="http://www.seb.ee/integration" 
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+
+	<element name="UnifiedServiceRequest">
+		<complexType>
+			<sequence>
+				<element name="unifiedServiceHeader" type="int:UnifiedServiceHeader" />
+				<element name="unifiedServiceBody" type="int:UnifiedServiceBody" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="UnifiedServiceResponse">
+		<complexType>
+			<sequence>
+				<element name="unifiedServiceHeader" type="int:UnifiedServiceHeader" />
+				<element name="unifiedServiceBody" type="int:UnifiedServiceBody" minOccurs="0" />
+				<element name="unifiedServiceErrors" type="int:UnifiedServiceErrors"  minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="UnifiedServiceHeader">
+		<sequence>
+			<element name="requestId" type="string" minOccurs="1"/>
+			<element name="serviceName" type="string" minOccurs="1"/>
+			<element name="userId" type="string" minOccurs="0"/>
+			<element name="officerId" type="string" minOccurs="0"/>
+			<element name="xsdBasedRequest" type="boolean" minOccurs="1"/>
+			<element name="responseIsCompressed" type="boolean" minOccurs="1"/>
+
+			<element name="requestRemoteHost" type="string" minOccurs="0"/>			
+			<element name="requestServerHost" type="string" minOccurs="0"/>	
+			<element name="requestServerId" type="string" minOccurs="0"/>	
+			<element name="responseServerHost" type="string" minOccurs="0"/>	
+			<element name="responseServerId" type="string" minOccurs="0"/>	
+			<element name="targetQueue" type="string" minOccurs="0"/>
+			<element name="backEndTransformerEnabled" type="boolean" minOccurs="0"/>
+    		<element name="additionalProPath" type="string" minOccurs="0"/>			
+			<element name="authenticationMethod" type="string" minOccurs="0"/>	
+			<element name="avatar" type="string" minOccurs="0"/>	
+			<element name="brand" type="string" minOccurs="0"/>	
+			<element name="channel" type="string" minOccurs="0"/>	
+			<element name="clientApplication" type="string" minOccurs="0"/>	
+			<element name="clientApplicationVersion" type="string" minOccurs="0"/>	
+			<element name="clientId" type="string" minOccurs="0"/>	
+			<element name="countryCode" type="string" minOccurs="0"/>	
+			<element name="debugBack" type="boolean" minOccurs="0"/>	
+           	<element name="debugFront" type="boolean" minOccurs="0"/>			
+
+			<element name="pvkActive" type="boolean" minOccurs="0"/>	
+			<element name="department" type="string" minOccurs="0"/>	
+			<element name="fromP2pAddress" type="string" minOccurs="0"/>	
+			<element name="homeBackend" type="string" minOccurs="0"/>
+			<element name="info" type="string" minOccurs="0"/>
+			<element name="language" type="string" minOccurs="1"/>
+
+			<element name="numberOfRModules" type="long" minOccurs="0"/>	
+			<element name="oriSessionName" type="string" minOccurs="0"/>	
+ 			<element name="remoteHost" type="string" minOccurs="0"/>			
+			<element name="replayTo" type="string" minOccurs="0"/>	
+
+			<element name="representativeId" type="string" minOccurs="0"/>	
+			<element name="representativeCustomerId" type="string" minOccurs="0"/>	
+			<element name="separateProgressLog" type="boolean" minOccurs="0"/>	
+			<element name="sessionKey" type="string" minOccurs="1"/>	
+			<element name="timeStamp" type="dateTime" minOccurs="0"/>	
+			<element name="toP2pAddress" type="string" minOccurs="0"/>	
+
+			<element name="originalXmlFormat" type="boolean" minOccurs="0"/>	
+			<element name="currentUserSignatureId" type="string" minOccurs="0"/>	
+
+			<element name="vmUniqueId" type="string" minOccurs="0"/>	
+		</sequence>
+	</complexType>
+	<complexType name="UnifiedServiceBody">
+		<sequence>
+			<!-- <element name="any" minOccurs="0" maxOccurs="unbounded" type=""></element> -->
+			<any maxOccurs="unbounded" minOccurs="0"></any>
+		</sequence>
+	</complexType>
+	<complexType name="UnifiedServiceErrors">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="Error" type="int:Error"></element>
+		</sequence>
+	</complexType>
+	<complexType name="Error">
+		<sequence>
+			<element name="backend" type="string" minOccurs="0" />
+			<element name="errorClass" type="string" minOccurs="0" />
+			<element name="errorCode" type="string" minOccurs="0" />
+			<element name="errorMessage" type="string" nillable="true" minOccurs="0" />
+			<element name="errorModule" type="string" minOccurs="0" />
+			<element name="errorObject" type="string" nillable="true" minOccurs="0" />
+			<element name="errorParameter" type="string" nillable="true" minOccurs="0" />
+		</sequence>
+	</complexType>
+</schema>
