@@ -5,7 +5,7 @@ import javax.xml.bind.JAXBException;
 
 public class GiveDigipassChallenge extends ServicesBase
 {
-	GiveDigipassQuery dq;
+	private GiveDigipassQuery dq;
 
 	public GiveDigipassChallenge() throws JAXBException
 	{

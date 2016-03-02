@@ -5,7 +5,7 @@ import javax.xml.bind.JAXBException;
 
 public class FindCustomerByPhoneOrPersonalCode extends ServicesBase
 {
-	FindCustomerQuery fcq;
+	private FindCustomerQuery fcq;
 
 	public FindCustomerByPhoneOrPersonalCode() throws JAXBException
 	{

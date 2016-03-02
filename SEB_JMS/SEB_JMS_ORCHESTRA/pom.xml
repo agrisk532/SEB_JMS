@@ -24,7 +24,6 @@
     <groupId>javax.servlet</groupId>
     <artifactId>javax.servlet-api</artifactId>
     <version>3.1.0</version>
-    <scope>provided</scope>
   </dependency>
   <!-- For logging purpose could be put in parent POM for modules to inherit  -->
     <dependency>

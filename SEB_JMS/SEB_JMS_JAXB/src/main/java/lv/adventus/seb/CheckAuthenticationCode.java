@@ -5,7 +5,7 @@ import javax.xml.bind.JAXBException;
 
 public class CheckAuthenticationCode extends ServicesBase
 {
-	AuthenticationQuery aq;
+	private AuthenticationQuery aq;
 
 	public CheckAuthenticationCode() throws JAXBException
 	{

@@ -7,5 +7,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="SEB_JMS_JAXB/target/SEB_JMS_JAXB-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="C:/Users/agrisk/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/agrisk/Downloads/javax.jms-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/agrisk/Documents/GCTI_Devel/SEB_IW_Custom/SonicMQ/Sonic2013_libraries/lib/sonic_Client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

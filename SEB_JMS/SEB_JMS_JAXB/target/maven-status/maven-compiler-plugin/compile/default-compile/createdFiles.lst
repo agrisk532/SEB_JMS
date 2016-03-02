@@ -9,6 +9,7 @@ lv\adventus\seb\AuthenticationQuery.class
 lv\adventus\seb\UnifiedServiceBody.class
 lv\adventus\seb\ContactcenterCheckAuthenticationCode2Input.class
 lv\adventus\seb\Error.class
+lv\adventus\seb\servlets\FindCustomerByPhoneOrPersonalCode.class
 lv\adventus\seb\ServicesBase.class
 lv\adventus\seb\GiveDigipassResponse.class
 lv\adventus\seb\UnifiedServiceRequest.class

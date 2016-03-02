@@ -92,6 +92,18 @@ public class ServicesBase {
 		  fileWriter.flush();
 		  fileWriter.close();
 	   }
+	
+		public String Marshal() throws IOException, JAXBException
+		{
+		      request.setUnifiedServiceHeader(header);
+		      request.setUnifiedServiceBody(body);
+		      ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		      marshaller.marshal(request, ba);
+
+		// remove unnecessary xmlns info in the case <xsdBasedRequest>false</ns2:xsdBasedRequest>,  JMS attribute "xsdBasedMessage" = false
+		      String s = RemoveXmlns(ba.toString());
+		      return s;
+		}
 
 //removes all xmlns related characters from a string  
 	private String RemoveXmlns(String s)
