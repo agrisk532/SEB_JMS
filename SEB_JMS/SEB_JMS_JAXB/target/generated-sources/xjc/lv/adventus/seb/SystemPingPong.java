@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="FindCustomerQuery" type="{http://www.seb.ee/contactcenter}FindCustomerQuery"/&gt;
+ *         &lt;element name="PingPong" type="{http://www.seb.ee/contactcenter}PingPong"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "findCustomerQuery"
+    "pingPong"
 })
-@XmlRootElement(name = "contactcenter.FindCustomerByPhoneOrPersonalCode_2_Input")
-public class ContactcenterFindCustomerByPhoneOrPersonalCode2Input {
+@XmlRootElement(name = "system.PingPong")
+public class SystemPingPong {
 
-    @XmlElement(name = "FindCustomerQuery", required = true)
-    protected FindCustomerQuery findCustomerQuery;
+    @XmlElement(name = "PingPong", required = true)
+    protected PingPong pingPong;
 
     /**
-     * Gets the value of the findCustomerQuery property.
+     * Gets the value of the pingPong property.
      * 
      * @return
      *     possible object is
-     *     {@link FindCustomerQuery }
+     *     {@link PingPong }
      *     
      */
-    public FindCustomerQuery getFindCustomerQuery() {
-        return findCustomerQuery;
+    public PingPong getPingPong() {
+        return pingPong;
     }
 
     /**
-     * Sets the value of the findCustomerQuery property.
+     * Sets the value of the pingPong property.
      * 
      * @param value
      *     allowed object is
-     *     {@link FindCustomerQuery }
+     *     {@link PingPong }
      *     
      */
-    public void setFindCustomerQuery(FindCustomerQuery value) {
-        this.findCustomerQuery = value;
+    public void setPingPong(PingPong value) {
+        this.pingPong = value;
     }
 
 }

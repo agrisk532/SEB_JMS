@@ -10,24 +10,23 @@ package lv.adventus.seb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- *  query
+ * PingPong
  * 
- * <p>Java class for GiveDigipassQuery complex type.
+ * <p>Java class for PingPong complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="GiveDigipassQuery"&gt;
+ * &lt;complexType name="PingPong"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="customerId" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="idCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="pingMessage" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="pongMessage" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,62 +36,61 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GiveDigipassQuery", propOrder = {
-    "customerId",
-    "idCode"
+@XmlType(name = "PingPong", propOrder = {
+    "pingMessage",
+    "pongMessage"
 })
-public class GiveDigipassQuery {
+public class PingPong {
 
-    @XmlElement(required = true)
-    protected String customerId;
-    protected String idCode;
+    protected String pingMessage;
+    protected String pongMessage;
 
     /**
-     * Gets the value of the customerId property.
+     * Gets the value of the pingMessage property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCustomerId() {
-        return customerId;
+    public String getPingMessage() {
+        return pingMessage;
     }
 
     /**
-     * Sets the value of the customerId property.
+     * Sets the value of the pingMessage property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCustomerId(String value) {
-        this.customerId = value;
+    public void setPingMessage(String value) {
+        this.pingMessage = value;
     }
 
     /**
-     * Gets the value of the idCode property.
+     * Gets the value of the pongMessage property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getIdCode() {
-        return idCode;
+    public String getPongMessage() {
+        return pongMessage;
     }
 
     /**
-     * Sets the value of the idCode property.
+     * Sets the value of the pongMessage property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setIdCode(String value) {
-        this.idCode = value;
+    public void setPongMessage(String value) {
+        this.pongMessage = value;
     }
 
 }
