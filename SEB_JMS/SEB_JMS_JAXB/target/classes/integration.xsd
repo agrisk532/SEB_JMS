@@ -21,6 +21,26 @@
 			</sequence>
 		</complexType>
 	</element>
+		<element name="PingPong">
+		<annotation>
+			<documentation>PingPong</documentation>
+		</annotation>
+		<complexType>
+		<sequence>
+			<element name="pingMessage" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Ping Message</documentation>
+				</annotation>
+			</element>
+			<element name="pongMessage" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Pong Message</documentation>
+				</annotation>
+			</element>
+		</sequence>
+		</complexType>
+</element>
+	
 	<complexType name="UnifiedServiceHeader">
 		<sequence>
 			<element name="requestId" type="string" minOccurs="1"/>

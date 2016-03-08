@@ -114,15 +114,8 @@ public class JAXB2UnMarshaller {
           		PingPong o = (PingPong) usr.getUnifiedServiceBody().getAny().get(0);
           		System.out.println(o.getPingMessage());
           		System.out.println(o.getPongMessage());
-          		
-          	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-        		  for (int i = 0; i < errors.getError().size(); i++) {
-      			System.out.println(errors.getError().get(i).getErrorClass());
-      			System.out.println(errors.getError().get(i).getErrorCode());
-      			System.out.println(errors.getError().get(i).getErrorObject().getValue());
-      		}
 
-      	  }
+       	  }
 
       
       else
