@@ -58,15 +58,6 @@ public class JAXB2UnMarshaller {
     	  ContactcenterFindCustomerByPhoneOrPersonalCode2Output o =
     			  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
     	  System.out.println(o.getFindCustomerResponse().getFirstName());
-    	  
-    	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-  		  for (int i = 0; i < errors.getError().size(); i++) {
-			System.out.println(errors.getError().get(i).getErrorClass());
-			System.out.println(errors.getError().get(i).getErrorCode());
-			System.out.println(errors.getError().get(i).getErrorObject().getValue());
-		}
-    	  
-    	  
       }
       
    // ContactcenterCheckAuthenticationCode2Output
@@ -78,14 +69,6 @@ public class JAXB2UnMarshaller {
         	  System.out.println(o.getAuthenticationResponse().getAuthenticationCode());
         	  System.out.println(o.getAuthenticationResponse().getUsername());
         	  System.out.println(o.getAuthenticationResponse().getChallengeCode());
-        	  
-        	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-      		  for (int i = 0; i < errors.getError().size(); i++) {
-    			System.out.println(errors.getError().get(i).getErrorClass());
-    			System.out.println(errors.getError().get(i).getErrorCode());
-    			System.out.println(errors.getError().get(i).getErrorObject().getValue());
-    		}
-
           }
 
    // ContactcenterGiveDigipassChallenge2Output
@@ -98,14 +81,6 @@ public class JAXB2UnMarshaller {
       		System.out.println(o.getGiveChallengeResponse().getChallengeCode());
       		System.out.println(o.getGiveChallengeResponse().getUsername());
       		System.out.println(o.getGiveChallengeResponse().getIdCode());
-      		
-      	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-    		  for (int i = 0; i < errors.getError().size(); i++) {
-  			System.out.println(errors.getError().get(i).getErrorClass());
-  			System.out.println(errors.getError().get(i).getErrorCode());
-  			System.out.println(errors.getError().get(i).getErrorObject().getValue());
-  		}
-
   	  }
       
           else
@@ -114,7 +89,6 @@ public class JAXB2UnMarshaller {
           		PingPong o = (PingPong) usr.getUnifiedServiceBody().getAny().get(0);
           		System.out.println(o.getPingMessage());
           		System.out.println(o.getPongMessage());
-
        	  }
 
       
@@ -122,6 +96,17 @@ public class JAXB2UnMarshaller {
    	  {
    		  
    	  }
+
+	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+	  if(errors != null)
+	  {
+		  for (int i = 0; i < errors.getError().size(); i++)
+		  {
+			  System.out.println(errors.getError().get(i).getErrorClass());
+			  System.out.println(errors.getError().get(i).getErrorCode());
+			  System.out.println(errors.getError().get(i).getErrorObject().getValue());
+		  }
+	  }
     }
     catch (JAXBException e)
     {
