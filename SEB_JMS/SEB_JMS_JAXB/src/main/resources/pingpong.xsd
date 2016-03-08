@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.seb.ee/contactcenter" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cmn="http://www.seb.ee/common" xmlns:contactcenter="http://www.seb.ee/contactcenter" elementFormDefault="qualified">
-	<element name="system.PingPong">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cmn="http://www.seb.ee/common" elementFormDefault="qualified">
+	<element name="PingPong">
 		<annotation>
 			<documentation>PingPong</documentation>
 		</annotation>
 		<complexType>
-			<sequence>
-				<element name="PingPong" type="contactcenter:PingPong"/>
-			</sequence>
-		</complexType>
-	</element>
-	<complexType name="PingPong">
-		<annotation>
-			<documentation>PingPong</documentation>
-		</annotation>
 		<sequence>
 			<element name="pingMessage" type="string" minOccurs="0">
 				<annotation>
@@ -26,5 +17,6 @@
 				</annotation>
 			</element>
 		</sequence>
-	</complexType>
+		</complexType>
+</element>
 </schema>

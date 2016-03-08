@@ -108,7 +108,24 @@ public class JAXB2UnMarshaller {
 
   	  }
       
-   	  else
+          else
+          	  if(usr.getUnifiedServiceBody().getAny().get(0).getClass() == PingPong.class)
+          	  {
+          		PingPong o = (PingPong) usr.getUnifiedServiceBody().getAny().get(0);
+          		System.out.println(o.getPingMessage());
+          		System.out.println(o.getPongMessage());
+          		
+          	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+        		  for (int i = 0; i < errors.getError().size(); i++) {
+      			System.out.println(errors.getError().get(i).getErrorClass());
+      			System.out.println(errors.getError().get(i).getErrorCode());
+      			System.out.println(errors.getError().get(i).getErrorObject().getValue());
+      		}
+
+      	  }
+
+      
+      else
    	  {
    		  
    	  }
@@ -134,14 +151,16 @@ public class JAXB2UnMarshaller {
 	}
   
   public static void main(String[] argv) {
-    File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
+    //File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
     //File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output.xml");
     //File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
+	  File xmlDocument = new File("PingPong_2Output.xml");
     System.out.println(xmlDocument.exists()); // prints true if a file exists at that location
     System.out.println(xmlDocument.getAbsoluteFile());// prints "c:\\eclipse\\eclipse.ini"
     JAXB2UnMarshaller jaxbUnmarshaller = new JAXB2UnMarshaller();
 
     jaxbUnmarshaller.unMarshall(xmlDocument);
+    System.exit(0);
 
   }
 

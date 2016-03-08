@@ -2,24 +2,22 @@
 <UnifiedServiceRequest>
     <unifiedServiceHeader>
         <requestId>cc02ed3ebc-38ec-319c-9328-063c6fc93b55</requestId>
-        <serviceName>contactcenter.FindCustomerByPhoneOrPersonalCode_2</serviceName>
+        <serviceName>system.PingPong_1 service</serviceName>
         <userId>35503186196</userId>
         <officerId>admin</officerId>
         <xsdBasedRequest>false</xsdBasedRequest>
         <responseIsCompressed>false</responseIsCompressed>
+        <requestRemoteHost>test remote host</requestRemoteHost>
         <requestServerId>test server id</requestServerId>
         <channel>ContactCenter</channel>
         <clientApplication>IVR</clientApplication>
         <clientApplicationVersion>IVR 1.0</clientApplicationVersion>
         <countryCode>EE</countryCode>
-        <remoteHost>test remote host</remoteHost>
+        <language>EE</language>
     </unifiedServiceHeader>
     <unifiedServiceBody>
-        <contactcenter.FindCustomerByPhoneOrPersonalCode_2_Input>
-            <FindCustomerQuery>
-                <idCode>35503186196</idCode>
-                <userPhoneNumber></userPhoneNumber>
-            </FindCustomerQuery>
-        </contactcenter.FindCustomerByPhoneOrPersonalCode_2_Input>
+        <PingPong>
+            <pingMessage>Test</pingMessage>
+        </PingPong>
     </unifiedServiceBody>
 </UnifiedServiceRequest>

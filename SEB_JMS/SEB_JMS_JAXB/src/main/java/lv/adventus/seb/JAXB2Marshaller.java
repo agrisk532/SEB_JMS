@@ -60,14 +60,21 @@ public class JAXB2Marshaller {
 */      
       // ContactcenterCheckAuthenticationCode2Input
       
-      header.setServiceName("contactcenter.CheckAuthenticationCode_2_Input");
-      ContactcenterCheckAuthenticationCode2Input cci3 = factory.createContactcenterCheckAuthenticationCode2Input();
-      AuthenticationQuery aq = factory.createAuthenticationQuery();
-      aq.setAuthenticationCode("5678");
-      aq.setChallengeCode("8765");
-      aq.setUsername("clientname");
-      cci3.setAuthenticationQuery(aq);
-      body.getAny().add(cci3);
+//      header.setServiceName("contactcenter.CheckAuthenticationCode_2_Input");
+//      ContactcenterCheckAuthenticationCode2Input cci3 = factory.createContactcenterCheckAuthenticationCode2Input();
+//      AuthenticationQuery aq = factory.createAuthenticationQuery();
+//      aq.setAuthenticationCode("5678");
+//      aq.setChallengeCode("8765");
+//      aq.setUsername("clientname");
+//      cci3.setAuthenticationQuery(aq);
+//      body.getAny().add(cci3);
+      
+      // PingPong2Input
+      
+      header.setServiceName("system.PingPong_1 service");
+      PingPong pp = factory.createPingPong();
+      pp.setPingMessage("Test");
+      body.getAny().add(pp);
       
       request.setUnifiedServiceHeader(header);
       request.setUnifiedServiceBody(body);
@@ -111,8 +118,10 @@ public class JAXB2Marshaller {
   public static void main(String[] argv) {
     //String xmlDocument = "FindCustomerByPhoneOrPersonalCode_2Input.xml";
 	//String xmlDocument = "GiveDigipassChallenge_2Input.xml";
-	String xmlDocument = "CheckAuthenticationCode_2Input.xml";
+	//String xmlDocument = "CheckAuthenticationCode_2Input.xml";
+	  String xmlDocument = "PingPong_2Input.xml";
     JAXB2Marshaller jaxbMarshaller = new JAXB2Marshaller();
     jaxbMarshaller.generateXMLDocument(new File(xmlDocument));
+    System.exit(0);
   }
 }

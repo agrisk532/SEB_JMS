@@ -2,7 +2,7 @@
 <UnifiedServiceRequest>
     <unifiedServiceHeader>
         <requestId>cc02ed3ebc-38ec-319c-9328-063c6fc93b55</requestId>
-        <serviceName>contactcenter.CheckAuthenticationCode_2_Input</serviceName>
+        <serviceName>system.PingPong_1 service</serviceName>
         <userId>35503186196</userId>
         <officerId>admin</officerId>
         <xsdBasedRequest>false</xsdBasedRequest>
@@ -16,12 +16,8 @@
         <language>EE</language>
     </unifiedServiceHeader>
     <unifiedServiceBody>
-        <contactcenter.CheckAuthenticationCode_2_Input>
-            <AuthenticationQuery>
-                <authenticationCode>5678</authenticationCode>
-                <username>clientname</username>
-                <challengeCode>8765</challengeCode>
-            </AuthenticationQuery>
-        </contactcenter.CheckAuthenticationCode_2_Input>
+        <PingPong>
+            <pingMessage>Test</pingMessage>
+        </PingPong>
     </unifiedServiceBody>
 </UnifiedServiceRequest>

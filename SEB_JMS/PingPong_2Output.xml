@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UnifiedServiceResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<unifiedServiceHeader>
+		<requestId>cc83985efc-4f40-3179-82c7-2096d16ad0f7</requestId>
+		<serviceName>system.PingPong_1</serviceName>
+		<userId />
+		<officerId>admin</officerId>
+		<xsdBasedRequest>false</xsdBasedRequest>
+		<responseIsCompressed>false</responseIsCompressed>
+		<authenticationMethod />
+		<avatar />
+		<brand />
+		<channel>ContactCenter</channel>
+		<clientId />
+		<countryCode>EE</countryCode>
+		<department>0</department>
+		<homeBackend />
+		<info />
+		<language>EE</language>
+		<numberOfRModules>0</numberOfRModules>
+		<representativeId />
+		<representativeCustomerId />
+		<sessionKey />
+		<timeStamp>2016-01-29T15:42:54.663</timeStamp>
+	</unifiedServiceHeader>
+	<unifiedServiceBody>
+		<PingPong>
+			<pingMessage>Test</pingMessage>
+			<pongMessage>29/01/2016 15:42:54.672+02:00, bank:OK , logbank:OK ,req:OK , tl:OK , crm:OK , nkvvx:OK , dkvvx:OK , archive:OK</pongMessage>
+		</PingPong>
+	</unifiedServiceBody>
+</UnifiedServiceResponse>

@@ -10,4 +10,9 @@
             <jaxb:package name="lv.adventus.seb"/>
         </jaxb:schemaBindings>
     </jaxb:bindings>
+        <jaxb:bindings schemaLocation="pingpong.xsd" node="/xsd:schema">
+        <jaxb:schemaBindings>
+            <jaxb:package name="lv.adventus.seb"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
 </jaxb:bindings>
