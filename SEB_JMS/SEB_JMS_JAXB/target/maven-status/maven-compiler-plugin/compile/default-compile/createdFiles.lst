@@ -2,6 +2,7 @@ lv\adventus\seb\GiveDigipassChallenge.class
 lv\adventus\seb\FindCustomerByPhoneOrPersonalCode.class
 lv\adventus\seb\PingPong.class
 lv\adventus\seb\ContactcenterGiveDigipassChallenge2Input.class
+lv\adventus\seb\util\MultipartMessageUtility.class
 lv\adventus\seb\JAXB2UnMarshaller.class
 lv\adventus\seb\package-info.class
 lv\adventus\seb\UnifiedServiceResponse.class
@@ -25,5 +26,6 @@ lv\adventus\seb\GiveDigipassQuery.class
 lv\adventus\seb\FindCustomerResponse.class
 lv\adventus\seb\UnifiedServiceHeader.class
 lv\adventus\seb\JAXB2Marshaller.class
+lv\adventus\seb\util\Connector.class
 lv\adventus\seb\JAXB2UnMarshaller$CustomValidationEventHandler.class
 lv\adventus\seb\util\QueueRequestor.class

@@ -19,6 +19,9 @@ import progress.message.jclient.Constants;
 import progress.message.jclient.TextMessage;
 import progress.message.jclient.BytesMessage;
 
+import lv.adventus.seb.util.Connector;
+import lv.adventus.seb.util.MultipartMessageUtility;
+
 /**
  * Servlet implementation class FindCustomerByPhoneOrPersonalCode
  */
@@ -28,15 +31,9 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
     private static final String username = "tester1";
     private static final String password = "tester";
     private static final String queue = "SEB_SERVICES";
-
-    private javax.jms.QueueConnection connect = null;
-    private javax.jms.QueueSession session = null;
-    private lv.adventus.seb.util.QueueRequestor requestor = null;
-    private long timeout = 60000; // SonicMQ response wait timeout in miliseconds
-
-	private static final long serialVersionUID = 1L;
-	
+    private static final long timeout = 60000;
 	private String xmlrequest;
+	private String xmlresponseFindCustomer;
 	
 
     /**
@@ -116,53 +113,27 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 	    	return;
 		}
 		
-		start(broker,username,password,queue, out);
-
-	}
-
-		    /** Create JMS client for sending messages. */
-    private void start ( String broker, String username, String password, String sQueue, PrintWriter out)
-    {
-        try
+		Connector c = new Connector(broker,username,password,queue, out, timeout);
+		c.start();
+	    //start(broker,username,password,queue, out);
+	    try
         {
-            javax.jms.QueueConnectionFactory factory;
-            factory = (new progress.message.jclient.QueueConnectionFactory (broker));
-            connect = factory.createQueueConnection (username, password);
-            session = connect.createQueueSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
-        }
-        catch (javax.jms.JMSException jmse)
-        {
-        	out.println("TECHNICALERROR");
-            System.out.println("error: Cannot connect to Broker - " + broker);
-            jmse.printStackTrace();
-            return;
-        }
-
-        // Create the Queue and QueueRequestor for sending requests.
-        javax.jms.Queue queue = null;
-        try
-        {
-            queue = session.createQueue (sQueue);
-            requestor = new lv.adventus.seb.util.QueueRequestor(session, queue);
-            connect.start();
-        }
-        catch (javax.jms.JMSException jmse)
-        {
-        	out.println("TECHNICALERROR");
-            jmse.printStackTrace();
-            return;
-        }
-
-        try
-        {
-        	// we assume response is SonicMQ XMLMessage
-        	progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session) session).createXMLMessage();
+        	progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session) c.getSession()).createXMLMessage();
 			//javax.jms.TextMessage msg = session.createTextMessage();
 			msg.setText( xmlrequest );
 			// Instead of sending, we will use the QueueRequestor.
-			javax.jms.Message response = requestor.request(msg, timeout);
+			javax.jms.Message responseMsg = c.getRequestor().request(msg, timeout);
+			if(responseMsg == null)
+			{
+				throw new javax.jms.JMSException("No response from JMS broker");
+			}
+			MultipartMessageUtility mmu = new MultipartMessageUtility(c); 
+			mmu.onMessage(responseMsg);
+			xmlresponseFindCustomer = mmu.getXMLMessage();
 			
-			onMessage(response);
+			// analyze xmlresponseFindCustomer
+			
+			c.exit();
         }
         catch (javax.jms.JMSException jmse)
         {
@@ -170,139 +141,5 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
         	System.out.println(jmse);
         	return;
         }
-    }
-			
-        /**
-         * Handle the message
-         * (as specified in the javax.jms.MessageListener interface).
-         */
-        public void onMessage( javax.jms.Message aMessage)
-        {
-            System.out.println();
-
-            if (aMessage instanceof MultipartMessage)
-            {
-                System.out.println( "received MutipartMessage.... "  );
-                unpackMM(aMessage, 0);
-            }
-            else
-            {
-                System.out.println( "received a JMS message ");
-            }
-            System.out.println("Received not a MultipartMessage.... ");
-
-        }
-
-        private void unpackMM(javax.jms.Message aMessage, int depth)
-        {
-            int n = depth;
-            System.out.println();
-            indent(n); System.out.println("******* Beginning of MultipartMessage ******");
-            System.out.println();
-
-            try
-            {
-                indent(n); System.out.println("Extend_type property = " + aMessage.getStringProperty(Constants.EXTENDED_TYPE));
-                MultipartMessage mm = (MultipartMessage)aMessage;
-                int partCount = mm.getPartCount();
-
-                indent(n); System.out.println("partCount of this MultipartMessage = " + partCount);
-                for (int i = 0; i < partCount; i++)
-                {
-                    System.out.println();
-                    indent(n); System.out.println("--------Beginning of part " + (i+1));
-                    Part part = mm.getPart(i);
-
-                    indent(n); System.out.println("Part.contentType = " + part.getHeader().getContentType());
-                    indent(n); System.out.println("Part.contentId = " + part.getHeader().getContentId());
-
-                    if (mm.isMessagePart(i))
-                    {
-                        javax.jms.Message msg = mm.getMessageFromPart(i);
-                        if (msg instanceof MultipartMessage)
-                            unpackMM(msg, ++depth);
-                        else
-                            unpackJMSMessage(msg, n);
-                    }
-                    else
-                    {
-                        unpackPart(part, n);
-                    }
-                    indent(n); System.out.println("--------end of part " + (i+1));
-                    System.out.println();
-                }
-                indent(n); System.out.println("******* End of MultipartMessage ******");
-                System.out.println();
-            }
-             catch (javax.jms.JMSException jmse)
-            {
-                System.err.println(jmse);
-            }
-        }
-
-
-        private void indent(int num)
-        {
-            for (int i = 0; i < num; i++)
-            {
-                System.out.print("\t");
-            }
-        }
-
-        private void unpackJMSMessage(javax.jms.Message aMessage, int depth)
-        {
-            try
-            {
-                if (aMessage instanceof TextMessage)
-                {
-                    javax.jms.TextMessage tmsg = (javax.jms.TextMessage) aMessage;
-                    indent(depth); System.out.println( "content in TextMessage... " + tmsg.getText() );
-                }
-                else if (aMessage instanceof BytesMessage)
-                {
-                    javax.jms.BytesMessage bmsg = (javax.jms.BytesMessage) aMessage;
-                    indent(depth); System.out.println( "content in Bytesmessage... " + bmsg.readUTF());
-                }
-                else if (aMessage instanceof progress.message.jclient.XMLMessage)
-                {
-                    progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session)session).createXMLMessage();
-                    indent(depth); System.out.println( "content in XMLmessage... " + msg.getText());
-                }
-                else
-                {
-                    indent(depth); System.out.println( "a JMS message... ");
-                }
-            }
-             catch (javax.jms.JMSException jmse)
-            {
-                System.err.println(jmse);
-            }
-        }
-
-        private void unpackPart(Part part, int depth)
-        {
-            byte[] content = part.getContentBytes();
-            int size = content.length;
-            String s = new String(content);
-            indent(depth); System.out.println( "...size :  " + size);
-            indent(depth); System.out.println( "...content :  ");
-            System.out.println();
-            indent(depth); System.out.println(s);
-        }
-
-        /** Cleanup resources cleanly and exit. */
-        private void exit()
-        {
-            try
-            {
-                connect.close();
-            }
-            catch (javax.jms.JMSException jmse)
-            {
-                jmse.printStackTrace();
-            }
-
-            System.exit(0);
-        }
-
+	}
 }
