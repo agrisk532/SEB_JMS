@@ -75,6 +75,16 @@ public class ServicesBase {
 				);	
 	}
 	
+	public void SetHeaderUserId(String userId)
+	{
+		header.setUserId(userId);
+	}
+	
+	public void SetHeaderRequestId(String rid)
+	{
+		header.setRequestId(rid);
+	}
+	
 	public void Marshal(String xmlDocument) throws IOException, JAXBException
 	{
 	      request.setUnifiedServiceHeader(header);
@@ -93,7 +103,7 @@ public class ServicesBase {
 		  fileWriter.close();
 	   }
 	
-		public String Marshal() throws IOException, JAXBException
+		public String Marshal() throws JAXBException
 		{
 		      request.setUnifiedServiceHeader(header);
 		      request.setUnifiedServiceBody(body);

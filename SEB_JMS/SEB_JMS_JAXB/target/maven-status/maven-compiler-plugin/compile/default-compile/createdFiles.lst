@@ -26,3 +26,4 @@ lv\adventus\seb\FindCustomerResponse.class
 lv\adventus\seb\UnifiedServiceHeader.class
 lv\adventus\seb\JAXB2Marshaller.class
 lv\adventus\seb\JAXB2UnMarshaller$CustomValidationEventHandler.class
+lv\adventus\seb\util\QueueRequestor.class
