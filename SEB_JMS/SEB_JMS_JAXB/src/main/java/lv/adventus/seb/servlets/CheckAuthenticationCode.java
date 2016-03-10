@@ -103,9 +103,9 @@ public class CheckAuthenticationCode extends ServletBase {
   			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
   			this.userName = cac.getAuthenticationResponse().getUsername();
   			this.challengeCode = cac.getAuthenticationResponse().getChallengeCode();
-      	    System.out.println("digipasscode = " + this.authenticationCode);
-      	    System.out.println("challengecode = " + this.challengeCode);
-      	    System.out.println("username = " + this.userName);
+      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
+      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
+      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
   			
   			c.exit();
   			out.println("OK");

@@ -57,25 +57,18 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    
 	    // check http request parameters
 	    
-	    if (userId==null)
+	    if (userId==null || connId==null)
 	    {
-	    	System.out.println("Parameter id not received");
+	    	String s = "";
+	    	if(userId==null) s += "userId ";
+	    	if(connId==null) s += "connId ";
+	    	System.out.println("Parameter " + s + "not received");
 	    	out.println("TECHNICALERROR");
 	    	return;
 	    }
 	    else
 	    {
 	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
-	    }
-			
-	    if (connId==null)
-	    {
-	    	System.out.println("Parameter connid not received");
-	    	out.println("TECHNICALERROR");
-	    	return;
-	    }
-	    else
-	    {
 	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
 	    }
 	    
@@ -105,8 +98,8 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
 		    this.customerId = fco.getFindCustomerResponse().getCustomerId();
 		    this.idCode = fco.getFindCustomerResponse().getIdCode();
-		    System.out.println(this.customerId);
-		    System.out.println(this.idCode);
+		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + this.customerId);
+		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + this.idCode);
 	  		c.exit();
 
 /////////// invoke GiveDigipassChallenge service
@@ -133,10 +126,10 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			this.challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			this.userName = gco.getGiveChallengeResponse().getUsername();
   			this.idCode = gco.getGiveChallengeResponse().getIdCode();
-  			System.out.println(this.customerId);
-  			System.out.println(this.challengeCode);
-  			System.out.println(this.userName);
-  			System.out.println(this.idCode);
+  			System.out.println("GiveDigipassChallenge: customerId = " + this.customerId);
+  			System.out.println("GiveDigipassChallenge: challengeCode = " + this.challengeCode);
+  			System.out.println("GiveDigipassChallenge: userName = " + this.userName);
+  			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
   			c.exit();
   			out.println("challengecode:" + this.challengeCode + "|userid:" + this.userName);
   			return;
