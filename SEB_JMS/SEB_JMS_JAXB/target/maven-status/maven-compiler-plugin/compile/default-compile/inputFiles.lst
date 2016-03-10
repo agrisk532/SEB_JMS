@@ -1,4 +1,5 @@
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\QueueRequestor.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\CheckAuthenticationCode.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceResponse.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\ContactcenterFindCustomerByPhoneOrPersonalCode2Output.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceErrors.java
@@ -14,6 +15,7 @@ C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceRequest.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\PingPong.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\Connector.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\XMLUtility.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\CheckAuthenticationCode.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\FindCustomerByPhoneOrPersonalCode.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\FindCustomerResponse.java
@@ -26,5 +28,6 @@ C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\ContactcenterFindCustomerByPhoneOrPersonalCode2Input.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\GiveDigipassQuery.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\ObjectFactory.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\ServletBase.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\package-info.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\ServicesBase.java

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,7 +40,8 @@ public class ServletBase extends HttpServlet {
     protected static String usernameSonic = "tester1";
     protected static String passwordSonic = "tester";
     protected static String queue = "SEB_SERVICES";
-    protected static long timeout = 60000;
+    protected static long connectionTimeout = 60000L;
+    
 	protected String xmlrequest;
 	protected String xmlresponse;
 
@@ -65,7 +67,13 @@ public class ServletBase extends HttpServlet {
 	 * @see Servlet#init(ServletConfig)
 	 */
 	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
+		super.init(config);
+		ServletContext sc = config.getServletContext();
+		this.broker = sc.getInitParameter("broker");
+		this.usernameSonic = sc.getInitParameter("usernameSonic");
+		this.passwordSonic = sc.getInitParameter("passwordSonic");
+		this.queue = sc.getInitParameter("queue");
+		this.connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
 	}
 
 	/**

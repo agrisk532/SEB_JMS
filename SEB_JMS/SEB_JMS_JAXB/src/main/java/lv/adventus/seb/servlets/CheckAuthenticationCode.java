@@ -93,7 +93,7 @@ public class CheckAuthenticationCode extends ServletBase {
 			System.out.println("CheckAuthenticationCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-  			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
+  			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
   			c.start();
   			this.usr = c.query(xmlrequest);
   			if(usr.getUnifiedServiceErrors() != null) return;

@@ -3,13 +3,43 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+<context-param>
+    <param-name>broker</param-name>
+    <param-value>awebs:6526</param-value>
+</context-param>
+<context-param>
+    <param-name>usernameSonic</param-name>
+    <param-value>tester1</param-value>
+</context-param>
+<context-param>
+    <param-name>passwordSonic</param-name>
+    <param-value>tester</param-value>
+</context-param>
+<context-param>
+    <param-name>queue</param-name>
+    <param-value>SEB_SERVICES</param-value>
+</context-param>
+<context-param>
+    <param-name>connectionTimeout</param-name>
+    <param-value>60000</param-value>
+</context-param>
+
 <servlet>
-    <servlet-name>JMS</servlet-name>
+    <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode</servlet-class>
-    <load-on-startup>1</load-on-startup>
+    <load-on-startup>3</load-on-startup>
+</servlet>
+<servlet>
+    <servlet-name>CheckAuthenticationCode</servlet-name>
+    <servlet-class>lv.adventus.seb.servlets.CheckAuthenticationCode</servlet-class>
+    <load-on-startup>3</load-on-startup>
 </servlet>
 <servlet-mapping>
-    <servlet-name>JMS</servlet-name>
-    <url-pattern>/FindCustomerByPhoneOrPersonalCode</url-pattern>
+    <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
+    <url-pattern>/GetChallengeCodeByPersonalCode</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>CheckAuthenticationCode</servlet-name>
+    <url-pattern>/CheckAuthenticationCode</url-pattern>
 </servlet-mapping>
 </web-app>

@@ -17,23 +17,25 @@ public class Connector {
 	private static String password;
 	private static String sQueue;
 	private static PrintWriter out; // servlet response writer
-	private static long timeout = 60000; // response wait timeout
+	private static long connectionTimeout; // response wait connectionTimeout
 	
     private javax.jms.QueueConnection connect = null;
     private javax.jms.QueueSession session = null;
     private lv.adventus.seb.util.QueueRequestor requestor = null;
     private String xmlresponse;
+    private progress.message.jclient.XMLMessage msg;
+    private lv.adventus.seb.UnifiedServiceHeader msgHeader;
     
 	private static final long serialVersionUID = 1L;
 	
-	public Connector(String broker, String username, String password, String sQueue, PrintWriter out, long timeout)
+	public Connector(String broker, String username, String password, String sQueue, PrintWriter out, long connectionTimeout)
 	{
 		this.broker = broker;
 		this.username = username;
 		this.password = password;
 		this.sQueue = sQueue;
 		this.out = out;
-		this.timeout = timeout;
+		this.connectionTimeout = connectionTimeout;
 	}
 	
     public void start() throws javax.jms.JMSException
@@ -59,6 +61,17 @@ public class Connector {
     	return session;
     }
     
+    public progress.message.jclient.XMLMessage createMessage() throws javax.jms.JMSException
+    {
+    	this.msg = ((progress.message.jclient.Session) this.getSession()).createXMLMessage();
+    	return this.msg;
+    }
+    
+    public progress.message.jclient.XMLMessage getMessage()
+    {
+    	return this.msg;
+    }
+    
     /** Cleanup resources and exit. */
     public void exit() throws javax.jms.JMSException
     {
@@ -68,11 +81,21 @@ public class Connector {
     
     public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException
     {
-    	progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session) this.getSession()).createXMLMessage();
 		//javax.jms.TextMessage msg = session.createTextMessage();
 		msg.setText( xmlrequest );
+		if(this.msgHeader != null)
+		{
+			msg.setStringProperty("messageCategory", "Request");
+			msg.setStringProperty("requestId", this.msgHeader.getRequestId());
+			msg.setStringProperty("userId", this.msgHeader.getUserId());
+			msg.setStringProperty("officerId", this.msgHeader.getOfficerId());
+			msg.setStringProperty("serviceName", this.msgHeader.getServiceName());
+			msg.setBooleanProperty("xsdBasedMessage", this.msgHeader.isXsdBasedRequest());
+			msg.setStringProperty("TTL", String.valueOf(this.connectionTimeout));
+			msg.setStringProperty("responseMsgTTL", String.valueOf(this.connectionTimeout));
+		}
 		// Instead of sending, we will use the QueueRequestor.
-		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.timeout);
+		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
@@ -96,16 +119,32 @@ public class Connector {
 		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
 		if(errors != null)
 		{
-		  String err = "There are errors";
+		  String errClass = null;
+		  String errCode = null;
+		  String errObject = null;
 		  for (int i = 0; i < errors.getError().size(); i++)
 		  {
-			  err = errors.getError().get(i).getErrorClass();
-			  System.out.println(err);
-			  System.out.println(errors.getError().get(i).getErrorCode());
-			  System.out.println(errors.getError().get(i).getErrorObject().getValue());
+			  errClass = errors.getError().get(i).getErrorClass();
+			  errCode = errors.getError().get(i).getErrorCode();
+			  errObject = errors.getError().get(i).getErrorObject().getValue();
+			  System.out.println(errClass);
+			  System.out.println(errCode);
+			  System.out.println(errObject);
 		  }
-	      out.println(err);
+		  if(errClass == "VALIDATIONERROR")
+		  {
+			  out.println(errCode);
+		  }
+		  else
+		  {
+			  out.println(errClass);
+		  }
 		}
   		return usr;
+    }
+    
+    public void SetHeader(lv.adventus.seb.UnifiedServiceHeader h)
+    {
+    	this.msgHeader = h;
     }
 }

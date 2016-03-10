@@ -1,6 +1,7 @@
 package lv.adventus.seb.servlets;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -25,6 +26,7 @@ import progress.message.jclient.BytesMessage;
 import lv.adventus.seb.util.Connector;
 import lv.adventus.seb.util.MultipartMessageUtility;
 import lv.adventus.seb.util.XMLUtility;
+import lv.adventus.seb.UnifiedServiceHeader;
 import lv.adventus.seb.UnifiedServiceResponse;
 import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.ContactcenterFindCustomerByPhoneOrPersonalCode2Output;
@@ -93,7 +95,8 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
+			c.SetHeader(fc.GetHeader());
 			c.start();
 		    this.usr = c.query(xmlrequest);
 		    if(usr.getUnifiedServiceErrors() != null) return;
@@ -119,10 +122,11 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("GiveDigipassChallenge sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-  			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
-  			c.start();
-  			this.usr = c.query(xmlrequest);
-  			if(usr.getUnifiedServiceErrors() != null) return;
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
+			c.SetHeader(dc.GetHeader());
+			c.start();
+		    this.usr = c.query(xmlrequest);
+		    if(usr.getUnifiedServiceErrors() != null) return;
   			
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
   			this.customerId = gco.getGiveChallengeResponse().getCustomerId();

@@ -29,6 +29,11 @@ public class ServicesBase {
 		this.body = factory.createUnifiedServiceBody();
 	}
 	
+	public UnifiedServiceHeader GetHeader()
+	{
+		return this.header;
+	}
+	
 	public void SetHeader(
 							String channel,
 							String clientApplication,
