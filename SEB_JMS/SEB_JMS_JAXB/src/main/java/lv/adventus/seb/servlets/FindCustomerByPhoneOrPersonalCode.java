@@ -1,7 +1,8 @@
 package lv.adventus.seb.servlets;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
@@ -10,7 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import progress.message.jclient.MultipartMessage;
 import progress.message.jclient.Part;
@@ -21,6 +24,9 @@ import progress.message.jclient.BytesMessage;
 
 import lv.adventus.seb.util.Connector;
 import lv.adventus.seb.util.MultipartMessageUtility;
+import lv.adventus.seb.UnifiedServiceResponse;
+import lv.adventus.seb.UnifiedServiceErrors;
+import lv.adventus.seb.ContactcenterFindCustomerByPhoneOrPersonalCode2Output;
 
 /**
  * Servlet implementation class FindCustomerByPhoneOrPersonalCode
@@ -131,9 +137,43 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 			mmu.onMessage(responseMsg);
 			xmlresponseFindCustomer = mmu.getXMLMessage();
 			
-			// analyze xmlresponseFindCustomer
+//////////  analyze xmlresponseFindCustomer ///////////////
 			
-			c.exit();
+			JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
+		    Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
+		 // mangle namespaces in the xmlDocument
+		      int pos = xmlresponseFindCustomer.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
+		      int pos2 = xmlresponseFindCustomer.indexOf(">", pos);
+		      xmlresponseFindCustomer =
+		    		  xmlresponseFindCustomer.replace(xmlresponseFindCustomer.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
+		      // unmarshal
+		      InputStream stream = new ByteArrayInputStream(xmlresponseFindCustomer.getBytes());
+		      UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
+	    	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+	    	  if(errors != null)
+	    	  {
+	    		  String err = "There are errors";
+	    		  for (int i = 0; i < errors.getError().size(); i++)
+	    		  {
+	    			  err = errors.getError().get(i).getErrorClass();
+	    			  System.out.println(err);
+	    			  System.out.println(errors.getError().get(i).getErrorCode());
+	    			  System.out.println(errors.getError().get(i).getErrorObject().getValue());
+	    		  }
+	  	    	  out.println(err);
+	  	    	  return;
+	    	  }
+		      ContactcenterFindCustomerByPhoneOrPersonalCode2Output o =
+	    			  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
+	    	  String customerId = o.getFindCustomerResponse().getCustomerId();
+	    	  String idCode = o.getFindCustomerResponse().getIdCode();
+	    	  System.out.println(customerId);
+	    	  System.out.println(idCode);
+  			  c.exit();
+
+	    	  // create request to the GiveDigipassChallenge service
+			
+
         }
         catch (javax.jms.JMSException jmse)
         {
@@ -141,5 +181,11 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
         	System.out.println(jmse);
         	return;
         }
+	    catch (javax.xml.bind.JAXBException e)
+	    {
+        	out.println("TECHNICALERROR");
+        	System.out.println(e);
+        	return;
+	    }
 	}
 }
