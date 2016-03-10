@@ -24,6 +24,7 @@ import progress.message.jclient.BytesMessage;
 
 import lv.adventus.seb.util.Connector;
 import lv.adventus.seb.util.MultipartMessageUtility;
+import lv.adventus.seb.util.XMLUtility;
 import lv.adventus.seb.UnifiedServiceResponse;
 import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.ContactcenterFindCustomerByPhoneOrPersonalCode2Output;
@@ -32,22 +33,8 @@ import lv.adventus.seb.ContactcenterGiveDigipassChallenge2Output;
 /**
  * Servlet implementation class FindCustomerByPhoneOrPersonalCode
  */
-public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
+public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	
-    private static final String broker = "awebs:6526";
-    private static final String usernameSonic = "tester1";
-    private static final String passwordSonic = "tester";
-    private static final String queue = "SEB_SERVICES";
-    private static final long timeout = 60000;
-	private String xmlrequest;
-	private String xmlresponse;
-	private String customerId;
-	private String idCode;
-	private String challengeCode;
-	private String userName;
-	private UnifiedServiceResponse usr;
-	private Connector c;
-
 
     /**
      * Default constructor. 
@@ -57,28 +44,6 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
     }
 
 	/**
-	 * @see Servlet#init(ServletConfig)
-	 */
-	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * @see Servlet#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * @see Servlet#getServletConfig()
-	 */
-	public ServletConfig getServletConfig() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -86,7 +51,7 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
         PrintWriter out = response.getWriter();
 	    response.setContentType("text/plain");
 	    String userId = request.getParameter("id");
-	    String connId = request.getParameter("connid");
+	    String connId = "cc" + request.getParameter("connid");
 	    
 	    // check http request parameters
 	    
@@ -124,6 +89,9 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 			fc.SetBody();
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
+  			// print XML
+			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
+			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
 			c.start();
@@ -142,12 +110,15 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 		
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
-  			dc.SetHeaderUserId(userId);
+  			dc.SetHeaderUserId(customerId);
   			dc.SetHeaderRequestId(connId);
   			dc.SetBody();
   			dc.SetBody(this.customerId, this.idCode);
   			xmlrequest = dc.Marshal();
-
+  			// print XML
+			System.out.println("GiveDigipassChallenge sent this XML:");
+			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+  			
   			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
   			c.start();
   			this.usr = c.query(xmlrequest);
@@ -163,7 +134,7 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
   			System.out.println(this.userName);
   			System.out.println(this.idCode);
   			c.exit();
-  			out.println("<"+this.challengeCode+">");
+  			out.println("challengecode:" + this.challengeCode + "|userid:" + this.userName);
   			return;
         }
         catch (javax.jms.JMSException jmse)
