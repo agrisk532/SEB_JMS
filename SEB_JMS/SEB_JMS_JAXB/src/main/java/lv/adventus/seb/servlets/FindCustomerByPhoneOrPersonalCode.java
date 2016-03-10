@@ -45,6 +45,8 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 	private String idCode;
 	private String challengeCode;
 	private String userName;
+	private UnifiedServiceResponse usr;
+	private Connector c;
 
 
     /**
@@ -85,6 +87,9 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 	    response.setContentType("text/plain");
 	    String userId = request.getParameter("id");
 	    String connId = request.getParameter("connid");
+	    
+	    // check http request parameters
+	    
 	    if (userId==null)
 	    {
 	    	System.out.println("Parameter id not received");
@@ -109,6 +114,9 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 	    
 	    try
 		{
+	    	
+/////////// invoke FindCustomerByPhoneOrPersonalCode service
+	    	
 			lv.adventus.seb.FindCustomerByPhoneOrPersonalCode fc = new lv.adventus.seb.FindCustomerByPhoneOrPersonalCode();
 			fc.SetHeader();
 			fc.SetHeaderUserId(userId);
@@ -116,81 +124,22 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 			fc.SetBody();
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
-		}
-		catch (JAXBException e)
-		{
-			System.out.println(e.getMessage());
-	    	out.println("TECHNICALERROR");
-	    	return;
-		}
-		
-		Connector c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
-		c.start();
-	    //start(broker,username,password,queue, out);
-	    try
-        {
-        	progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session) c.getSession()).createXMLMessage();
-			//javax.jms.TextMessage msg = session.createTextMessage();
-			msg.setText( xmlrequest );
-			// Instead of sending, we will use the QueueRequestor.
-			javax.jms.Message responseMsg = c.getRequestor().request(msg, timeout);
-			if(responseMsg == null)
-			{
-				throw new javax.jms.JMSException("No response from JMS broker");
-			}
-			MultipartMessageUtility mmu = new MultipartMessageUtility(c); 
-			mmu.onMessage(responseMsg);
-			xmlresponse = mmu.getXMLMessage();
-			
-//////////  analyze xmlresponse ///////////////
-			
-			JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
-		    Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
-		 // mangle namespaces in the xmlDocument
-		      int pos = xmlresponse.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
-		      int pos2 = xmlresponse.indexOf(">", pos);
-		      xmlresponse =
-		    		  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
-		      // unmarshal
-		      InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes());
-		      UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
-	    	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-	    	  if(errors != null)
-	    	  {
-	    		  String err = "There are errors";
-	    		  for (int i = 0; i < errors.getError().size(); i++)
-	    		  {
-	    			  err = errors.getError().get(i).getErrorClass();
-	    			  System.out.println(err);
-	    			  System.out.println(errors.getError().get(i).getErrorCode());
-	    			  System.out.println(errors.getError().get(i).getErrorObject().getValue());
-	    		  }
-	  	    	  out.println(err);
-	  	    	  return;
-	    	  }
-		      ContactcenterFindCustomerByPhoneOrPersonalCode2Output o =
-	    			  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-	    	  this.customerId = o.getFindCustomerResponse().getCustomerId();
-	    	  this.idCode = o.getFindCustomerResponse().getIdCode();
-	    	  System.out.println(this.customerId);
-	    	  System.out.println(this.idCode);
-  			  c.exit();
-        }
-	    catch (JAXBException e)
-	    {
-	    	System.err.println(e.getMessage());
-	    }
-        catch (javax.jms.JMSException jmse)
-        {
-        	out.println("TECHNICALERROR");
-        	System.out.println(jmse);
-        	return;
-        }
 
-	      // create request to the GiveDigipassChallenge service
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
+			c.start();
+		    this.usr = c.query(xmlrequest);
+		    if(usr.getUnifiedServiceErrors() != null) return;
+	
+			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
+		    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
+		    this.customerId = fco.getFindCustomerResponse().getCustomerId();
+		    this.idCode = fco.getFindCustomerResponse().getIdCode();
+		    System.out.println(this.customerId);
+		    System.out.println(this.idCode);
+	  		c.exit();
+
+/////////// invoke GiveDigipassChallenge service
 		
-  		try
-  		{
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(userId);
@@ -198,69 +147,24 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
   			dc.SetBody();
   			dc.SetBody(this.customerId, this.idCode);
   			xmlrequest = dc.Marshal();
-  		}
-  		catch (JAXBException e)
-  		{
-  			System.out.println(e.getMessage());
-  			out.println("TECHNICALERROR");
+
+  			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
+  			c.start();
+  			this.usr = c.query(xmlrequest);
+  			if(usr.getUnifiedServiceErrors() != null) return;
+  			
+  			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
+  			this.customerId = gco.getGiveChallengeResponse().getCustomerId();
+  			this.challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
+  			this.userName = gco.getGiveChallengeResponse().getUsername();
+  			this.idCode = gco.getGiveChallengeResponse().getIdCode();
+  			System.out.println(this.customerId);
+  			System.out.println(this.challengeCode);
+  			System.out.println(this.userName);
+  			System.out.println(this.idCode);
+  			c.exit();
+  			out.println("<"+this.challengeCode+">");
   			return;
-  		}
-  		
-  		c = new Connector(broker,usernameSonic,passwordSonic,queue, out, timeout);
-  		c.start();
-  		//start(broker,username,password,queue, out);
-  		try
-  	    {
-  	    	progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session) c.getSession()).createXMLMessage();
-  			//javax.jms.TextMessage msg = session.createTextMessage();
-  			msg.setText( xmlrequest );
-  			// Instead of sending, we will use the QueueRequestor.
-  			javax.jms.Message responseMsg = c.getRequestor().request(msg, timeout);
-  			if(responseMsg == null)
-  			{
-  				throw new javax.jms.JMSException("No response from JMS broker");
-  			}
-  			MultipartMessageUtility mmu = new MultipartMessageUtility(c); 
-  			mmu.onMessage(responseMsg);
-  			xmlresponse = mmu.getXMLMessage();
-  			
-  	//////  analyze xmlresponse ///////////////
-  			
-  			JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
-  		    Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
-  		 // mangle namespaces in the xmlDocument
-  		      int pos = xmlresponse.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
-  		      int pos2 = xmlresponse.indexOf(">", pos);
-  		      xmlresponse =
-  		    		  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
-  		      // unmarshal
-  		      InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes());
-  		      UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
-  			  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-  			  if(errors != null)
-  			  {
-  				  String err = "There are errors";
-  				  for (int i = 0; i < errors.getError().size(); i++)
-  				  {
-  					  err = errors.getError().get(i).getErrorClass();
-  					  System.out.println(err);
-  					  System.out.println(errors.getError().get(i).getErrorCode());
-  					  System.out.println(errors.getError().get(i).getErrorObject().getValue());
-  				  }
-  		    	  out.println(err);
-  		    	  return;
-  			  }
-  			  ContactcenterGiveDigipassChallenge2Output o = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			  this.customerId = o.getGiveChallengeResponse().getCustomerId();
-  			  System.out.println(this.customerId);
-  			  this.challengeCode = o.getGiveChallengeResponse().getChallengeCode(); 
-  			  System.out.println(this.challengeCode);
-  			  this.userName = o.getGiveChallengeResponse().getUsername();
-  			  System.out.println(this.userName);
-  			  this.idCode = o.getGiveChallengeResponse().getIdCode();
-  			  System.out.println(this.idCode);
-  			  c.exit();
-  			  out.println("<"+this.challengeCode+">");
         }
         catch (javax.jms.JMSException jmse)
         {
@@ -271,7 +175,7 @@ public class FindCustomerByPhoneOrPersonalCode extends HttpServlet {
 	    catch (javax.xml.bind.JAXBException e)
 	    {
         	out.println("TECHNICALERROR");
-        	System.out.println(e);
+        	System.out.println(e.getMessage());
         	return;
 	    }
 	}
