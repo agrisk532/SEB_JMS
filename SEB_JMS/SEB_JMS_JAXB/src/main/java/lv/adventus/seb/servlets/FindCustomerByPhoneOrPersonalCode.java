@@ -91,6 +91,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
 			c.SetHeader(fc.GetHeader());
 			c.start();
+			c.createMessage();
 		    this.usr = c.query(xmlrequest);
 		    if(usr.getUnifiedServiceErrors() != null) return;
 	
@@ -118,6 +119,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
 			c.SetHeader(dc.GetHeader());
 			c.start();
+			c.createMessage();
 		    this.usr = c.query(xmlrequest);
 		    if(usr.getUnifiedServiceErrors() != null) return;
   			

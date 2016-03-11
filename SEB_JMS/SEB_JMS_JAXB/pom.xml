@@ -17,8 +17,23 @@
 	<version>2.0.1</version>
 </dependency>
 <dependency>
+	<groupId>javax.mail</groupId>
+	<artifactId>mail</artifactId>
+	<version>1.4.7</version>
+</dependency>
+<dependency>
   <groupId>progress.message</groupId>
   <artifactId>jclient</artifactId>
+  <version>1.0</version>
+</dependency>
+<dependency>
+  <groupId>progress.message</groupId>
+  <artifactId>crypto</artifactId>
+  <version>1.0</version>
+</dependency>
+<dependency>
+  <groupId>progress.message</groupId>
+  <artifactId>sonic_XMessage</artifactId>
   <version>1.0</version>
 </dependency>
   </dependencies>

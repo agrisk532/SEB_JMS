@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="C:/Users/agrisk/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/agrisk/Downloads/javax.jms-api-2.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/agrisk/Documents/GCTI_Devel/SEB_IW_Custom/SonicMQ/Sonic2013_libraries/lib/sonic_Client.jar"/>
+	<classpathentry kind="lib" path="C:/Users/agrisk/Documents/GCTI_Devel/SEB_IW_Custom/SonicMQ/Sonic2013_libraries/lib/sonic_Crypto.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
