@@ -63,7 +63,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	if(userId==null) s += "userId ";
 	    	if(connId==null) s += "connId ";
 	    	System.out.println("Parameter " + s + "not received");
-	    	out.println("TECHNICALERROR");
+	    	out.println("error:TECHNICALERROR");
 	    	return;
 	    }
 	    else
@@ -136,13 +136,13 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.println("TECHNICALERROR");
+        	out.println("error:TECHNICALERROR");
         	System.out.println(jmse);
         	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.println("TECHNICALERROR");
+        	out.println("error:TECHNICALERROR");
         	System.out.println(e.getMessage());
         	return;
 	    }

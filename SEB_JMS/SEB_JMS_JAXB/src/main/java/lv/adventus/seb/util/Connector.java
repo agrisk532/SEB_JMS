@@ -133,11 +133,11 @@ public class Connector {
 		  }
 		  if(errClass == "VALIDATIONERROR")
 		  {
-			  out.println(errCode);
+			  out.println("error:" + errCode);
 		  }
 		  else
 		  {
-			  out.println(errClass);
+			  out.println("error:"+errClass);
 		  }
 		}
   		return usr;
