@@ -25,8 +25,8 @@ public class JAXB2Marshaller {
       header.setChannel("ContactCenter");
       header.setClientApplication("IVR");
       header.setClientApplicationVersion("IVR 1.0");
-      header.setCountryCode("EE");
-      header.setLanguage("EE");
+      header.setCountryCode("LV");
+      header.setLanguage("LV");
       header.setOfficerId("admin");
       header.setRequestId("cc02ed3ebc-38ec-319c-9328-063c6fc93b55");
       header.setRequestRemoteHost("test remote host");
