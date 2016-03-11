@@ -66,7 +66,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(userId==null) pr+="userid ";
 	    	if(connId==null) pr+="connid ";
 	    	System.out.println("Expected parameter digipasscode not received: " + pr);
-	    	out.println("error:TECHNICALERROR");
+	    	out.println("result:TECHNICALERROR");
 	    	return;
 	    }
 	    else
@@ -108,18 +108,18 @@ public class CheckAuthenticationCode extends ServletBase {
       	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
   			
   			c.exit();
-  			out.println("OK");
+  			out.println("result:OK");
   			return;
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.println("error:TECHNICALERROR");
+        	out.println("result:TECHNICALERROR");
         	System.out.println(jmse);
         	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.println("error:TECHNICALERROR");
+        	out.println("result:TECHNICALERROR");
         	System.out.println(e.getMessage());
         	return;
 	    }
