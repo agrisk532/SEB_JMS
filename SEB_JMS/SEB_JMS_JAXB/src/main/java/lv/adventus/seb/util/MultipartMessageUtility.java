@@ -9,7 +9,6 @@ import progress.message.jclient.TextMessage;
 public class MultipartMessageUtility {
 	
 	private Connector connector;
-	private int xmlResponsePart = -1; // MultipartMessage part containing XMLResponse 
 	private String xmlResponse;
 	private String partMessage;
 
