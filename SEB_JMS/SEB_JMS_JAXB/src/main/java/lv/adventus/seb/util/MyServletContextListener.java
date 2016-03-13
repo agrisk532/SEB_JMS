@@ -16,6 +16,7 @@ public class MyServletContextListener implements ServletContextListener
 	private String queue;
 	private long connectionTimeout;
 	private ServletContext sc;
+	private long pingPongInterval; 
 
     public MyServletContextListener()
     {
@@ -31,6 +32,16 @@ public class MyServletContextListener implements ServletContextListener
     	passwordSonic = sc.getInitParameter("passwordSonic");
     	queue = sc.getInitParameter("queue");
     	connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
+    	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
+    	
+    	System.out.println("ServletContext parameters:");
+    	System.out.println("broker: " + broker);
+    	System.out.println("username: " + usernameSonic);
+    	System.out.println("password: " + passwordSonic);
+    	System.out.println("queue: " + queue);
+    	System.out.println("connectionTimeout: " + connectionTimeout);
+    	System.out.println("PingPongInterval: " + pingPongInterval);
+    	System.out.println();
 
 	   	int delay = 1000;
 	   	Timer timer = new Timer();
@@ -45,7 +56,7 @@ public class MyServletContextListener implements ServletContextListener
 	   		return;
 	   	}
 
-	   	timer.scheduleAtFixedRate(this.task, delay, 30000);
+	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
 	   	sc.setAttribute ("timer", timer);
 	}
 

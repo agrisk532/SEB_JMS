@@ -23,7 +23,10 @@
     <param-name>connectionTimeout</param-name>
     <param-value>60000</param-value>
 </context-param>
-
+<context-param>
+    <param-name>pingPongInterval</param-name>
+    <param-value>30000</param-value>
+</context-param>
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode</servlet-class>
