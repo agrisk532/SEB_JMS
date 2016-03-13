@@ -103,6 +103,11 @@ public class Connector {
 		MultipartMessageUtility mmu = new MultipartMessageUtility(this); 
 		mmu.onMessage(responseMsg);
 		xmlresponse = mmu.getXMLMessage();
+		if(xmlresponse.length() == 0)
+		{
+				System.out.println("xmlresponse is null length. Cannot continue.");
+				return null;
+		}
 		
 //////  analyze xmlresponse ///////////////
 		

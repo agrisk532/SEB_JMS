@@ -19,13 +19,19 @@ public class MultipartMessageUtility {
 	public MultipartMessageUtility(Connector c)
 	{
 		this.connector = c;
+		xmlResponse = "unassigned";
+		partMessage = "unassigned";
 	}
 	
 	public String getXMLMessage()
 	{
 		if(xmlResponse.length() > 0) return xmlResponse;
 		else
+		{
+			System.out.println("XML response is null length.");
 			return null;
+		}
+			
 	}
     /**
      * Handle the message
@@ -42,10 +48,9 @@ public class MultipartMessageUtility {
         }
         else
         {
-            System.out.println( "received a JMS message ");
+            System.out.println("Received a JMS message.");
+            System.out.println("Received not a MultipartMessage....Cannot continue.");
         }
-        System.out.println("Received not a MultipartMessage....Cannot continue.");
-
     }
 
     private void unpackMM(javax.jms.Message aMessage, int depth) throws javax.jms.JMSException
@@ -110,7 +115,15 @@ public class MultipartMessageUtility {
 
     private void unpackJMSMessage(javax.jms.Message aMessage, int depth) throws javax.jms.JMSException
     {
-        if (aMessage instanceof TextMessage)
+// Be careful. progress.message.jclient.XMLMessage is derived from progress.message.jclient.TextMessage.
+// Order of following operators is important.    	
+        if (aMessage instanceof progress.message.jclient.XMLMessage)
+        {
+            progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session)connector.getSession()).createXMLMessage();
+            indent(depth); System.out.println( "content in XMLmessage... " + msg.getText());
+            partMessage = msg.getText();
+        }
+        else if (aMessage instanceof TextMessage)   
         {
             javax.jms.TextMessage tmsg = (javax.jms.TextMessage) aMessage;
             indent(depth); System.out.println( "content in TextMessage... " + tmsg.getText() );
@@ -119,12 +132,6 @@ public class MultipartMessageUtility {
         {
             javax.jms.BytesMessage bmsg = (javax.jms.BytesMessage) aMessage;
             indent(depth); System.out.println( "content in Bytesmessage... " + bmsg.readUTF());
-        }
-        else if (aMessage instanceof progress.message.jclient.XMLMessage)
-        {
-            progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session)connector.getSession()).createXMLMessage();
-            indent(depth); System.out.println( "content in XMLmessage... " + msg.getText());
-            partMessage = msg.getText();
         }
         else
         {

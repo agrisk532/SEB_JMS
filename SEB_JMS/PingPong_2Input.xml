@@ -12,8 +12,8 @@
         <channel>ContactCenter</channel>
         <clientApplication>IVR</clientApplication>
         <clientApplicationVersion>IVR 1.0</clientApplicationVersion>
-        <countryCode>EE</countryCode>
-        <language>EE</language>
+        <countryCode>LV</countryCode>
+        <language>LV</language>
     </unifiedServiceHeader>
     <unifiedServiceBody>
         <PingPong>
