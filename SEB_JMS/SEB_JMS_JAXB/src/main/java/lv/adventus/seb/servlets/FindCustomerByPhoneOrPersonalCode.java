@@ -75,13 +75,13 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    }
 	    
 	 // check PingPong service result
- 		ServletContext context = getServletContext();
- 		if(context.getAttribute("PingPong") == "0")
- 		{
- 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
- 			out.println("result:TECHNICALERROR");
- 			return;
- 		}
+// 	 	ServletContext context = getServletContext();
+// 		if(context.getAttribute("PingPong") == "0")
+// 		{
+// 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
+// 			out.println("result:TECHNICALERROR");
+// 			return;
+// 		}
 	    
 	    try
 		{

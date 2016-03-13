@@ -80,13 +80,13 @@ public class CheckAuthenticationCode extends ServletBase {
 	    }
 
 // check PingPong service result
-		ServletContext context = getServletContext();
- 		if(context.getAttribute("PingPong") == "0")
- 		{
- 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
- 			out.println("result:TECHNICALERROR");
- 			return;
- 		}
+//		ServletContext context = getServletContext();
+// 		if(context.getAttribute("PingPong") == "0")
+// 		{
+// 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
+// 			out.println("result:TECHNICALERROR");
+// 			return;
+// 		}
 	    
 	    try
 		{
