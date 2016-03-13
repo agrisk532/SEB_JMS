@@ -2,7 +2,7 @@
 <UnifiedServiceRequest>
     <unifiedServiceHeader>
         <requestId>cc02ed3ebc-38ec-319c-9328-063c6fc93b55</requestId>
-        <serviceName>system.PingPong_1 service</serviceName>
+        <serviceName>system.PingPong_1</serviceName>
         <userId>35503186196</userId>
         <officerId>admin</officerId>
         <xsdBasedRequest>false</xsdBasedRequest>

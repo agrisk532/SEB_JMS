@@ -41,7 +41,7 @@ public class MyServletContextListener implements ServletContextListener
 	   	catch(javax.xml.bind.JAXBException e)
 	   	{
 	   		System.out.println("PingPong service exception. Could not create the timer task");
-	   		System.out.println("PingPong service will be unused.");
+	   		System.out.println("PingPong service won't be used.");
 	   		return;
 	   	}
 

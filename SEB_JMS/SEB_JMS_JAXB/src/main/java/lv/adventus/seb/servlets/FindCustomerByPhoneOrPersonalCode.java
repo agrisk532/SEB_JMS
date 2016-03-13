@@ -78,6 +78,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
  		ServletContext context = getServletContext();
  		if(context.getAttribute("PingPong") == "0")
  		{
+ 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
  			out.println("result:TECHNICALERROR");
  			return;
  		}
@@ -103,6 +104,12 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			c.start();
 			c.createMessage();
 		    this.usr = c.query(xmlrequest);
+		    if(this.usr == null)
+		    {
+		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
+	 			out.println("result:TECHNICALERROR");
+	 			return;
+		    }
 		    if(usr.getUnifiedServiceErrors() != null) return;
 	
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =

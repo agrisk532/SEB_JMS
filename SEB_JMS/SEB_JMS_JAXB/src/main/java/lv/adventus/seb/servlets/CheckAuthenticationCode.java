@@ -81,11 +81,12 @@ public class CheckAuthenticationCode extends ServletBase {
 
 // check PingPong service result
 		ServletContext context = getServletContext();
-		if(context.getAttribute("PingPong") == "0")
-		{
-			out.println("result:TECHNICALERROR");
-			return;
-		}
+ 		if(context.getAttribute("PingPong") == "0")
+ 		{
+ 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
+ 			out.println("result:TECHNICALERROR");
+ 			return;
+ 		}
 	    
 	    try
 		{
@@ -106,6 +107,13 @@ public class CheckAuthenticationCode extends ServletBase {
   			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
   			c.start();
   			this.usr = c.query(xmlrequest);
+		    if(this.usr == null)
+		    {
+		    	System.out.println("CheckAuthenticationCode: query returned null.");
+	 			out.println("result:TECHNICALERROR");
+	 			return;
+		    }
+
   			if(usr.getUnifiedServiceErrors() != null) return;
   			
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);

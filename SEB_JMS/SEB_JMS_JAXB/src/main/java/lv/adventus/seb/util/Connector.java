@@ -136,7 +136,7 @@ public class Connector {
 			  System.out.println(errCode);
 			  System.out.println(errObject);
 		  }
-		  if(out != null)
+		  if(out != null)  // print only if called from servlets
 		  {
 			  if(errClass == "VALIDATIONERROR")
 			  {

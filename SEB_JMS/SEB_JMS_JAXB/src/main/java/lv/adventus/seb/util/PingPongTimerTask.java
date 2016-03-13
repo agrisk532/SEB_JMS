@@ -39,26 +39,17 @@ class PingPongTimerTask extends TimerTask
 	@Override
 	public void run()
 	{
-		String xmlrequest;
-		pps.SetHeader();
-		pps.SetBody("Test", "");
-				
 		try
 		{
+			String xmlrequest;
+			pps.SetHeader();
+			pps.SetBody("Test", "");
+
 			xmlrequest = pps.Marshal();
-		}
-		catch(javax.xml.bind.JAXBException e)
-		{
-			System.out.println("Marshaling exception in PingPongTimerTask()");
-			System.out.println("Canceling PingPong service");
-			return;
-		}
 			// print XML
-		System.out.println("PingPongService sent this XML:");
-		System.out.println(XMLUtility.prettyFormat(xmlrequest));
-		
-		try
-		{
+			System.out.println("PingPongService sent this XML:");
+			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+
 			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout);
 			c.SetHeader(pps.GetHeader());
 			c.start();
@@ -83,16 +74,13 @@ class PingPongTimerTask extends TimerTask
 		catch (javax.jms.JMSException e)
 		{
 			System.out.println("JMS exception in PingPongTimerTask()");
-			System.out.println("Canceling PingPong service");
 			e.printStackTrace();
 			return;
 		}
 		catch (javax.xml.bind.JAXBException e)
 		{
 			System.out.println("JAXB exception in PingPongTimerTask()");
-			System.out.println("Canceling PingPong service");
 			e.printStackTrace();
-			sc.setAttribute("PingPong", "0");
 			return;
 		}
 	}

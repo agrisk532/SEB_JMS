@@ -22,6 +22,7 @@ C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\JAXB2UnMarshaller.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceBody.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\AuthenticationQuery.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\MyServletContextListener.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\GiveDigipassResponse.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\MultipartMessageUtility.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\ContactcenterGiveDigipassChallenge2Input.java
@@ -31,3 +32,5 @@ C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\ServletBase.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\package-info.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\ServicesBase.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\PingPongTimerTask.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\PingPongService.java
