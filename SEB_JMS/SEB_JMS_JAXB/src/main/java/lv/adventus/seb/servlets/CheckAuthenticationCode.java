@@ -2,11 +2,13 @@ package lv.adventus.seb.servlets;
 
 import java.io.ByteArrayInputStream;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,7 +57,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    String chcode = request.getParameter("challengecode");
 	    String userId = request.getParameter("userid");
 	    String connId = request.getParameter("connid");
-	    
+
 	    // check http request parameters
 	    
 	    if (dpcode==null || chcode==null || userId==null || connId==null)
@@ -76,6 +78,14 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	System.out.println("CheckAuthenticationCode: userid = " + userId);
 	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
 	    }
+
+// check PingPong service result
+		ServletContext context = getServletContext();
+		if(context.getAttribute("PingPong") == "0")
+		{
+			out.println("result:TECHNICALERROR");
+			return;
+		}
 	    
 	    try
 		{

@@ -105,8 +105,8 @@ public class Connector {
 		xmlresponse = mmu.getXMLMessage();
 		if(xmlresponse.length() == 0)
 		{
-				System.out.println("xmlresponse is null length. Cannot continue.");
-				return null;
+			System.out.println("xmlresponse is null length. Cannot continue.");
+			return null;
 		}
 		
 //////  analyze xmlresponse ///////////////
@@ -136,13 +136,16 @@ public class Connector {
 			  System.out.println(errCode);
 			  System.out.println(errObject);
 		  }
-		  if(errClass == "VALIDATIONERROR")
+		  if(out != null)
 		  {
-			  out.println("error:" + errCode);
-		  }
-		  else
-		  {
-			  out.println("error:"+errClass);
+			  if(errClass == "VALIDATIONERROR")
+			  {
+				  out.println("error:" + errCode);
+			  }
+			  else
+			  {
+				  out.println("error:"+errClass);
+			  }
 		  }
 		}
   		return usr;
