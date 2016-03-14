@@ -126,7 +126,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
-  			dc.SetHeaderRequestId(connId);
+  			dc.SetHeaderRequestId(connId + "1");  // to make requestId unique
   			dc.SetBody();
   			dc.SetBody(this.customerId, this.idCode);
   			xmlrequest = dc.Marshal();
@@ -159,14 +159,14 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
         catch (javax.jms.JMSException jmse)
         {
         	out.print("error:TECHNICALERROR");
+        	System.out.print("javax.jms.JMSException: ");
         	System.out.println(jmse);
-        	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
         	out.print("error:TECHNICALERROR");
+        	System.out.print("javax.xml.bind.JAXBException: ");
         	System.out.println(e.getMessage());
-        	return;
 	    }
 	}
 }

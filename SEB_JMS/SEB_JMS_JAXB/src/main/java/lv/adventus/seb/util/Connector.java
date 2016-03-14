@@ -19,12 +19,13 @@ public class Connector {
 	private static PrintWriter out; // servlet response writer
 	private static long connectionTimeout; // response wait connectionTimeout
 	
-    private javax.jms.QueueConnection connect = null;
-    private javax.jms.QueueSession session = null;
-    private lv.adventus.seb.util.QueueRequestor requestor = null;
-    private String xmlresponse;
-    private progress.message.jclient.XMLMessage msg;
-    private lv.adventus.seb.UnifiedServiceHeader msgHeader;
+    public javax.jms.QueueConnection connect = null;
+    public javax.jms.QueueSession session = null;
+    public lv.adventus.seb.util.QueueRequestor requestor = null;
+    public String xmlresponse;
+    public progress.message.jclient.XMLMessage msg;
+    public lv.adventus.seb.UnifiedServiceHeader msgHeader;
+    public lv.adventus.seb.UnifiedServiceResponse usr;
     
 	private static final long serialVersionUID = 1L;
 	
@@ -128,7 +129,7 @@ public class Connector {
 	    	  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
 	    // unmarshal
 	    InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes());
-	    UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
+	    this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
 		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
 		if(errors != null)
 		{
@@ -156,7 +157,7 @@ public class Connector {
 			  }
 		  }
 		}
-  		return usr;
+  		return this.usr;
     }
     
     public void SetHeader(lv.adventus.seb.UnifiedServiceHeader h)

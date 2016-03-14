@@ -46,8 +46,8 @@
     <url-pattern>/CheckAuthenticationCode</url-pattern>
 </servlet-mapping>
 <!-- 
-    <listener>
-       <listener-class>lv.adventus.seb.util.MyServletContextListener</listener-class>
-    </listener>
- -->    
+<listener>
+    <listener-class>lv.adventus.seb.util.MyServletContextListener</listener-class>
+</listener>
+ -->
 </web-app>

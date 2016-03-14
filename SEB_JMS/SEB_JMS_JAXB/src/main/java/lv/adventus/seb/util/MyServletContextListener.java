@@ -3,6 +3,9 @@ package lv.adventus.seb.util;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -16,7 +19,8 @@ public class MyServletContextListener implements ServletContextListener
 	private String queue;
 	private long connectionTimeout;
 	private ServletContext sc;
-	private long pingPongInterval; 
+	private long pingPongInterval;
+	private ConcurrentHashMap<String, Object> shared;
 
     public MyServletContextListener()
     {
@@ -58,6 +62,16 @@ public class MyServletContextListener implements ServletContextListener
 
 	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
 	   	sc.setAttribute ("timer", timer);
+	   	
+	   	ConcurrentHashMap<String, Object> shared =
+	   			(ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
+	   	if (shared == null)
+	   	{
+	   	    shared = new ConcurrentHashMap<String, Object>();
+	   	    sc.setAttribute("sharedData", shared);
+	   	}
+
+	   	shared.put("UID", String.valueOf(UUID.randomUUID()));
 	}
 
     @Override

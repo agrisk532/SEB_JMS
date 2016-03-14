@@ -96,7 +96,7 @@ public class CheckAuthenticationCode extends ServletBase {
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
   			dc.SetHeaderUserId(userId);
-  			dc.SetHeaderRequestId(connId);
+  			dc.SetHeaderRequestId(connId + "2");
   			dc.SetBody();
   			dc.SetBody(dpcode,chcode,userId);
   			xmlrequest = dc.Marshal();

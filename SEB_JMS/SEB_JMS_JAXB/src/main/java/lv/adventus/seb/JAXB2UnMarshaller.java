@@ -11,7 +11,10 @@ import java.io.*;
 
 public class JAXB2UnMarshaller {
 
-  public void unMarshall(File xmlDocument) {
+	private UnifiedServiceResponse usr = null;
+	
+  public UnifiedServiceResponse unMarshall(File xmlDocument) {
+	  
     try {
 
       JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
@@ -43,70 +46,8 @@ public class JAXB2UnMarshaller {
       
       //UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
      
-      UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
+      usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
 
-      System.out.println(usr.getUnifiedServiceHeader().getRequestId());
-      System.out.println(usr.getUnifiedServiceHeader().getLanguage());
-      System.out.println(usr.getUnifiedServiceHeader().getServiceName());
-      System.out.println(usr.getUnifiedServiceBody().getAny().get(0));
-      System.out.println(usr.getUnifiedServiceBody().getAny().get(0).getClass());
-      
-      // ContactcenterFindCustomerByPhoneOrPersonalCode2Output
-      
-      if(usr.getUnifiedServiceBody().getAny().get(0).getClass() == ContactcenterFindCustomerByPhoneOrPersonalCode2Output.class)
-      {
-    	  ContactcenterFindCustomerByPhoneOrPersonalCode2Output o =
-    			  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-    	  System.out.println(o.getFindCustomerResponse().getFirstName());
-      }
-      
-   // ContactcenterCheckAuthenticationCode2Output
-      
-      else 
-          if(usr.getUnifiedServiceBody().getAny().get(0).getClass() == ContactcenterCheckAuthenticationCode2Output.class)
-          {
-        	  ContactcenterCheckAuthenticationCode2Output o = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-        	  System.out.println(o.getAuthenticationResponse().getAuthenticationCode());
-        	  System.out.println(o.getAuthenticationResponse().getUsername());
-        	  System.out.println(o.getAuthenticationResponse().getChallengeCode());
-          }
-
-   // ContactcenterGiveDigipassChallenge2Output
-      
-      else
-      	  if(usr.getUnifiedServiceBody().getAny().get(0).getClass() == ContactcenterGiveDigipassChallenge2Output.class)
-      	  {
-      		ContactcenterGiveDigipassChallenge2Output o = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-      		System.out.println(o.getGiveChallengeResponse().getCustomerId());
-      		System.out.println(o.getGiveChallengeResponse().getChallengeCode());
-      		System.out.println(o.getGiveChallengeResponse().getUsername());
-      		System.out.println(o.getGiveChallengeResponse().getIdCode());
-  	  }
-      
-          else
-          	  if(usr.getUnifiedServiceBody().getAny().get(0).getClass() == PingPong.class)
-          	  {
-          		PingPong o = (PingPong) usr.getUnifiedServiceBody().getAny().get(0);
-          		System.out.println(o.getPingMessage());
-          		System.out.println(o.getPongMessage());
-       	  }
-
-      
-      else
-   	  {
-   		  
-   	  }
-
-	  UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-	  if(errors != null)
-	  {
-		  for (int i = 0; i < errors.getError().size(); i++)
-		  {
-			  System.out.println(errors.getError().get(i).getErrorClass());
-			  System.out.println(errors.getError().get(i).getErrorCode());
-			  System.out.println(errors.getError().get(i).getErrorObject().getValue());
-		  }
-	  }
     }
     catch (JAXBException e)
     {
@@ -116,6 +57,8 @@ public class JAXB2UnMarshaller {
     {
     	System.err.println(e.getMessage());
     }
+    
+    return usr;
   }
   
   static String readFile(File file, String charset)
@@ -129,15 +72,18 @@ public class JAXB2UnMarshaller {
 	}
   
   public static void main(String[] argv) {
-    File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
-    //File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output.xml");
+    //File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
+    File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output2.xml");
     //File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
 //	  File xmlDocument = new File("PingPong_2Output.xml");
     System.out.println(xmlDocument.exists()); // prints true if a file exists at that location
     System.out.println(xmlDocument.getAbsoluteFile());// prints "c:\\eclipse\\eclipse.ini"
     JAXB2UnMarshaller jaxbUnmarshaller = new JAXB2UnMarshaller();
 
-    jaxbUnmarshaller.unMarshall(xmlDocument);
+    UnifiedServiceResponse usr = jaxbUnmarshaller.unMarshall(xmlDocument);
+    System.out.println(usr.getUnifiedServiceHeader().getRequestId());
+    if(usr.getUnifiedServiceErrors() != null)
+    	System.out.println("There are errors.");
     System.exit(0);
 
   }

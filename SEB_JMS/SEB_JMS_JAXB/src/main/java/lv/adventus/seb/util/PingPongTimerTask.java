@@ -4,6 +4,7 @@ import java.util.Date;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -23,6 +24,8 @@ class PingPongTimerTask extends TimerTask
 	private String queue;
 	private long connectionTimeout;
 	private ServletContext sc;
+	private long timesCalled;
+
 	
 	public PingPongTimerTask(ServletContext sc, String broker, String username, String password,
 			String queue, long timeout) throws javax.xml.bind.JAXBException
@@ -33,6 +36,7 @@ class PingPongTimerTask extends TimerTask
 		this.passwordSonic = password;
 		this.queue = queue;
 		this.connectionTimeout = timeout;
+		this.timesCalled = 0;
 		pps = new lv.adventus.seb.PingPongService();
 	}
 	
@@ -43,6 +47,9 @@ class PingPongTimerTask extends TimerTask
 		{
 			String xmlrequest;
 			pps.SetHeader();
+			ConcurrentHashMap<String, Object> o = (ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
+			String uid = String.valueOf(o.get("UID")).concat(String.valueOf(timesCalled++));
+			pps.SetHeaderRequestId(uid);
 			pps.SetBody("Test", "");
 
 			xmlrequest = pps.Marshal();
