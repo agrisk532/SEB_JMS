@@ -129,10 +129,10 @@ public class JAXB2UnMarshaller {
 	}
   
   public static void main(String[] argv) {
-    //File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
+    File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
     //File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output.xml");
     //File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
-	  File xmlDocument = new File("PingPong_2Output.xml");
+//	  File xmlDocument = new File("PingPong_2Output.xml");
     System.out.println(xmlDocument.exists()); // prints true if a file exists at that location
     System.out.println(xmlDocument.getAbsoluteFile());// prints "c:\\eclipse\\eclipse.ini"
     JAXB2UnMarshaller jaxbUnmarshaller = new JAXB2UnMarshaller();

@@ -65,7 +65,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	if(userId==null) s += "userId ";
 	    	if(connId==null) s += "connId ";
 	    	System.out.println("Parameter " + s + "not received");
-	    	out.println("error:TECHNICALERROR");
+	    	out.print("error:TECHNICALERROR");
 	    	return;
 	    }
 	    else
@@ -79,7 +79,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 // 		if(context.getAttribute("PingPong") == "0")
 // 		{
 // 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
-// 			out.println("result:TECHNICALERROR");
+// 			out.print("result:TECHNICALERROR");
 // 			return;
 // 		}
 	    
@@ -107,7 +107,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    if(this.usr == null)
 		    {
 		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
-	 			out.println("result:TECHNICALERROR");
+	 			out.print("result:TECHNICALERROR");
 	 			return;
 		    }
 		    if(usr.getUnifiedServiceErrors() != null) return;
@@ -158,13 +158,13 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.println("error:TECHNICALERROR");
+        	out.print("error:TECHNICALERROR");
         	System.out.println(jmse);
         	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.println("error:TECHNICALERROR");
+        	out.print("error:TECHNICALERROR");
         	System.out.println(e.getMessage());
         	return;
 	    }

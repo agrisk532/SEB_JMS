@@ -68,7 +68,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(userId==null) pr+="userid ";
 	    	if(connId==null) pr+="connid ";
 	    	System.out.println("Expected parameter digipasscode not received: " + pr);
-	    	out.println("result:TECHNICALERROR");
+	    	out.print("result:TECHNICALERROR");
 	    	return;
 	    }
 	    else
@@ -84,7 +84,7 @@ public class CheckAuthenticationCode extends ServletBase {
 // 		if(context.getAttribute("PingPong") == "0")
 // 		{
 // 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
-// 			out.println("result:TECHNICALERROR");
+// 			out.print("result:TECHNICALERROR");
 // 			return;
 // 		}
 	    
@@ -110,7 +110,7 @@ public class CheckAuthenticationCode extends ServletBase {
 		    if(this.usr == null)
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
-	 			out.println("result:TECHNICALERROR");
+	 			out.print("result:TECHNICALERROR");
 	 			return;
 		    }
 
@@ -127,18 +127,18 @@ public class CheckAuthenticationCode extends ServletBase {
       	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
   			
   			c.exit();
-  			out.println("result:OK");
+  			out.print("result:OK");
   			return;
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.println("result:TECHNICALERROR");
+        	out.print("result:TECHNICALERROR");
         	System.out.println(jmse);
         	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.println("result:TECHNICALERROR");
+        	out.print("result:TECHNICALERROR");
         	System.out.println(e.getMessage());
         	return;
 	    }

@@ -103,6 +103,10 @@ public class Connector {
 		MultipartMessageUtility mmu = new MultipartMessageUtility(this); 
 		mmu.onMessage(responseMsg);
 		xmlresponse = mmu.getXMLMessage();
+		
+		System.out.println("XML Response:");
+		System.out.println(xmlresponse);
+		
 		if(xmlresponse.length() == 0)
 		{
 			System.out.println("xmlresponse is null length. Cannot continue.");
@@ -116,6 +120,10 @@ public class Connector {
 	 // mangle namespaces in the xmlDocument
 	    int pos = xmlresponse.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
 	    int pos2 = xmlresponse.indexOf(">", pos);
+	    
+		System.out.println("pos: " + pos);
+		System.out.println("pos2: " + pos2);
+	    
 	    xmlresponse =
 	    	  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
 	    // unmarshal
@@ -138,13 +146,13 @@ public class Connector {
 		  }
 		  if(out != null)  // print only if called from servlets
 		  {
-			  if(errClass == "VALIDATIONERROR")
+			  if(errClass.equals("VALIDATIONERROR"))
 			  {
-				  out.println("error:" + errCode);
+				  out.print("error:" + errCode);
 			  }
 			  else
 			  {
-				  out.println("error:"+errClass);
+				  out.print("error:"+errClass);
 			  }
 		  }
 		}

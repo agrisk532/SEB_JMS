@@ -19,8 +19,8 @@ public class MultipartMessageUtility {
 	public MultipartMessageUtility(Connector c)
 	{
 		this.connector = c;
-		xmlResponse = "unassigned";
-		partMessage = "unassigned";
+		xmlResponse = "unassignedXMLResponse";
+		partMessage = "unassignedPartMessage";
 	}
 	
 	public String getXMLMessage()
@@ -78,23 +78,28 @@ public class MultipartMessageUtility {
             {
                 javax.jms.Message msg = mm.getMessageFromPart(i);
                 if (msg instanceof MultipartMessage)
+                {
+                	System.out.println("MM: in MM part");
                     unpackMM(msg, ++depth);
+                }
                 else
                 {
-                    if(part.getHeader().getContentId()=="XMLResponse")
+                    if(part.getHeader().getContentId().equals("XMLResponse"))
                     {
+                    	System.out.println("MM: in XML part");
                     	unpackJMSMessage(msg, n);
                     	xmlResponse = partMessage;
-                    	return; // no need to scan after XMLResponse is found
                     }
                     else
                     {
+                    	System.out.println("MM: in not XML part");
                     	unpackJMSMessage(msg, n);
                     }
                 }
             }
             else
             {
+            	System.out.println("MM: in other part");
                 unpackPart(part, n);
             }
             indent(n); System.out.println("--------end of part " + (i+1));
