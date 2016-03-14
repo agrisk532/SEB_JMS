@@ -73,7 +73,7 @@ public class MultipartMessageUtility {
             Part part = mm.getPart(i);
             indent(n); System.out.println("Part.contentType = " + part.getHeader().getContentType());
             indent(n); System.out.println("Part.contentId = " + part.getHeader().getContentId());
-
+ 
             if (mm.isMessagePart(i))
             {
                 javax.jms.Message msg = mm.getMessageFromPart(i);
@@ -119,7 +119,7 @@ public class MultipartMessageUtility {
 // Order of following operators is important.    	
         if (aMessage instanceof progress.message.jclient.XMLMessage)
         {
-            progress.message.jclient.XMLMessage msg = ((progress.message.jclient.Session)connector.getSession()).createXMLMessage();
+            progress.message.jclient.XMLMessage msg = (progress.message.jclient.XMLMessage)aMessage;
             indent(depth); System.out.println( "content in XMLmessage... " + msg.getText());
             partMessage = msg.getText();
         }
