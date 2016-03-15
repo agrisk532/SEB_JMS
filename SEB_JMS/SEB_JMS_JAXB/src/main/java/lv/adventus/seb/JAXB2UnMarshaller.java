@@ -63,22 +63,20 @@ public class JAXB2UnMarshaller {
 //	    
 //  for CheckAuthenticationCode()
 //    
-	    String s1 = "<unifiedServiceBody>";
-	    StringBuilder sb = new StringBuilder(s);
-	    String s2 = "<contactcenter:contactcenter.CheckAuthenticationCode_2_Output xmlns:cmn=\"http://www.seb.ee/common\" xmlns:contactcenter=\"http://www.seb.ee/contactcenter\">"; 
-	    int pos3 = sb.indexOf(s1);
-	    pos3 += s1.length();
-	    sb.insert(pos3, s2);
-	    s1 = "</contactcenter:AuthenticationResponse>";
-	    s2 = "</contactcenter:contactcenter.CheckAuthenticationCode_2_Output>";
-	    pos3 = sb.indexOf(s1);
-	    pos3 += s1.length();
-	    sb.insert(pos3, s2);
-	    s = sb.toString(); 
-	    InputStream stream = new ByteArrayInputStream(s.getBytes("UTF-8"));
-	      
-	      //UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
-	     
+//	    String s1 = "<unifiedServiceBody>";
+//	    StringBuilder sb = new StringBuilder(s);
+//	    String s2 = "<contactcenter:contactcenter.CheckAuthenticationCode_2_Output xmlns:cmn=\"http://www.seb.ee/common\" xmlns:contactcenter=\"http://www.seb.ee/contactcenter\">"; 
+//	    int pos3 = sb.indexOf(s1);
+//	    pos3 += s1.length();
+//	    sb.insert(pos3, s2);
+//	    s1 = "</contactcenter:AuthenticationResponse>";
+//	    s2 = "</contactcenter:contactcenter.CheckAuthenticationCode_2_Output>";
+//	    pos3 = sb.indexOf(s1);
+//	    pos3 += s1.length();
+//	    sb.insert(pos3, s2);
+//	    s = sb.toString(); 
+
+      	InputStream stream = new ByteArrayInputStream(s.getBytes("UTF-8"));
 	    usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
 	
 	    }
@@ -137,8 +135,22 @@ public class JAXB2UnMarshaller {
 	    System.out.println("CheckAuthenticationCode: challengecode = " + challengeCode);
 	    System.out.println("CheckAuthenticationCode: username = " + userName);
     
-    if(usr.getUnifiedServiceErrors() != null)
-    	System.out.println("There are errors.");
+		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
+		if(errors != null)
+		{
+		  String errClass = null;
+		  String errCode = null;
+		  String errObject = null;
+		  for (int i = 0; i < errors.getError().size(); i++)
+		  {
+			  errClass = errors.getError().get(i).getErrorClass();
+			  errCode = errors.getError().get(i).getErrorCode();
+			  errObject = errors.getError().get(i).getErrorObject().getValue();
+			  System.out.println(errClass);
+			  System.out.println(errCode);
+			  System.out.println(errObject);
+		  }
+		}
     System.exit(0);
 
   }
