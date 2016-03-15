@@ -9,7 +9,7 @@ public class CheckAuthenticationCode extends ServicesBase
 
 	public CheckAuthenticationCode() throws JAXBException
 	{
-	      header.setServiceName("contactcenter.CheckAuthenticationCode_2_Input");
+	      header.setServiceName("contactcenter.CheckAuthenticationCode_2");
 	      ContactcenterCheckAuthenticationCode2Input cac = factory.createContactcenterCheckAuthenticationCode2Input();
 	      aq = factory.createAuthenticationQuery();
 	      cac.setAuthenticationQuery(aq);

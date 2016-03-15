@@ -153,7 +153,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
   			c.exit();
   			// this will be read by Genesys routing server
-  			out.println("challengecode:" + this.challengeCode + "|userid:" + this.userName);
+  			out.print("challengecode:" + this.challengeCode + "|userid:" + this.userName);
   			return;
         }
         catch (javax.jms.JMSException jmse)

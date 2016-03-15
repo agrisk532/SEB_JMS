@@ -57,6 +57,7 @@ public class MyServletContextListener implements ServletContextListener
 	   	{
 	   		System.out.println("PingPong service exception. Could not create the timer task");
 	   		System.out.println("PingPong service won't be used.");
+	   		sc.setAttribute("PingPong", "0");
 	   		return;
 	   	}
 
@@ -84,6 +85,8 @@ public class MyServletContextListener implements ServletContextListener
     	timer.cancel();
     	// remove the timer from the servlet context
     	servletContext.removeAttribute ("timer");
+    	servletContext.removeAttribute ("sharedData");
+    	servletContext.removeAttribute ("PingPong");
     	System.out.println("ServletContextListener destroyed");
     }
 }
