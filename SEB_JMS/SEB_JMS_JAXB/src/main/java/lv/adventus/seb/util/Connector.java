@@ -1,6 +1,7 @@
 package lv.adventus.seb.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
@@ -80,7 +81,7 @@ public class Connector {
         connect.close();
     }
     
-    public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException
+    public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException, java.io.IOException 
     {
 		//javax.jms.TextMessage msg = session.createTextMessage();
 		msg.setText( xmlrequest );
@@ -127,9 +128,60 @@ public class Connector {
 	    
 	    xmlresponse =
 	    	  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
+	    
+// add missing lines to the XML response, if Sonic is not sending them
+//	    
+// for GiveDigipassChallenge()
+//	    
+//	    if(xmlresponse.indexOf("GiveDigipassChallenge") != -1)
+//	    {
+//	      StringBuilder sb = new StringBuilder(xmlresponse);
+//	      String s1 = "<unifiedServiceBody>";
+//	      String s2 = "<contactcenter:contactcenter.GiveDigipassChallenge_2_Output xmlns:cmn=\"http://www.seb.ee/common\" xmlns:contactcenter=\"http://www.seb.ee/contactcenter\">"; 
+//	      int pos3 = sb.indexOf(s1);
+//		    pos3 += s1.length();
+//		    sb.insert(pos3, s2);
+//		   
+//		    s1 = "</contactcenter:GiveChallengeResponse>";
+//		    s2 = "</contactcenter:contactcenter.GiveDigipassChallenge_2_Output>";
+//		    pos3 = sb.indexOf(s1);
+//		    pos3 += s1.length();
+//		    sb.insert(pos3, s2);
+//		    
+//		    xmlresponse = sb.toString(); 
+//	    }
+//	    
+// for CheckAuthenticationCode()
+//
+//	    if(xmlresponse.indexOf("CheckAuthenticationCode") != -1)
+//	    {
+//	      StringBuilder sb = new StringBuilder(xmlresponse);
+//	      String s1 = "<unifiedServiceBody>";
+//	      String s2 = "<contactcenter:contactcenter.CheckAuthenticationCode_2_Output xmlns:cmn=\"http://www.seb.ee/common\" xmlns:contactcenter=\"http://www.seb.ee/contactcenter\">"; 
+//	      int pos3 = sb.indexOf(s1);
+//		    pos3 += s1.length();
+//		    sb.insert(pos3, s2);
+//		   
+//		    s1 = "</contactcenter:AuthenticationResponse>";
+//		    s2 = "</contactcenter:contactcenter.CheckAuthenticationCode_2_Output>";
+//		    pos3 = sb.indexOf(s1);
+//		    pos3 += s1.length();
+//		    sb.insert(pos3, s2);
+//		    
+//		    xmlresponse = sb.toString(); 
+//	    }
+
+		System.out.println("Connector XML:");
+		System.out.println(XMLUtility.prettyFormat(xmlresponse));
+	    
 	    // unmarshal
-	    InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes());
-	    this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
+		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
+    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
+    	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
+	    if(this.usr != null)
+	    {
+	    	System.out.println("Connector:RequestID: " + usr.getUnifiedServiceHeader().getRequestId());
+	    }
 		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
 		if(errors != null)
 		{

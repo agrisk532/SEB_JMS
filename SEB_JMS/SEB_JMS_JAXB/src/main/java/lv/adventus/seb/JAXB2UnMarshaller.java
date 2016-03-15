@@ -11,20 +11,21 @@ import java.io.*;
 
 public class JAXB2UnMarshaller {
 
+	//private UnifiedServiceResponse usr = null;
 	private UnifiedServiceResponse usr = null;
 	
   public UnifiedServiceResponse unMarshall(File xmlDocument) {
 	  
     try {
 
-      JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
-      Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
-      InputStream isMain = this.getClass().getResourceAsStream( "src/main/resources/contactcenter.xsd" );
-      InputStream isImport = this.getClass().getResourceAsStream( "src/main/resources/integration.xsd" );
-      Source imp = new StreamSource( isImport );
-      Source main = new StreamSource( isMain  );
+    	JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
+    	Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
+    	InputStream isMain = this.getClass().getResourceAsStream( "src/main/resources/contactcenter.xsd" );
+    	InputStream isImport = this.getClass().getResourceAsStream( "src/main/resources/integration.xsd" );
+    	Source imp = new StreamSource( isImport );
+    	Source main = new StreamSource( isMain  );
 //
-      Source[] schemaFiles = new Source[] { imp, main };
+    	Source[] schemaFiles = new Source[] { imp, main };
 //
       //SchemaFactory sf = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
       //Schema schema = sf.newSchema( schemaFiles );
@@ -35,30 +36,62 @@ public class JAXB2UnMarshaller {
 //      JAXBElement<UnifiedServiceResponse> catalogElement = 
 //    		  ((JAXBElement<UnifiedServiceResponse>) unMarshaller.unmarshal(xmlDocument));
 
-      
 // mangle namespaces in the xmlDocument
-      String s = JAXB2UnMarshaller.readFile(xmlDocument,"utf8");
-      int pos = s.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
-      int pos2 = s.indexOf(">", pos);
-      s = s.replace(s.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
-      
-      InputStream stream = new ByteArrayInputStream(s.getBytes());
-      
-      //UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
-     
-      usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
+      	String s = JAXB2UnMarshaller.readFile(xmlDocument,"utf8");
+      	int pos = s.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
+      	int pos2 = s.indexOf(">", pos);
+      	s = s.replace(s.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
 
-    }
-    catch (JAXBException e)
-    {
-    	System.err.println(e.getMessage());
-    }
-    catch (IOException e)
-    {
-    	System.err.println(e.getMessage());
-    }
-    
-    return usr;
+// add missing lines to the XML response, if Sonic is not sending them
+//      
+// for GiveDigipassChallenge()
+//      
+//      StringBuilder sb = new StringBuilder(s);
+//      String s1 = "<unifiedServiceBody>";
+//      String s2 = "<contactcenter:contactcenter.GiveDigipassChallenge_2_Output xmlns:cmn=\"http://www.seb.ee/common\" xmlns:contactcenter=\"http://www.seb.ee/contactcenter\">"; 
+//      int pos3 = sb.indexOf(s1);
+//	    pos3 += s1.length();
+//	    sb.insert(pos3, s2);
+//	   
+//	    s1 = "</contactcenter:GiveChallengeResponse>";
+//	    s2 = "</contactcenter:contactcenter.GiveDigipassChallenge_2_Output>";
+//	    pos3 = sb.indexOf(s1);
+//	    pos3 += s1.length();
+//	    sb.insert(pos3, s2);
+//	    
+//	     s = sb.toString(); 
+//	    
+//  for CheckAuthenticationCode()
+//    
+	    String s1 = "<unifiedServiceBody>";
+	    StringBuilder sb = new StringBuilder(s);
+	    String s2 = "<contactcenter:contactcenter.CheckAuthenticationCode_2_Output xmlns:cmn=\"http://www.seb.ee/common\" xmlns:contactcenter=\"http://www.seb.ee/contactcenter\">"; 
+	    int pos3 = sb.indexOf(s1);
+	    pos3 += s1.length();
+	    sb.insert(pos3, s2);
+	    s1 = "</contactcenter:AuthenticationResponse>";
+	    s2 = "</contactcenter:contactcenter.CheckAuthenticationCode_2_Output>";
+	    pos3 = sb.indexOf(s1);
+	    pos3 += s1.length();
+	    sb.insert(pos3, s2);
+	    s = sb.toString(); 
+	    InputStream stream = new ByteArrayInputStream(s.getBytes("UTF-8"));
+	      
+	      //UnifiedServiceResponse usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
+	     
+	    usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream); 
+	
+	    }
+	    catch (JAXBException e)
+	    {
+	    	System.err.println(e.getMessage());
+	    }
+	    catch (IOException e)
+	    {
+	    	System.err.println(e.getMessage());
+	    }
+	    
+	    return usr;
   }
   
   static String readFile(File file, String charset)
@@ -72,8 +105,8 @@ public class JAXB2UnMarshaller {
 	}
   
   public static void main(String[] argv) {
-    //File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
-    File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output2.xml");
+    File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
+    //File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output2.xml");
     //File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
 //	  File xmlDocument = new File("PingPong_2Output.xml");
     System.out.println(xmlDocument.exists()); // prints true if a file exists at that location
@@ -82,6 +115,28 @@ public class JAXB2UnMarshaller {
 
     UnifiedServiceResponse usr = jaxbUnmarshaller.unMarshall(xmlDocument);
     System.out.println(usr.getUnifiedServiceHeader().getRequestId());
+    
+//	ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
+//    String customerId = gco.getGiveChallengeResponse().getCustomerId();
+//	String challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
+//	String userName = gco.getGiveChallengeResponse().getUsername();
+//	String idCode = gco.getGiveChallengeResponse().getIdCode();
+//	System.out.println("Answer from JMS Broker:");
+//	System.out.println("GiveDigipassChallenge: customerId = " + customerId);
+//	System.out.println("GiveDigipassChallenge: challengeCode = " + challengeCode);
+//	System.out.println("GiveDigipassChallenge: userName = " + userName);
+//	System.out.println("GiveDigipassChallenge: idCode = " + idCode);
+
+		ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
+
+		String authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
+		String userName = cac.getAuthenticationResponse().getUsername();
+		String challengeCode = cac.getAuthenticationResponse().getChallengeCode();
+		System.out.println("Answer from JMS Broker:");
+	    System.out.println("CheckAuthenticationCode: digipasscode = " + authenticationCode);
+	    System.out.println("CheckAuthenticationCode: challengecode = " + challengeCode);
+	    System.out.println("CheckAuthenticationCode: username = " + userName);
+    
     if(usr.getUnifiedServiceErrors() != null)
     	System.out.println("There are errors.");
     System.exit(0);

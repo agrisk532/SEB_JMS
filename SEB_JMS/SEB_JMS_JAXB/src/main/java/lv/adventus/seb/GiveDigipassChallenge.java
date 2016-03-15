@@ -9,7 +9,7 @@ public class GiveDigipassChallenge extends ServicesBase
 
 	public GiveDigipassChallenge() throws JAXBException
 	{
-	      header.setServiceName("contactcenter.GiveDigipassChallenge_2_Input");
+	      header.setServiceName("contactcenter.GiveDigipassChallenge_2");
 	      ContactcenterGiveDigipassChallenge2Input cci2 = factory.createContactcenterGiveDigipassChallenge2Input();
 	      dq = factory.createGiveDigipassQuery();
 	      cci2.setGiveDigipassQuery(dq);

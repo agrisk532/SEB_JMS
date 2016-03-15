@@ -24,11 +24,30 @@
     <timeStamp>2016-01-25T11:14:22.483</timeStamp>
   </unifiedServiceHeader>
 <unifiedServiceBody>
+<contactcenter:contactcenter.GiveDigipassChallenge_2_Output xmlns:cmn="http://www.seb.ee/common" xmlns:contactcenter="http://www.seb.ee/contactcenter">
 <contactcenter:GiveChallengeResponse xmlns:contactcenter="http://www.seb.ee/contactcenter">
     <contactcenter:customerId>F85354</contactcenter:customerId>
     <contactcenter:challengeCode>1904</contactcenter:challengeCode>
     <contactcenter:username>florida</contactcenter:username>
     <contactcenter:idCode>38207031078</contactcenter:idCode>
   </contactcenter:GiveChallengeResponse>
+  </contactcenter:contactcenter.GiveDigipassChallenge_2_Output>
 </unifiedServiceBody>
+  <unifiedServiceErrors>
+	<Error>
+	<errorClass>VALIDATIONERROR</errorClass> 
+	<errorCode>NO_CUSTOMER_FOUND</errorCode>
+	<errorObject>userPhoneNumber</errorObject>
+	</Error>
+	<Error>
+	<errorClass>VALIDATIONERROR</errorClass>
+	<errorCode>ANOTHERERRORCODE </errorCode>
+	<errorObject>anotherField</errorObject>
+	</Error>
+	<Error>
+	<errorClass>TECHNICALERROR</errorClass>
+	<errorCode>TECHNICALERRORCODE </errorCode>
+	<errorObject>TechnicalErrorField</errorObject>
+	</Error>		
+	</unifiedServiceErrors>
 </UnifiedServiceResponse>

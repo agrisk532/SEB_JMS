@@ -82,13 +82,16 @@ class PingPongTimerTask extends TimerTask
 		{
 			System.out.println("JMS exception in PingPongTimerTask()");
 			e.printStackTrace();
-			return;
 		}
 		catch (javax.xml.bind.JAXBException e)
 		{
 			System.out.println("JAXB exception in PingPongTimerTask()");
 			e.printStackTrace();
-			return;
 		}
+        catch (java.io.IOException e)
+        {
+        	System.out.println("IO exception in PingPongTimerTask()");
+        	e.printStackTrace();
+        }
 	}
 }

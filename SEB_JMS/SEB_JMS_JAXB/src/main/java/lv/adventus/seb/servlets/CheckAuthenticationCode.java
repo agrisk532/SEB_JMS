@@ -105,7 +105,9 @@ public class CheckAuthenticationCode extends ServletBase {
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
   			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
+  			c.SetHeader(dc.GetHeader());
   			c.start();
+  			c.createMessage();
   			this.usr = c.query(xmlrequest);
 		    if(this.usr == null)
 		    {

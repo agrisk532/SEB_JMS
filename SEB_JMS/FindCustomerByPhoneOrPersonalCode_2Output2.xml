@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<UnifiedServiceResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?><UnifiedServiceResponse xmlns="http://www.seb.ee/integration">
   <unifiedServiceHeader>
-    <requestId>cc00a8027af2cce924</requestId>
+    <requestId>cc00a8027af2ccee7f</requestId>
     <serviceName>contactcenter.FindCustomerByPhoneOrPersonalCode_2</serviceName>
     <userId>01020311111</userId>
     <officerId>admin</officerId>
@@ -21,14 +20,17 @@
     <representativeId/>
     <representativeCustomerId/>
     <sessionKey/>
-    <timeStamp>2016-03-14T17:40:32.052</timeStamp>
+    <timeStamp>2016-03-15T11:17:42.552</timeStamp>
   </unifiedServiceHeader>
 <unifiedServiceBody>
 <contactcenter:contactcenter.FindCustomerByPhoneOrPersonalCode_2_Output xmlns:cmn="http://www.seb.ee/common" xmlns:contactcenter="http://www.seb.ee/contactcenter">
 <contactcenter:FindCustomerResponse>
     <contactcenter:customerId>I23317</contactcenter:customerId>
     <contactcenter:idCode>010203-11111</contactcenter:idCode>
-    <contactcenter:firstName>JÎIS</contactcenter:firstName>
-    <contactcenter:lastName>KALNIӐ</contactcenter:lastName>
+    <contactcenter:firstName>JĀNIS</contactcenter:firstName>
+    <contactcenter:lastName>KALNIŅŠ</contactcenter:lastName>
     <contactcenter:userPhoneNumber/>
-  </contactcenter:FindCustomerResponse></contactcenter:contactcenter.FindCustomerByPhoneOrPersonalCode_2_Output></unifiedServiceBody></UnifiedServiceResponse>
+  </contactcenter:FindCustomerResponse>
+    </contactcenter:contactcenter.FindCustomerByPhoneOrPersonalCode_2_Output>
+  </unifiedServiceBody>
+</UnifiedServiceResponse> 

@@ -128,7 +128,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			dc.SetHeaderUserId(customerId);
   			dc.SetHeaderRequestId(connId + "1");  // to make requestId unique
   			dc.SetBody();
-  			dc.SetBody(this.customerId, this.idCode);
+  	 		dc.SetBody(this.customerId, this.idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
 			System.out.println("GiveDigipassChallenge sent this XML:");
@@ -168,5 +168,11 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
         	System.out.print("javax.xml.bind.JAXBException: ");
         	System.out.println(e.getMessage());
 	    }
+        catch (java.io.IOException e)
+        {
+        	out.print("error:TECHNICALERROR");
+        	System.out.print("java.io.IOException: ");
+        	System.out.println(e);
+        }
 	}
 }
