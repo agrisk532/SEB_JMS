@@ -205,7 +205,7 @@ public class Connector {
 			  }
 			  else
 			  {
-				  out.print("error:"+errClass);
+				  out.print("error:" + errClass);
 			  }
 		  }
 		}

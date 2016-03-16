@@ -1,35 +1,35 @@
 package lv.adventus.seb.servlets;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+//import java.io.ByteArrayInputStream;
+//import java.io.IOException;
+//import java.io.InputStream;
+//import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
+//import javax.xml.bind.JAXBContext;
+//import javax.xml.bind.JAXBException;
+//import javax.xml.bind.Unmarshaller;
 
-import progress.message.jclient.MultipartMessage;
-import progress.message.jclient.Part;
-import progress.message.jclient.Header;
-import progress.message.jclient.Constants;
-import progress.message.jclient.TextMessage;
-import progress.message.jclient.BytesMessage;
+//import progress.message.jclient.MultipartMessage;
+//import progress.message.jclient.Part;
+//import progress.message.jclient.Header;
+//import progress.message.jclient.Constants;
+//import progress.message.jclient.TextMessage;
+//import progress.message.jclient.BytesMessage;
 
 import lv.adventus.seb.util.Connector;
-import lv.adventus.seb.util.MultipartMessageUtility;
-import lv.adventus.seb.util.XMLUtility;
+//import lv.adventus.seb.util.MultipartMessageUtility;
+//import lv.adventus.seb.util.XMLUtility;
 import lv.adventus.seb.UnifiedServiceResponse;
-import lv.adventus.seb.UnifiedServiceErrors;
-import lv.adventus.seb.ContactcenterFindCustomerByPhoneOrPersonalCode2Output;
-import lv.adventus.seb.ContactcenterGiveDigipassChallenge2Output;
+//import lv.adventus.seb.UnifiedServiceErrors;
+//import lv.adventus.seb.ContactcenterFindCustomerByPhoneOrPersonalCode2Output;
+//import lv.adventus.seb.ContactcenterGiveDigipassChallenge2Output;
 
 /**
  * Servlet implementation class CheckAuthenticationCode
