@@ -68,25 +68,26 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(userId==null) pr+="userid ";
 	    	if(connId==null) pr+="connid ";
 	    	System.out.println("Expected parameter digipasscode not received: " + pr);
-	    	out.print("result:TECHNICALERROR");
+	    	out.print("error:TECHNICALERROR");
 	    	return;
 	    }
 	    else
 	    {
-	    	System.out.println("CheckAuthenticationCode: digipasscode = " + dpcode);
-	    	System.out.println("CheckAuthenticationCode: challengecode = " + chcode);
-	    	System.out.println("CheckAuthenticationCode: userid = " + userId);
-	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
+//	    	System.out.println("CheckAuthenticationCode: digipasscode = " + dpcode);
+//	    	System.out.println("CheckAuthenticationCode: challengecode = " + chcode);
+//	    	System.out.println("CheckAuthenticationCode: userid = " + userId);
+//	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
 	    }
 
 // check PingPong service result
-//		ServletContext context = getServletContext();
-// 		if(context.getAttribute("PingPong") == "0")
-// 		{
-// 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
-// 			out.print("result:TECHNICALERROR");
-// 			return;
-// 		}
+    	ServletContext context = request.getSession().getServletContext();
+ 	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
+ 		if(attribute.booleanValue() == false)
+ 		{
+ 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
+ 			out.print("error:TECHNICALERROR");
+ 			return;
+ 		}
 	    
 	    try
 		{
@@ -112,7 +113,7 @@ public class CheckAuthenticationCode extends ServletBase {
 		    if(this.usr == null)
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
-	 			out.print("result:TECHNICALERROR");
+	 			out.print("error:TECHNICALERROR");
 	 			return;
 		    }
 
@@ -123,10 +124,10 @@ public class CheckAuthenticationCode extends ServletBase {
   			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
   			this.userName = cac.getAuthenticationResponse().getUsername();
   			this.challengeCode = cac.getAuthenticationResponse().getChallengeCode();
-  			System.out.println("Answer from JMS Broker:");
-      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
-      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
-      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
+//  			System.out.println("Answer from JMS Broker:");
+//      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
+//      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
+//      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
   			
   			c.exit();
   			out.print("result:OK");
@@ -134,13 +135,13 @@ public class CheckAuthenticationCode extends ServletBase {
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.print("result:TECHNICALERROR");
+        	out.print("error:TECHNICALERROR");
         	System.out.println(jmse);
         	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.print("result:TECHNICALERROR");
+        	out.print("error:TECHNICALERROR");
         	System.out.println(e.getMessage());
         	return;
 	    }

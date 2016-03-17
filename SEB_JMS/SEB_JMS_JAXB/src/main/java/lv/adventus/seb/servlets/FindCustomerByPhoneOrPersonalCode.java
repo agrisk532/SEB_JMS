@@ -69,18 +69,19 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    }
 	    else
 	    {
-	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
-	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
+//	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
+//	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
 	    }
 	    
 	 // check PingPong service result
-// 	 	ServletContext context = getServletContext();
-// 		if(context.getAttribute("PingPong") == "0")
-// 		{
-// 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
-// 			out.print("result:TECHNICALERROR");
-// 			return;
-// 		}
+	    ServletContext context = request.getSession().getServletContext();
+ 	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
+ 		if(attribute.booleanValue() == false)
+ 		{
+ 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
+ 			out.print("error:TECHNICALERROR");
+ 			return;
+ 		}
 	    
 	    try
 		{
@@ -106,7 +107,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    if(this.usr == null)
 		    {
 		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
-	 			out.print("result:TECHNICALERROR");
+	 			out.print("error:TECHNICALERROR");
 	 			return;
 		    }
 		    if(usr.getUnifiedServiceErrors() != null) return;
@@ -115,9 +116,9 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
 		    this.customerId = fco.getFindCustomerResponse().getCustomerId();
 		    this.idCode = fco.getFindCustomerResponse().getIdCode();
-		    System.out.println("Answer from JMS Broker:");
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + this.customerId);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + this.idCode);
+//		    System.out.println("Answer from JMS Broker:");
+//		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + this.customerId);
+//		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + this.idCode);
 	  		c.exit();
 
 /////////// invoke GiveDigipassChallenge service
@@ -145,11 +146,11 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			this.challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			this.userName = gco.getGiveChallengeResponse().getUsername();
   			this.idCode = gco.getGiveChallengeResponse().getIdCode();
-  			System.out.println("Answer from JMS Broker:");
-  			System.out.println("GiveDigipassChallenge: customerId = " + this.customerId);
-  			System.out.println("GiveDigipassChallenge: challengeCode = " + this.challengeCode);
-  			System.out.println("GiveDigipassChallenge: userName = " + this.userName);
-  			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
+//  			System.out.println("Answer from JMS Broker:");
+//  			System.out.println("GiveDigipassChallenge: customerId = " + this.customerId);
+//  			System.out.println("GiveDigipassChallenge: challengeCode = " + this.challengeCode);
+//  			System.out.println("GiveDigipassChallenge: userName = " + this.userName);
+//  			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
   			c.exit();
   			// this will be read by Genesys routing server
   			out.print("challengecode:" + this.challengeCode + "|userid:" + this.userName);

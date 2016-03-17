@@ -66,17 +66,17 @@ class PingPongTimerTask extends TimerTask
 			if(usr.getUnifiedServiceErrors() != null)
 			{
 				System.out.println("PingPongTimerTask: PingPong service returns 0.");
-				sc.setAttribute("PingPong", "0");
+				sc.setAttribute("PingPong", Boolean.FALSE);
 				return;
 			}
 
 			PingPong pp = (PingPong) usr.getUnifiedServiceBody().getAny().get(0);
 			this.pongMessage = pp.getPongMessage();
 
-			System.out.println("Answer from JMS Broker:");
-			System.out.println("system.PingPong_1: pongMessage = " + this.pongMessage);
+//			System.out.println("Answer from JMS Broker:");
+//			System.out.println("system.PingPong_1: pongMessage = " + this.pongMessage);
 			c.exit();
-			sc.setAttribute("PingPong", "1");
+			sc.setAttribute("PingPong", Boolean.TRUE);
 		}
 		catch (javax.jms.JMSException e)
 		{

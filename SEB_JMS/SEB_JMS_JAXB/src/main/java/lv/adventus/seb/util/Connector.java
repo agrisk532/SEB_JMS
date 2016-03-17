@@ -106,8 +106,8 @@ public class Connector {
 		mmu.onMessage(responseMsg);
 		xmlresponse = mmu.getXMLMessage();
 		
-		System.out.println("XML Response:");
-		System.out.println(xmlresponse);
+//		System.out.println("XML Response:");
+//		System.out.println(xmlresponse);
 		
 		if(xmlresponse.length() == 0)
 		{
@@ -123,8 +123,8 @@ public class Connector {
 	    int pos = xmlresponse.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
 	    int pos2 = xmlresponse.indexOf(">", pos);
 	    
-		System.out.println("pos: " + pos);
-		System.out.println("pos2: " + pos2);
+//		System.out.println("pos: " + pos);
+//		System.out.println("pos2: " + pos2);
 	    
 	    xmlresponse =
 	    	  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
@@ -171,17 +171,17 @@ public class Connector {
 //		    xmlresponse = sb.toString(); 
 //	    }
 
-		System.out.println("Connector XML:");
-		System.out.println(XMLUtility.prettyFormat(xmlresponse));
+//		System.out.println("Connector XML:");
+//		System.out.println(XMLUtility.prettyFormat(xmlresponse));
 	    
 	    // unmarshal
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
-    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
+//    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
-	    if(this.usr != null)
-	    {
-	    	System.out.println("Connector:RequestID: " + usr.getUnifiedServiceHeader().getRequestId());
-	    }
+//	    if(this.usr != null)
+//	    {
+//	    	System.out.println("Connector:RequestID: " + usr.getUnifiedServiceHeader().getRequestId());
+//	    }
 		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
 		if(errors != null)
 		{
@@ -201,7 +201,10 @@ public class Connector {
 		  {
 			  if(errClass.equals("VALIDATIONERROR"))
 			  {
-				  out.print("error:" + errCode);
+				  if(errCode.equals("Check ERROR"))
+					  out.print("result: WRONGCODE");
+				  else
+					  out.print("error:" + errCode);
 			  }
 			  else
 			  {

@@ -57,13 +57,13 @@ public class MyServletContextListener implements ServletContextListener
 	   	{
 	   		System.out.println("PingPong service exception. Could not create the timer task");
 	   		System.out.println("PingPong service won't be used.");
-	   		sc.setAttribute("PingPong", "0");
+	   		sc.setAttribute("PingPong", Boolean.FALSE);
 	   		return;
 	   	}
 
 	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
 	   	sc.setAttribute ("timer", timer);
-	   	
+
 	   	ConcurrentHashMap<String, Object> shared =
 	   			(ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
 	   	if (shared == null)

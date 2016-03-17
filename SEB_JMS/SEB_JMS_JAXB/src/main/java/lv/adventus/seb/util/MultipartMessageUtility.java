@@ -86,7 +86,7 @@ public class MultipartMessageUtility {
                 {
                     if(part.getHeader().getContentId().equals("XMLResponse"))
                     {
-                    	System.out.println("MM: in XML part");
+                    	//System.out.println("MM: in XML part");
                     	unpackJMSMessage(msg, n);
                     	xmlResponse = partMessage;
                     }
