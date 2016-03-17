@@ -84,11 +84,15 @@ public class CheckAuthenticationCode extends ServletBase {
  	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
  		if(attribute.booleanValue() == false)
  		{
- 			System.out.println("CheckAuthenticationCode: PingPong returns 0.");
+ 			System.out.println("CheckAuthenticationCode: PingPong returns 0. We stop processing.");
  			out.print("error:TECHNICALERROR");
  			return;
  		}
-	    
+ 		else
+ 		{
+ 			System.out.println("CheckAuthenticationCode: PingPong returns 1. We continue.");
+ 		}
+
 	    try
 		{
 

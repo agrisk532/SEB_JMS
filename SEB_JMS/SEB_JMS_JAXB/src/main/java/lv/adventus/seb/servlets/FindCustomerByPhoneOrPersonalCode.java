@@ -78,9 +78,13 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
  	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
  		if(attribute.booleanValue() == false)
  		{
- 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0.");
+ 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0. We stop processing.");
  			out.print("error:TECHNICALERROR");
  			return;
+ 		}
+ 		else
+ 		{
+ 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 1. We continue.");
  		}
 	    
 	    try
