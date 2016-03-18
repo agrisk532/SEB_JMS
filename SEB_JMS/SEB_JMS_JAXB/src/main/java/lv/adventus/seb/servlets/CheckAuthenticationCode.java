@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -51,8 +52,8 @@ public class CheckAuthenticationCode extends ServletBase {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-        PrintWriter out = response.getWriter();
-	    response.setContentType("text/plain");
+		response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
 	    String dpcode = request.getParameter("digipasscode");
 	    String chcode = request.getParameter("challengecode");
 //	    String userId = request.getParameter("userid");
@@ -70,6 +71,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(chcode==null) pr+="challengecode ";
 	    	System.out.println("Expected parameter digipasscode not received: " + pr);
 	    	out.print("error:TECHNICALERROR");
+	    	out.flush();
 	    	return;
 	    }
 	    else
@@ -110,7 +112,7 @@ public class CheckAuthenticationCode extends ServletBase {
 			System.out.println("CheckAuthenticationCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-  			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
+  			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
   			c.SetHeader(dc.GetHeader());
   			c.start();
   			c.createMessage();
@@ -119,6 +121,7 @@ public class CheckAuthenticationCode extends ServletBase {
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
 	 			out.print("error:TECHNICALERROR");
+	 			out.flush();
 	 			return;
 		    }
 
@@ -136,19 +139,19 @@ public class CheckAuthenticationCode extends ServletBase {
   			
   			c.exit();
   			out.print("result:OK");
-  			return;
+  			out.flush();
         }
         catch (javax.jms.JMSException jmse)
         {
         	out.print("error:TECHNICALERROR");
+        	out.flush();
         	System.out.println(jmse);
-        	return;
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
         	out.print("error:TECHNICALERROR");
+        	out.flush();
         	System.out.println(e.getMessage());
-        	return;
 	    }
 	}
 }

@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -51,8 +52,8 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-        PrintWriter out = response.getWriter();
-	    response.setContentType("text/plain");
+		response.setContentType("text/html; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
 	    String userId = request.getParameter("id");
 	    String connId = "cc" + request.getParameter("connid");
 	    
@@ -65,6 +66,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	if(connId==null) s += "connId ";
 	    	System.out.println("Parameter " + s + "not received");
 	    	out.print("error:TECHNICALERROR");
+	    	out.flush();
 	    	return;
 	    }
 	    else
@@ -103,7 +105,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
 			c.SetHeader(fc.GetHeader());
 			c.start();
 			c.createMessage();
@@ -112,6 +114,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    {
 		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
 	 			out.print("error:TECHNICALERROR");
+	 			out.flush();
 	 			return;
 		    }
 		    if(usr.getUnifiedServiceErrors() != null) return;
@@ -141,7 +144,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("GiveDigipassChallenge sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, out, connectionTimeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
 			c.SetHeader(dc.GetHeader());
 			c.start();
 			c.createMessage();
@@ -164,23 +167,26 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   					  "|idCode:" + this.idCode + "|firstName:" + this.firstName + 
   					  "|lastName:" + this.lastName + "|userPhoneNumber:" + this.userPhoneNumber + 
   					  "|challengecode:" + this.challengeCode);
-  			return;
+  			out.flush();
         }
         catch (javax.jms.JMSException jmse)
         {
         	out.print("error:TECHNICALERROR");
+        	out.flush();
         	System.out.print("javax.jms.JMSException: ");
         	System.out.println(jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
         	out.print("error:TECHNICALERROR");
+        	out.flush();
         	System.out.print("javax.xml.bind.JAXBException: ");
         	System.out.println(e.getMessage());
 	    }
         catch (java.io.IOException e)
         {
         	out.print("error:TECHNICALERROR");
+        	out.flush();
         	System.out.print("java.io.IOException: ");
         	System.out.println(e);
         }

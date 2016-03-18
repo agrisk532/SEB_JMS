@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
@@ -30,13 +31,14 @@ public class Connector {
     
 	private static final long serialVersionUID = 1L;
 	
-	public Connector(String broker, String username, String password, String sQueue, PrintWriter out, long connectionTimeout)
+	public Connector(String broker, String username, String password, String sQueue, HttpServletResponse res, long connectionTimeout) throws java.io.IOException
+	
 	{
 		this.broker = broker;
 		this.username = username;
 		this.password = password;
 		this.sQueue = sQueue;
-		this.out = out;
+		this.out = res.getWriter();
 		this.connectionTimeout = connectionTimeout;
 	}
 	
@@ -232,6 +234,7 @@ public class Connector {
 				  System.out.println("Connector: inside general error. No VALIDATIONERROR.");
 				  this.out.print("error:" + errClass);
 			  }
+			  this.out.flush();
 		  }
 		}
   		return this.usr;
