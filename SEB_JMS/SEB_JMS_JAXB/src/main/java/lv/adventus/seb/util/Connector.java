@@ -197,32 +197,40 @@ public class Connector {
 			  System.out.println(errCode);
 			  System.out.println(errObject);
 		  }
-		  if(out != null)  // print only if called from servlets
+		  System.out.println("Connector: Servlet out stream = " + this.out.toString());
+		  if(this.out != null)  // print only if called from servlets
 		  {
+			  System.out.println("Connector: Servlet out stream is not null.");
 			  if(errClass.equals("VALIDATIONERROR"))
 			  {
+				  System.out.println("Connector: inside VALIDATIONERROR");
 				  if(errCode.equals("NO_MATCH"))
 				  {
-					  out.print("error:NO_MATCH");
+					  System.out.println("Connector: inside NO_MATCH");
+					  this.out.print("error:NO_MATCH");
 				  }
 				  else
 				  if(errCode.equals("MULTIPLE_MATCH"))
 				  {
-					  out.print("error:MULTIPLE_MATCH");
+					  System.out.println("Connector: inside MULTIPLE_MATCH");
+					  this.out.print("error:MULTIPLE_MATCH");
 				  }
 				  else
 				  if(errCode.equals("Check ERROR"))
 				  {
-					  out.print("error:WRONGCODE");
+					  System.out.println("Connector: inside Check ERROR");
+					  this.out.print("result:WRONGCODE");
 				  }
 				  else
 				  {
-					  out.print("error:" + errCode);
+					  System.out.println("Connector: inside general error");
+					  this.out.print("error:" + errCode);
 				  }
 			  }
 			  else
 			  {
-				  out.print("error:" + errClass);
+				  System.out.println("Connector: inside general error. No VALIDATIONERROR.");
+				  this.out.print("error:" + errClass);
 			  }
 		  }
 		}

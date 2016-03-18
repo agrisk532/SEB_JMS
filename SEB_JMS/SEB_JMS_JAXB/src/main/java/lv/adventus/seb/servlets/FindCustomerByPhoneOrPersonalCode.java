@@ -74,18 +74,18 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    }
 	    
 	 // check PingPong service result
-	    ServletContext context = request.getSession().getServletContext();
- 	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
- 		if(attribute.booleanValue() == false || attribute == null)
- 		{
- 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0. Processing stopped.");
- 			out.print("error:TECHNICALERROR");
- 			return;
- 		}
- 		else
- 		{
- 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 1. Processing continues.");
- 		}
+//	    ServletContext context = request.getSession().getServletContext();
+// 	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
+// 		if(attribute.booleanValue() == false || attribute == null)
+// 		{
+// 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0. Processing stopped.");
+// 			out.print("error:TECHNICALERROR");
+// 			return;
+// 		}
+// 		else
+// 		{
+// 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 1. Processing continues.");
+// 		}
 	    
 	    try
 		{
