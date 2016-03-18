@@ -201,10 +201,24 @@ public class Connector {
 		  {
 			  if(errClass.equals("VALIDATIONERROR"))
 			  {
-				  if(errCode.equals("Check ERROR"))
-					  out.print("result: WRONGCODE");
+				  if(errCode.equals("NO_MATCH"))
+				  {
+					  out.print("error:NO_MATCH");
+				  }
 				  else
+				  if(errCode.equals("MULTIPLE_MATCH"))
+				  {
+					  out.print("error:MULTIPLE_MATCH");
+				  }
+				  else
+				  if(errCode.equals("Check ERROR"))
+				  {
+					  out.print("error:WRONGCODE");
+				  }
+				  else
+				  {
 					  out.print("error:" + errCode);
+				  }
 			  }
 			  else
 			  {

@@ -76,15 +76,15 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	 // check PingPong service result
 	    ServletContext context = request.getSession().getServletContext();
  	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
- 		if(attribute.booleanValue() == false)
+ 		if(attribute.booleanValue() == false || attribute == null)
  		{
- 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0. We stop processing.");
+ 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0. Processing stopped.");
  			out.print("error:TECHNICALERROR");
  			return;
  		}
  		else
  		{
- 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 1. We continue.");
+ 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 1. Processing continues.");
  		}
 	    
 	    try
@@ -120,6 +120,9 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
 		    this.customerId = fco.getFindCustomerResponse().getCustomerId();
 		    this.idCode = fco.getFindCustomerResponse().getIdCode();
+		    this.firstName = fco.getFindCustomerResponse().getFirstName();
+		    this.lastName = fco.getFindCustomerResponse().getLastName();
+		    this.userPhoneNumber = fco.getFindCustomerResponse().getUserPhoneNumber();
 //		    System.out.println("Answer from JMS Broker:");
 //		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + this.customerId);
 //		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + this.idCode);
@@ -157,7 +160,10 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 //  			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
   			c.exit();
   			// this will be read by Genesys routing server
-  			out.print("challengecode:" + this.challengeCode + "|userid:" + this.userName);
+  			out.print("customerId:" + this.customerId + "|username:" + this.userName +
+  					  "|idCode:" + this.idCode + "|firstName:" + this.firstName + 
+  					  "|lastName:" + this.lastName + "|userPhoneNumber:" + this.userPhoneNumber + 
+  					  "|challengecode:" + this.challengeCode);
   			return;
         }
         catch (javax.jms.JMSException jmse)

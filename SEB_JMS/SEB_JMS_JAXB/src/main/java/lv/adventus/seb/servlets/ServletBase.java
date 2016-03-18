@@ -47,10 +47,11 @@ public class ServletBase extends HttpServlet {
 
 	protected String customerId;
 	protected String idCode;
-
+	protected String firstName;
+	protected String lastName;
+	protected String userPhoneNumber;
 	protected String challengeCode;
 	protected String userName;
-
 	protected String authenticationCode;
 	
 	protected UnifiedServiceResponse usr;

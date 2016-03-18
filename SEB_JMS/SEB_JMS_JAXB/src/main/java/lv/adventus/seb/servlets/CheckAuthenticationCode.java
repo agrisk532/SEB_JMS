@@ -55,42 +55,43 @@ public class CheckAuthenticationCode extends ServletBase {
 	    response.setContentType("text/plain");
 	    String dpcode = request.getParameter("digipasscode");
 	    String chcode = request.getParameter("challengecode");
-	    String userId = request.getParameter("userid");
+//	    String userId = request.getParameter("userid");
 	    String connId = request.getParameter("connid");
+	    String username = request.getParameter("username");
 
 	    // check http request parameters
 	    
-	    if (dpcode==null || chcode==null || userId==null || connId==null)
+	    if (dpcode==null || username==null || connId==null || chcode == null)
 	    {
 	    	String pr = "";
 	    	if(dpcode==null) pr+="digipasscode ";
-	    	if(chcode==null) pr+="challengecode ";
-	    	if(userId==null) pr+="userid ";
+	    	if(username==null) pr+="username ";
 	    	if(connId==null) pr+="connid ";
+	    	if(chcode==null) pr+="challengecode ";
 	    	System.out.println("Expected parameter digipasscode not received: " + pr);
 	    	out.print("error:TECHNICALERROR");
 	    	return;
 	    }
 	    else
 	    {
-//	    	System.out.println("CheckAuthenticationCode: digipasscode = " + dpcode);
-//	    	System.out.println("CheckAuthenticationCode: challengecode = " + chcode);
-//	    	System.out.println("CheckAuthenticationCode: userid = " + userId);
-//	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
+	    	System.out.println("CheckAuthenticationCode: digipasscode = " + dpcode);
+	    	System.out.println("CheckAuthenticationCode: challengecode = " + chcode);
+	    	System.out.println("CheckAuthenticationCode: username = " + username);
+	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
 	    }
 
 // check PingPong service result
     	ServletContext context = request.getSession().getServletContext();
  	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
- 		if(attribute.booleanValue() == false)
+ 		if(attribute.booleanValue() == false || attribute == null)
  		{
- 			System.out.println("CheckAuthenticationCode: PingPong returns 0. We stop processing.");
+ 			System.out.println("CheckAuthenticationCode: PingPong returns 0. Processing stopped.");
  			out.print("error:TECHNICALERROR");
  			return;
  		}
  		else
  		{
- 			System.out.println("CheckAuthenticationCode: PingPong returns 1. We continue.");
+ 			System.out.println("CheckAuthenticationCode: PingPong returns 1. Processing continues.");
  		}
 
 	    try
@@ -100,10 +101,10 @@ public class CheckAuthenticationCode extends ServletBase {
 		
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
-  			dc.SetHeaderUserId(userId);
+  			dc.SetHeaderUserId(username);
   			dc.SetHeaderRequestId(connId + "2");
   			dc.SetBody();
-  			dc.SetBody(dpcode,chcode,userId);
+  			dc.SetBody(dpcode,chcode,username);
   			xmlrequest = dc.Marshal();
   			// print XML
 			System.out.println("CheckAuthenticationCode sent this XML:");
@@ -128,10 +129,10 @@ public class CheckAuthenticationCode extends ServletBase {
   			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
   			this.userName = cac.getAuthenticationResponse().getUsername();
   			this.challengeCode = cac.getAuthenticationResponse().getChallengeCode();
-//  			System.out.println("Answer from JMS Broker:");
-//      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
-//      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
-//      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
+  			System.out.println("Answer from JMS Broker:");
+      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
+      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
+      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
   			
   			c.exit();
   			out.print("result:OK");
