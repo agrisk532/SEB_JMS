@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.concurrent.ConcurrentHashMap;
 import java.io.OutputStreamWriter;
 
 import javax.servlet.ServletConfig;
@@ -28,6 +29,7 @@ import progress.message.jclient.BytesMessage;
 import lv.adventus.seb.util.Connector;
 import lv.adventus.seb.util.MultipartMessageUtility;
 import lv.adventus.seb.util.XMLUtility;
+import lv.adventus.seb.util.Utility;
 import lv.adventus.seb.UnifiedServiceHeader;
 import lv.adventus.seb.UnifiedServiceResponse;
 import lv.adventus.seb.UnifiedServiceErrors;
@@ -65,8 +67,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	if(userId==null) s += "userId ";
 	    	if(connId==null) s += "connId ";
 	    	System.out.println("Parameter " + s + "not received");
-	    	out.print("error:TECHNICALERROR");
-	    	out.flush();
+	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	    	return;
 	    }
 	    else
@@ -76,18 +77,13 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    }
 	    
 	 // check PingPong service result
-//	    ServletContext context = request.getSession().getServletContext();
-// 	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
-// 		if(attribute.booleanValue() == false || attribute == null)
-// 		{
-// 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 0. Processing stopped.");
-// 			out.print("error:TECHNICALERROR");
-// 			return;
-// 		}
-// 		else
-// 		{
-// 			System.out.println("FindCustomerByPhoneOrPersonalCode: PingPong returns 1. Processing continues.");
-// 		}
+
+	    if(Utility.CheckPingPongStatus(request, response, "FindCustomerByPhoneOrPersonalCode") == false)
+	    {
+	    	return;
+	    }
+	    
+	 // PingPong ok, we continue
 	    
 	    try
 		{
@@ -113,8 +109,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    if(this.usr == null)
 		    {
 		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
-	 			out.print("error:TECHNICALERROR");
-	 			out.flush();
+		    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
 		    if(usr.getUnifiedServiceErrors() != null) return;
@@ -163,30 +158,27 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 //  			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
   			c.exit();
   			// this will be read by Genesys routing server
-  			out.print("customerId:" + this.customerId + "|username:" + this.userName +
-  					  "|idCode:" + this.idCode + "|firstName:" + this.firstName + 
-  					  "|lastName:" + this.lastName + "|userPhoneNumber:" + this.userPhoneNumber + 
-  					  "|challengecode:" + this.challengeCode);
-  			out.flush();
+  			Utility.ServletResponse(response,
+  					"customerId:" + this.customerId + "|username:" + this.userName +
+					"|idCode:" + this.idCode + "|firstName:" + this.firstName + 
+					"|lastName:" + this.lastName + "|userPhoneNumber:" + this.userPhoneNumber + 
+					"|challengecode:" + this.challengeCode);
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.print("error:TECHNICALERROR");
-        	out.flush();
+        	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.print("javax.jms.JMSException: ");
         	System.out.println(jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.print("error:TECHNICALERROR");
-        	out.flush();
+        	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.print("javax.xml.bind.JAXBException: ");
         	System.out.println(e.getMessage());
 	    }
         catch (java.io.IOException e)
         {
-        	out.print("error:TECHNICALERROR");
-        	out.flush();
+        	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.print("java.io.IOException: ");
         	System.out.println(e);
         }

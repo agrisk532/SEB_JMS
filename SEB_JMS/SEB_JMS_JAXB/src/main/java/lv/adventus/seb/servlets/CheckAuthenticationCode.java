@@ -29,6 +29,7 @@ import progress.message.jclient.BytesMessage;
 import lv.adventus.seb.util.Connector;
 import lv.adventus.seb.util.MultipartMessageUtility;
 import lv.adventus.seb.util.XMLUtility;
+import lv.adventus.seb.util.Utility;
 import lv.adventus.seb.UnifiedServiceResponse;
 import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.ContactcenterCheckAuthenticationCode2Output;
@@ -70,9 +71,8 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(connId==null) pr+="connid ";
 	    	if(chcode==null) pr+="challengecode ";
 	    	System.out.println("Expected parameter digipasscode not received: " + pr);
-	    	out.print("error:TECHNICALERROR");
-	    	out.flush();
-	    	return;
+        	Utility.ServletResponse(response, "error:TECHNICALERROR");
+        	return;
 	    }
 	    else
 	    {
@@ -82,25 +82,20 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
 	    }
 
-// check PingPong service result
-//    	ServletContext context = request.getSession().getServletContext();
-// 	 	Boolean attribute = (Boolean)context.getAttribute("PingPong"); 
-// 		if(attribute.booleanValue() == false || attribute == null)
-// 		{
-// 			System.out.println("CheckAuthenticationCode: PingPong returns 0. Processing stopped.");
-// 			out.print("error:TECHNICALERROR");
-// 			return;
-// 		}
-// 		else
-// 		{
-// 			System.out.println("CheckAuthenticationCode: PingPong returns 1. Processing continues.");
-// 		}
+		 // check PingPong service result
+
+	    if(Utility.CheckPingPongStatus(request, response, "CheckAuthenticationCode") == false)
+	    {
+	    	return;
+	    }
+	    
+	 // PingPong ok, we continue
 
 	    try
 		{
 
 /////////// invoke CheckAuthenticationCode service
-		
+
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
   			dc.SetHeaderUserId(username);
@@ -120,13 +115,13 @@ public class CheckAuthenticationCode extends ServletBase {
 		    if(this.usr == null)
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
-	 			out.print("error:TECHNICALERROR");
-	 			out.flush();
+	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
+	        	c.exit();
 	 			return;
 		    }
 
   			if(usr.getUnifiedServiceErrors() != null) return;
-  			
+
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
 
   			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
@@ -136,22 +131,18 @@ public class CheckAuthenticationCode extends ServletBase {
       	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
       	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
       	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
-  			
-  			c.exit();
-  			out.print("result:OK");
-  			out.flush();
+			c.exit();
+        	Utility.ServletResponse(response, "result:OK");
         }
         catch (javax.jms.JMSException jmse)
         {
-        	out.print("error:TECHNICALERROR");
-        	out.flush();
+        	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.println(jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
-        	out.print("error:TECHNICALERROR");
-        	out.flush();
-        	System.out.println(e.getMessage());
+	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
+	    	System.out.println(e.getMessage());
 	    }
 	}
 }

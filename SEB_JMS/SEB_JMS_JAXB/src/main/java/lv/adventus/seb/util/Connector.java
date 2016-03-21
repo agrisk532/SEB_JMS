@@ -18,7 +18,7 @@ public class Connector {
 	private static String username;
 	private static String password;
 	private static String sQueue;
-	private static PrintWriter out; // servlet response writer
+	private static HttpServletResponse response; // servlet response writer
 	private static long connectionTimeout; // response wait connectionTimeout
 	
     public javax.jms.QueueConnection connect = null;
@@ -38,7 +38,7 @@ public class Connector {
 		this.username = username;
 		this.password = password;
 		this.sQueue = sQueue;
-		this.out = res.getWriter();
+		this.response = res;
 		this.connectionTimeout = connectionTimeout;
 	}
 	
@@ -180,63 +180,11 @@ public class Connector {
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
 //    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
+    	ErrorHandler.SendErrors(response, usr);
 //	    if(this.usr != null)
 //	    {
 //	    	System.out.println("Connector:RequestID: " + usr.getUnifiedServiceHeader().getRequestId());
 //	    }
-		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-		if(errors != null)
-		{
-		  String errClass = null;
-		  String errCode = null;
-		  String errObject = null;
-		  for (int i = 0; i < errors.getError().size(); i++)
-		  {
-			  errClass = errors.getError().get(i).getErrorClass();
-			  errCode = errors.getError().get(i).getErrorCode();
-			  errObject = errors.getError().get(i).getErrorObject().getValue();
-			  System.out.println(errClass);
-			  System.out.println(errCode);
-			  System.out.println(errObject);
-		  }
-		  System.out.println("Connector: Servlet out stream = " + this.out.toString());
-		  if(this.out != null)  // print only if called from servlets
-		  {
-			  System.out.println("Connector: Servlet out stream is not null.");
-			  if(errClass.equals("VALIDATIONERROR"))
-			  {
-				  System.out.println("Connector: inside VALIDATIONERROR");
-				  if(errCode.equals("NO_MATCH"))
-				  {
-					  System.out.println("Connector: inside NO_MATCH");
-					  this.out.print("error:NO_MATCH");
-				  }
-				  else
-				  if(errCode.equals("MULTIPLE_MATCH"))
-				  {
-					  System.out.println("Connector: inside MULTIPLE_MATCH");
-					  this.out.print("error:MULTIPLE_MATCH");
-				  }
-				  else
-				  if(errCode.equals("Check ERROR"))
-				  {
-					  System.out.println("Connector: inside Check ERROR");
-					  this.out.print("result:WRONGCODE");
-				  }
-				  else
-				  {
-					  System.out.println("Connector: inside general error");
-					  this.out.print("error:" + errCode);
-				  }
-			  }
-			  else
-			  {
-				  System.out.println("Connector: inside general error. No VALIDATIONERROR.");
-				  this.out.print("error:" + errClass);
-			  }
-			  this.out.flush();
-		  }
-		}
   		return this.usr;
     }
     

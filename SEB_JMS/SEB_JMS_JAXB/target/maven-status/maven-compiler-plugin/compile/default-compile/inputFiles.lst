@@ -18,6 +18,7 @@ C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\XMLUtility.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\CheckAuthenticationCode.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\FindCustomerByPhoneOrPersonalCode.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\Utility.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\FindCustomerResponse.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\JAXB2UnMarshaller.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceBody.java
@@ -30,6 +31,7 @@ C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\GiveDigipassQuery.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\ObjectFactory.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\ServletBase.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\ErrorHandler.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\package-info.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\ServicesBase.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\PingPongTimerTask.java

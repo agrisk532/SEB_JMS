@@ -47,8 +47,8 @@ class PingPongTimerTask extends TimerTask
 		{
 			String xmlrequest;
 			pps.SetHeader();
-			ConcurrentHashMap<String, Object> o = (ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
-			String uid = String.valueOf(o.get("UID")).concat(String.valueOf(timesCalled++));
+			ConcurrentHashMap<String, Object> shared = (ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
+			String uid = String.valueOf(shared.get("PingPongUID")).concat(String.valueOf(timesCalled++));
 			pps.SetHeaderRequestId(uid);
 			pps.SetBody("Test", "");
 
@@ -66,7 +66,7 @@ class PingPongTimerTask extends TimerTask
 			if(usr.getUnifiedServiceErrors() != null)
 			{
 				System.out.println("PingPongTimerTask: PingPong service returns 0.");
-				sc.setAttribute("PingPong", Boolean.FALSE);
+				shared.put("PingPong", Boolean.FALSE);
 				return;
 			}
 
@@ -76,7 +76,7 @@ class PingPongTimerTask extends TimerTask
 //			System.out.println("Answer from JMS Broker:");
 //			System.out.println("system.PingPong_1: pongMessage = " + this.pongMessage);
 			c.exit();
-			sc.setAttribute("PingPong", Boolean.TRUE);
+			shared.put("PingPong", Boolean.TRUE);
 		}
 		catch (javax.jms.JMSException e)
 		{

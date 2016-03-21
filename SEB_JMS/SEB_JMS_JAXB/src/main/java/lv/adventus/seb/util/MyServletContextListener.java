@@ -49,20 +49,6 @@ public class MyServletContextListener implements ServletContextListener
 
 	   	int delay = 1000;
 	   	Timer timer = new Timer();
-	   	try
-	   	{
-	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout);
-	   	}
-	   	catch(javax.xml.bind.JAXBException e)
-	   	{
-	   		System.out.println("PingPong service exception. Could not create the timer task");
-	   		System.out.println("PingPong service won't be used.");
-	   		sc.setAttribute("PingPong", Boolean.FALSE);
-	   		return;
-	   	}
-
-	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
-	   	sc.setAttribute ("timer", timer);
 
 	   	ConcurrentHashMap<String, Object> shared =
 	   			(ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
@@ -71,8 +57,22 @@ public class MyServletContextListener implements ServletContextListener
 	   	    shared = new ConcurrentHashMap<String, Object>();
 	   	    sc.setAttribute("sharedData", shared);
 	   	}
+	   	
+	   	try
+	   	{
+	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout);
+	   	}
+	   	catch(javax.xml.bind.JAXBException e)
+	   	{
+	   		System.out.println("PingPong service exception. Could not create the timer task");
+	   		System.out.println("PingPong service won't be used.");
+	   		shared.put("PingPong", Boolean.FALSE);
+	   		return;
+	   	}
 
-	   	shared.put("UID", String.valueOf(UUID.randomUUID()));
+	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
+	   	shared.put("timer", timer);
+	   	shared.put("PingPongUID", String.valueOf(UUID.randomUUID())); // unique uid for PingPong, Genesys connection id for other servlets
 	}
 
     @Override
@@ -84,9 +84,7 @@ public class MyServletContextListener implements ServletContextListener
     	if (timer != null)
     	timer.cancel();
     	// remove the timer from the servlet context
-    	servletContext.removeAttribute ("timer");
     	servletContext.removeAttribute ("sharedData");
-    	servletContext.removeAttribute ("PingPong");
     	System.out.println("ServletContextListener destroyed");
     }
 }
