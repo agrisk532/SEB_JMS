@@ -20,6 +20,7 @@ public class MyServletContextListener implements ServletContextListener
 	private long connectionTimeout;
 	private ServletContext sc;
 	private long pingPongInterval;
+	private String pingPongStatusFileName;
 	private ConcurrentHashMap<String, Object> shared;
 
     public MyServletContextListener()
@@ -37,6 +38,7 @@ public class MyServletContextListener implements ServletContextListener
     	queue = sc.getInitParameter("queue");
     	connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
+    	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
     	
     	System.out.println("ServletContext parameters:");
     	System.out.println("broker: " + broker);
@@ -73,7 +75,9 @@ public class MyServletContextListener implements ServletContextListener
 	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
 	   	shared.put("timer", timer);
 	   	shared.put("PingPongUID", String.valueOf(UUID.randomUUID())); // unique uid for PingPong, Genesys connection id for other servlets
+	   	shared.put("PingPongStatusFileName", pingPongStatusFileName);
 	}
+    
 
     @Override
     public void contextDestroyed(ServletContextEvent sce){

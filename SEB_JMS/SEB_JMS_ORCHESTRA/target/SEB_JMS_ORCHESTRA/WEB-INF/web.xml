@@ -27,6 +27,10 @@
     <param-name>pingPongInterval</param-name>
     <param-value>30000</param-value>
 </context-param>
+<context-param>
+    <param-name>pingPongStatusFileName</param-name>
+    <param-value>PingPongStatusFile.txt</param-value>
+</context-param>
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode</servlet-class>
@@ -45,9 +49,7 @@
     <servlet-name>CheckAuthenticationCode</servlet-name>
     <url-pattern>/CheckAuthenticationCode</url-pattern>
 </servlet-mapping>
-<!-- 
 <listener>
     <listener-class>lv.adventus.seb.util.MyServletContextListener</listener-class>
 </listener>
--->
 </web-app>

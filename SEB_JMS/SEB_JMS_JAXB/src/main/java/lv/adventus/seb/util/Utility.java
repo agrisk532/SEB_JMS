@@ -39,4 +39,21 @@ public class Utility
  			return true;
  		}
 	}
+	
+	public static void stringToFile( String text, String fileName ) throws java.io.IOException
+	{
+	    File file = new File( fileName );
+
+	    // if file doesnt exists, then create it 
+	    if ( ! file.exists( ) )
+	    {
+	        file.createNewFile( );
+	    }
+
+	    FileWriter fw = new FileWriter( file.getAbsoluteFile( ) );
+	    BufferedWriter bw = new BufferedWriter( fw );
+	    bw.write( text );
+	    bw.close( );
+	}
 }
+

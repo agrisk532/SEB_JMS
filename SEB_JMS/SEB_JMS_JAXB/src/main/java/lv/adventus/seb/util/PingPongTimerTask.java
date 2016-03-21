@@ -25,7 +25,6 @@ class PingPongTimerTask extends TimerTask
 	private long connectionTimeout;
 	private ServletContext sc;
 	private long timesCalled;
-
 	
 	public PingPongTimerTask(ServletContext sc, String broker, String username, String password,
 			String queue, long timeout) throws javax.xml.bind.JAXBException
@@ -46,9 +45,12 @@ class PingPongTimerTask extends TimerTask
 		try
 		{
 			String xmlrequest;
-			pps.SetHeader();
+			
 			ConcurrentHashMap<String, Object> shared = (ConcurrentHashMap<String, Object>)sc.getAttribute("sharedData");
 			String uid = String.valueOf(shared.get("PingPongUID")).concat(String.valueOf(timesCalled++));
+			String pingPongStatusFileName =  String.valueOf(shared.get("PingPongStatusFileName"));
+
+			pps.SetHeader();
 			pps.SetHeaderRequestId(uid);
 			pps.SetBody("Test", "");
 
@@ -67,6 +69,7 @@ class PingPongTimerTask extends TimerTask
 			{
 				System.out.println("PingPongTimerTask: PingPong service returns 0.");
 				shared.put("PingPong", Boolean.FALSE);
+				Utility.stringToFile("0",pingPongStatusFileName); // for Zabbix
 				return;
 			}
 
@@ -77,6 +80,7 @@ class PingPongTimerTask extends TimerTask
 //			System.out.println("system.PingPong_1: pongMessage = " + this.pongMessage);
 			c.exit();
 			shared.put("PingPong", Boolean.TRUE);
+			Utility.stringToFile("1",pingPongStatusFileName);	// for Zabbix
 		}
 		catch (javax.jms.JMSException e)
 		{
