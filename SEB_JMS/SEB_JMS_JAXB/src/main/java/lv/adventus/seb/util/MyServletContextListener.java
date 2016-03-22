@@ -80,7 +80,8 @@ public class MyServletContextListener implements ServletContextListener
     
 
     @Override
-    public void contextDestroyed(ServletContextEvent sce){
+    public void contextDestroyed(ServletContextEvent sce)
+    {
     	ServletContext servletContext = sce.getServletContext();
     	// get our timer from the Context
     	Timer timer = (Timer)servletContext.getAttribute ("timer");
@@ -89,6 +90,15 @@ public class MyServletContextListener implements ServletContextListener
     	timer.cancel();
     	// remove the timer from the servlet context
     	servletContext.removeAttribute ("sharedData");
+    	try
+    	{
+    		Utility.stringToFile("0",pingPongStatusFileName); // for Zabbix
+    	}
+        catch (java.io.IOException e)
+        {
+        	System.out.println("java.io.IOException: ");
+        	System.out.println(e);
+        }
     	System.out.println("ServletContextListener destroyed");
     }
 }
