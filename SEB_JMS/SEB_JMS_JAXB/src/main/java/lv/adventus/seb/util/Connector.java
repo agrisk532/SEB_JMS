@@ -12,6 +12,9 @@ import javax.xml.bind.Unmarshaller;
 import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.UnifiedServiceResponse;
 
+import java.util.Date;
+import java.sql.Timestamp;
+
 public class Connector {
 	
 	private static String broker;
@@ -99,7 +102,9 @@ public class Connector {
 			msg.setStringProperty("responseMsgTTL", String.valueOf(this.connectionTimeout));
 		}
 		// Instead of sending, we will use the QueueRequestor.
+		System.out.println("Request to SonicMQ sent at: " + getTimestamp());
 		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
+		System.out.println("Response from SonicMQ received at: " + getTimestamp());
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
@@ -243,5 +248,13 @@ public class Connector {
     public void SetHeader(lv.adventus.seb.UnifiedServiceHeader h)
     {
     	this.msgHeader = h;
+    }
+    // gets current timestamp
+    public Timestamp getTimestamp()
+    {
+    	Date date= new Date();
+    	long time = date.getTime();
+    	Timestamp ts = new Timestamp(time);
+    	return ts;
     }
 }
