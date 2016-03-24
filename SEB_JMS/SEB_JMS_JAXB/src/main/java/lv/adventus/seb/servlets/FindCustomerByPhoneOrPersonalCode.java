@@ -52,6 +52,20 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		String xmlrequest;
+	
+		String customerId;
+		String idCode;
+		String firstName;
+		String lastName;
+		String userPhoneNumber;
+		String challengeCode;
+		String userName;
+		
+		UnifiedServiceResponse usr;
+		Connector c;
+
+		System.out.println("FindCustomerByPhoneOrPersonalCode http request received at: " + Connector.getTimestamp());
 		response.setContentType("text/html; charset=UTF-8");
 	    PrintWriter out = response.getWriter();
 	    String userId = request.getParameter("id");
@@ -71,8 +85,8 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    }
 	    else
 	    {
-//	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
-//	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
+	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
+	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
 	    }
 	    
 	 // check PingPong service result
@@ -93,7 +107,8 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		{
 	    	
 /////////// invoke FindCustomerByPhoneOrPersonalCode service
-	    	
+
+	    	System.out.println("FindCustomerByPhoneOrPersonalCode processing started at: " + Connector.getTimestamp());
 			lv.adventus.seb.FindCustomerByPhoneOrPersonalCode fc = new lv.adventus.seb.FindCustomerByPhoneOrPersonalCode();
 			fc.SetHeader();
 			fc.SetHeaderUserId(userId);
@@ -105,12 +120,20 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
+			System.out.println("FindCustomerByPhoneOrPersonalCode creating Connector at: " + Connector.getTimestamp());
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
 			c.SetHeader(fc.GetHeader());
+			System.out.println("FindCustomerByPhoneOrPersonalCode starting Connector at: " + Connector.getTimestamp());
 			c.start();
 			c.createMessage();
-		    this.usr = c.query(xmlrequest);
-		    if(this.usr == null)
+			System.out.println("FindCustomerByPhoneOrPersonalCode Connector query begins at: " + Connector.getTimestamp());
+		    usr = c.query(xmlrequest);
+		    System.out.println("FindCustomerByPhoneOrPersonalCode Connector query ends at: " + Connector.getTimestamp());
+  			System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector started at: " + Connector.getTimestamp());
+	  		c.exit();
+	  		System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector completed at: " + Connector.getTimestamp());
+
+		    if(usr == null)
 		    {
 		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
 	 			out.print("error:TECHNICALERROR");
@@ -118,56 +141,69 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	 			return;
 		    }
 		    if(usr.getUnifiedServiceErrors() != null) return;
-	
+
+  			System.out.println("FindCustomerByPhoneOrPersonalCode parsing response started at: " + Connector.getTimestamp());
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 		    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-		    this.customerId = fco.getFindCustomerResponse().getCustomerId();
-		    this.idCode = fco.getFindCustomerResponse().getIdCode();
-		    this.firstName = fco.getFindCustomerResponse().getFirstName();
-		    this.lastName = fco.getFindCustomerResponse().getLastName();
-		    this.userPhoneNumber = fco.getFindCustomerResponse().getUserPhoneNumber();
+		    customerId = fco.getFindCustomerResponse().getCustomerId();
+		    idCode = fco.getFindCustomerResponse().getIdCode();
+		    firstName = fco.getFindCustomerResponse().getFirstName();
+		    lastName = fco.getFindCustomerResponse().getLastName();
+		    userPhoneNumber = fco.getFindCustomerResponse().getUserPhoneNumber();
 //		    System.out.println("Answer from JMS Broker:");
-//		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + this.customerId);
-//		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + this.idCode);
-	  		c.exit();
+//		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + customerId);
+//		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + idCode);
+
 
 /////////// invoke GiveDigipassChallenge service
 		
+	    	System.out.println("GiveDigipassChallenge processing started at: " + Connector.getTimestamp());
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
   			dc.SetHeaderRequestId(connId + "1");  // to make requestId unique
   			dc.SetBody();
-  	 		dc.SetBody(this.customerId, this.idCode);
+  	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
 			System.out.println("GiveDigipassChallenge sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
+			System.out.println("GiveDigipassChallenge creating Connector at: " + Connector.getTimestamp());
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
 			c.SetHeader(dc.GetHeader());
+			System.out.println("GiveDigipassChallenge starting Connector at: " + Connector.getTimestamp());
 			c.start();
 			c.createMessage();
-		    this.usr = c.query(xmlrequest);
+			System.out.println("GiveDigipassChallenge Connector query begins at: " + Connector.getTimestamp());
+		    usr = c.query(xmlrequest);
+		    System.out.println("GiveDigipassChallenge Connector query ends at: " + Connector.getTimestamp());
+  			System.out.println("GiveDigipassChallenge Exit from Connector started at: " + Connector.getTimestamp());
+		    c.exit();
+	  		System.out.println("GiveDigipassChallenge Exit from Connector completed at: " + Connector.getTimestamp());
+		    
 		    if(usr.getUnifiedServiceErrors() != null) return;
   			
+		    System.out.println("GiveDigipassChallenge parsing response started at: " + Connector.getTimestamp());
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			this.customerId = gco.getGiveChallengeResponse().getCustomerId();
-  			this.challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
-  			this.userName = gco.getGiveChallengeResponse().getUsername();
-  			this.idCode = gco.getGiveChallengeResponse().getIdCode();
+  			customerId = gco.getGiveChallengeResponse().getCustomerId();
+  			challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
+  			userName = gco.getGiveChallengeResponse().getUsername();
+  			idCode = gco.getGiveChallengeResponse().getIdCode();
 //  			System.out.println("Answer from JMS Broker:");
-//  			System.out.println("GiveDigipassChallenge: customerId = " + this.customerId);
-//  			System.out.println("GiveDigipassChallenge: challengeCode = " + this.challengeCode);
-//  			System.out.println("GiveDigipassChallenge: userName = " + this.userName);
-//  			System.out.println("GiveDigipassChallenge: idCode = " + this.idCode);
-  			c.exit();
+//  			System.out.println("GiveDigipassChallenge: customerId = " + customerId);
+//  			System.out.println("GiveDigipassChallenge: challengeCode = " + challengeCode);
+//  			System.out.println("GiveDigipassChallenge: userName = " + userName);
+//  			System.out.println("GiveDigipassChallenge: idCode = " + idCode);
   			// this will be read by Genesys routing server
-  			out.print("customerId:" + this.customerId + "|username:" + this.userName +
-  					  "|idCode:" + this.idCode + "|firstName:" + this.firstName + 
-  					  "|lastName:" + this.lastName + "|userPhoneNumber:" + this.userPhoneNumber + 
-  					  "|challengecode:" + this.challengeCode);
+  			System.out.println("GiveDigipassChallenge servlet output started at: " + Connector.getTimestamp());
+  			out.print("customerId:" + customerId + "|username:" + userName +
+  					  "|idCode:" + idCode + "|firstName:" + firstName + 
+  					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber + 
+  					  "|challengecode:" + challengeCode);
+  			System.out.println("GiveDigipassChallenge servlet output completed at: " + Connector.getTimestamp());
   			out.flush();
+  			System.out.println("GiveDigipassChallenge servlet output flushed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {

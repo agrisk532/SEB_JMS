@@ -52,6 +52,15 @@ public class CheckAuthenticationCode extends ServletBase {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		String xmlrequest;
+	
+		String challengeCode;
+		String userName;
+		String authenticationCode;
+		
+		UnifiedServiceResponse usr;
+		Connector c;
+		
 		System.out.println("CheckAuthenticationCode http request received at: " + Connector.getTimestamp());
 		response.setContentType("text/html; charset=UTF-8");
 	    PrintWriter out = response.getWriter();
@@ -121,9 +130,13 @@ public class CheckAuthenticationCode extends ServletBase {
   			c.start();
   			c.createMessage();
   			System.out.println("CheckAuthenticationCode Connector query begins at: " + Connector.getTimestamp());
-  			this.usr = c.query(xmlrequest);
+  			usr = c.query(xmlrequest);
   			System.out.println("CheckAuthenticationCode Connector query ends at: " + Connector.getTimestamp());
-		    if(this.usr == null)
+  			System.out.println("CheckAuthenticationCode Exit from Connector started at: " + Connector.getTimestamp());
+  			c.exit();
+  			System.out.println("CheckAuthenticationCode Exit from Connector completed at: " + Connector.getTimestamp());
+
+		    if(usr == null)
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
 	 			out.print("error:TECHNICALERROR");
@@ -135,17 +148,15 @@ public class CheckAuthenticationCode extends ServletBase {
   			System.out.println("CheckAuthenticationCode parsing response started at: " + Connector.getTimestamp());
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
 
-  			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
-  			this.userName = cac.getAuthenticationResponse().getUsername();
-  			this.challengeCode = cac.getAuthenticationResponse().getChallengeCode();
+  			authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
+  			userName = cac.getAuthenticationResponse().getUsername();
+  			challengeCode = cac.getAuthenticationResponse().getChallengeCode();
   			System.out.println("Answer from JMS Broker:");
-      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
-      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
-      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
+      	    System.out.println("CheckAuthenticationCode: digipasscode = " + authenticationCode);
+      	    System.out.println("CheckAuthenticationCode: challengecode = " + challengeCode);
+      	    System.out.println("CheckAuthenticationCode: username = " + userName);
       	    System.out.println("CheckAuthenticationCode parsing response completed at: " + Connector.getTimestamp());
-      	    System.out.println("CheckAuthenticationCode Exit from Connector started at: " + Connector.getTimestamp());
-  			c.exit();
-  			System.out.println("CheckAuthenticationCode Exit from Connector completed at: " + Connector.getTimestamp());
+
   			System.out.println("CheckAuthenticationCode servlet output started at: " + Connector.getTimestamp());
   			out.print("result:OK");
   			System.out.println("CheckAuthenticationCode servlet output completed at: " + Connector.getTimestamp());
