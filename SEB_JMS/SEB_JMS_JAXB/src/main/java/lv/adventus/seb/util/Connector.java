@@ -88,6 +88,7 @@ public class Connector {
     
     public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException, java.io.IOException 
     {
+    	System.out.println("Connector query started at: " + Connector.getTimestamp());
 		//javax.jms.TextMessage msg = session.createTextMessage();
 		msg.setText( xmlrequest );
 		if(this.msgHeader != null)
@@ -102,9 +103,9 @@ public class Connector {
 			msg.setStringProperty("responseMsgTTL", String.valueOf(this.connectionTimeout));
 		}
 		// Instead of sending, we will use the QueueRequestor.
-		System.out.println("Request to SonicMQ sent at: " + getTimestamp());
+		System.out.println("Request to SonicMQ sent at: " + Connector.getTimestamp());
 		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
-		System.out.println("Response from SonicMQ received at: " + getTimestamp());
+		System.out.println("Response from SonicMQ received at: " + Connector.getTimestamp());
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
@@ -184,6 +185,7 @@ public class Connector {
 	    // unmarshal
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
 //    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
+		System.out.println("Connector unmarshaling started at: " + Connector.getTimestamp());
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
 //	    if(this.usr != null)
 //	    {
@@ -239,6 +241,7 @@ public class Connector {
 				  System.out.println("Connector: inside general error. No VALIDATIONERROR.");
 				  this.out.print("error:" + errClass);
 			  }
+			  System.out.println("Connector output flush started at: " + Connector.getTimestamp());
 			  this.out.flush();
 		  }
 		}
@@ -250,7 +253,7 @@ public class Connector {
     	this.msgHeader = h;
     }
     // gets current timestamp
-    public Timestamp getTimestamp()
+    public static Timestamp getTimestamp()
     {
     	Date date= new Date();
     	long time = date.getTime();

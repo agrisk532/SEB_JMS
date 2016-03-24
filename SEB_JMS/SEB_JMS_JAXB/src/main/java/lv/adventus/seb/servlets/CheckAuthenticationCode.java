@@ -52,6 +52,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		System.out.println("CheckAuthenticationCode http request received at: " + Connector.getTimestamp());
 		response.setContentType("text/html; charset=UTF-8");
 	    PrintWriter out = response.getWriter();
 	    String dpcode = request.getParameter("digipasscode");
@@ -101,6 +102,7 @@ public class CheckAuthenticationCode extends ServletBase {
 
 /////////// invoke CheckAuthenticationCode service
 		
+	    	System.out.println("CheckAuthenticationCode processing started at: " + Connector.getTimestamp());
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
   			dc.SetHeaderUserId(username);
@@ -112,11 +114,15 @@ public class CheckAuthenticationCode extends ServletBase {
 			System.out.println("CheckAuthenticationCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
+			System.out.println("CheckAuthenticationCode creating Connector at: " + Connector.getTimestamp());
   			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
   			c.SetHeader(dc.GetHeader());
+  			System.out.println("CheckAuthenticationCode starting Connector at: " + Connector.getTimestamp());
   			c.start();
   			c.createMessage();
+  			System.out.println("CheckAuthenticationCode Connector query begins at: " + Connector.getTimestamp());
   			this.usr = c.query(xmlrequest);
+  			System.out.println("CheckAuthenticationCode Connector query ends at: " + Connector.getTimestamp());
 		    if(this.usr == null)
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
@@ -126,7 +132,7 @@ public class CheckAuthenticationCode extends ServletBase {
 		    }
 
   			if(usr.getUnifiedServiceErrors() != null) return;
-  			
+  			System.out.println("CheckAuthenticationCode parsing response started at: " + Connector.getTimestamp());
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
 
   			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
@@ -136,10 +142,15 @@ public class CheckAuthenticationCode extends ServletBase {
       	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
       	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
       	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
-  			
+      	    System.out.println("CheckAuthenticationCode parsing response completed at: " + Connector.getTimestamp());
+      	    System.out.println("CheckAuthenticationCode Exit from Connector started at: " + Connector.getTimestamp());
   			c.exit();
+  			System.out.println("CheckAuthenticationCode Exit from Connector completed at: " + Connector.getTimestamp());
+  			System.out.println("CheckAuthenticationCode servlet output started at: " + Connector.getTimestamp());
   			out.print("result:OK");
+  			System.out.println("CheckAuthenticationCode servlet output completed at: " + Connector.getTimestamp());
   			out.flush();
+  			System.out.println("CheckAuthenticationCode servlet output flushed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {
