@@ -16,9 +16,9 @@ public class ErrorHandler
 		String errClass = null;
 		String errCode = null;
 		String errObject = null;
+		String servletOut = null; // for servlet output
 		PrintWriter out = response.getWriter(); // servlet response writer
 		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
-		String servletOut = null; // for servlet output
 
 		if(errors != null)
 		{

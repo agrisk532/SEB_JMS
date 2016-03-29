@@ -42,20 +42,20 @@ public class ServletBase extends HttpServlet {
     protected static String queue = "SEB_SERVICES";
     protected static long connectionTimeout = 60000L;
     
-	protected String xmlrequest;
-	protected String xmlresponse;
-
-	protected String customerId;
-	protected String idCode;
-	protected String firstName;
-	protected String lastName;
-	protected String userPhoneNumber;
-	protected String challengeCode;
-	protected String userName;
-	protected String authenticationCode;
-	
-	protected UnifiedServiceResponse usr;
-	protected Connector c;
+//	protected String xmlrequest;
+//	protected String xmlresponse;
+//
+//	protected String customerId;
+//	protected String idCode;
+//	protected String firstName;
+//	protected String lastName;
+//	protected String userPhoneNumber;
+//	protected String challengeCode;
+//	protected String userName;
+//	protected String authenticationCode;
+//	
+//	protected UnifiedServiceResponse usr;
+//	protected Connector c;
 
     /**
      * Default constructor. 

@@ -53,39 +53,53 @@ public class CheckAuthenticationCode extends ServletBase {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		response.setContentType("text/html; charset=UTF-8");
-	    PrintWriter out = response.getWriter();
-	    String dpcode = request.getParameter("digipasscode");
-	    String chcode = request.getParameter("challengecode");
-//	    String userId = request.getParameter("userid");
-	    String connId = request.getParameter("connid");
-	    String username = request.getParameter("username");
+		String xmlrequest;
+		String challengeCode;
+		String userName;
+		String digipassCode;
+		String connectionId;
 
-	    // check http request parameters
+		Connector c;
+		UnifiedServiceResponse usr;
+		PrintWriter out;
+
+		System.out.println("CheckAuthenticationCode http request received at: " + Connector.getTimestamp());
+		response.setContentType("text/plain; charset=UTF-8");
+	    out = response.getWriter();
 	    
-	    if (dpcode==null || username==null || connId==null || chcode == null)
+	    digipassCode = request.getParameter("digipasscode");
+	    challengeCode = request.getParameter("challengecode");
+	    connectionId = request.getParameter("connectionId");
+	    userName = request.getParameter("userName");
+
+	    // check HTTP GET request parameters
+
+	    if (digipassCode==null || challengeCode == null || connectionId==null || userName==null)
 	    {
 	    	String pr = "";
-	    	if(dpcode==null) pr+="digipasscode ";
-	    	if(username==null) pr+="username ";
-	    	if(connId==null) pr+="connid ";
-	    	if(chcode==null) pr+="challengecode ";
-	    	System.out.println("Expected parameter digipasscode not received: " + pr);
+	    	if(digipassCode==null)  pr += "digipasscode ";
+	    	if(challengeCode==null) pr += "challengecode ";
+	    	if(connectionId==null)  pr += "connectionId ";
+	    	if(userName==null) 		pr += "userName ";
+
+	    	System.out.println("Expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	System.out.println("CheckAuthenticationCode: digipasscode = " + dpcode);
-	    	System.out.println("CheckAuthenticationCode: challengecode = " + chcode);
-	    	System.out.println("CheckAuthenticationCode: username = " + username);
-	    	System.out.println("CheckAuthenticationCode: connid = " + connId);
+	    	System.out.println("CheckAuthenticationCode received HTTP GET parameters:");
+	    	System.out.println("digipasscode = " + digipassCode);
+	    	System.out.println("challengecode = " + challengeCode);
+	    	System.out.println("connectionId = " + connectionId);
+	    	System.out.println("userName = " + userName);
 	    }
 
 		 // check PingPong service result
 
 	    if(Utility.CheckPingPongStatus(request, response, "CheckAuthenticationCode") == false)
 	    {
+ 			Utility.ServletResponse(response,"error:TECHNICALERROR");
 	    	return;
 	    }
 	    
@@ -95,49 +109,60 @@ public class CheckAuthenticationCode extends ServletBase {
 		{
 
 /////////// invoke CheckAuthenticationCode service
-
+		
+	    	System.out.println("CheckAuthenticationCode processing started at: " + Connector.getTimestamp());
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
-  			dc.SetHeaderUserId(username);
-  			dc.SetHeaderRequestId(connId + "2");
+  			dc.SetHeaderUserId(userName);
+  			dc.SetHeaderRequestId(connectionId + "2");
   			dc.SetBody();
-  			dc.SetBody(dpcode,chcode,username);
+  			dc.SetBody(digipassCode,challengeCode,userName);
   			xmlrequest = dc.Marshal();
   			// print XML
 			System.out.println("CheckAuthenticationCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-  			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
+			System.out.println("CheckAuthenticationCode created Connector at: " + Connector.getTimestamp());
   			c.SetHeader(dc.GetHeader());
   			c.start();
+  			System.out.println("CheckAuthenticationCode started Connector at: " + Connector.getTimestamp());
   			c.createMessage();
-  			this.usr = c.query(xmlrequest);
-		    if(this.usr == null)
+  			System.out.println("CheckAuthenticationCode Connector query begins at: " + Connector.getTimestamp());
+  			usr = c.query(xmlrequest);
+  			System.out.println("CheckAuthenticationCode Connector query ends at: " + Connector.getTimestamp());
+  			System.out.println("CheckAuthenticationCode exit from Connector started at: " + Connector.getTimestamp());
+  			c.exit();
+  			System.out.println("CheckAuthenticationCode exit from Connector completed at: " + Connector.getTimestamp());
+
+		    if(usr == null)
 		    {
 		    	System.out.println("CheckAuthenticationCode: query returned null.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
-	        	c.exit();
 	 			return;
 		    }
 
-  			if(usr.getUnifiedServiceErrors() != null) return;
+  			if(usr.getUnifiedServiceErrors() != null) return; // errors already returned in servlet response from c.query()
 
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
+  			System.out.println("CheckAuthenticationCode response body extracted at: " + Connector.getTimestamp());
+  			digipassCode = cac.getAuthenticationResponse().getAuthenticationCode();
+  			userName = cac.getAuthenticationResponse().getUsername();
+  			challengeCode = cac.getAuthenticationResponse().getChallengeCode();
 
-  			this.authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
-  			this.userName = cac.getAuthenticationResponse().getUsername();
-  			this.challengeCode = cac.getAuthenticationResponse().getChallengeCode();
   			System.out.println("Answer from JMS Broker:");
-      	    System.out.println("CheckAuthenticationCode: digipasscode = " + this.authenticationCode);
-      	    System.out.println("CheckAuthenticationCode: challengecode = " + this.challengeCode);
-      	    System.out.println("CheckAuthenticationCode: username = " + this.userName);
-			c.exit();
-        	Utility.ServletResponse(response, "result:OK");
+      	    System.out.println("CheckAuthenticationCode: digipasscode = " + digipassCode);
+      	    System.out.println("CheckAuthenticationCode: challengecode = " + challengeCode);
+      	    System.out.println("CheckAuthenticationCode: userName = " + userName);
+
+      	    System.out.println("CheckAuthenticationCode servlet output started at: " + Connector.getTimestamp());
+      	    Utility.ServletResponse(response, "result:OK");
+  			System.out.println("CheckAuthenticationCode servlet output completed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
-        	System.out.println(jmse);
+        	System.out.println(jmse.getMessage());
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {

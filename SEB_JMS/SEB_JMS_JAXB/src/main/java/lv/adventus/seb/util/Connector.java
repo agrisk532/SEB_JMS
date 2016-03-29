@@ -12,6 +12,9 @@ import javax.xml.bind.Unmarshaller;
 import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.UnifiedServiceResponse;
 
+import java.util.Date;
+import java.sql.Timestamp;
+
 public class Connector {
 	
 	private static String broker;
@@ -85,7 +88,7 @@ public class Connector {
     
     public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException, java.io.IOException 
     {
-		//javax.jms.TextMessage msg = session.createTextMessage();
+    	System.out.println("Connector query started at: " + Connector.getTimestamp());
 		msg.setText( xmlrequest );
 		if(this.msgHeader != null)
 		{
@@ -99,7 +102,9 @@ public class Connector {
 			msg.setStringProperty("responseMsgTTL", String.valueOf(this.connectionTimeout));
 		}
 		// Instead of sending, we will use the QueueRequestor.
+		System.out.println("Request to SonicMQ sent at: " + Connector.getTimestamp());
 		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
+		System.out.println("Response from SonicMQ received at: " + Connector.getTimestamp());
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
@@ -179,17 +184,22 @@ public class Connector {
 	    // unmarshal
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
 //    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
+		System.out.println("Connector unmarshaling started at: " + Connector.getTimestamp());
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
     	ErrorHandler.SendErrors(response, usr);
-//	    if(this.usr != null)
-//	    {
-//	    	System.out.println("Connector:RequestID: " + usr.getUnifiedServiceHeader().getRequestId());
-//	    }
   		return this.usr;
     }
     
     public void SetHeader(lv.adventus.seb.UnifiedServiceHeader h)
     {
     	this.msgHeader = h;
+    }
+    // gets current timestamp
+    public static Timestamp getTimestamp()
+    {
+    	Date date= new Date();
+    	long time = date.getTime();
+    	Timestamp ts = new Timestamp(time);
+    	return ts;
     }
 }
