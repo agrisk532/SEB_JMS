@@ -41,7 +41,11 @@ public class ServletBase extends HttpServlet {
     protected static String passwordSonic = "tester";
     protected static String queue = "SEB_SERVICES";
     protected static long connectionTimeout = 60000L;
-    
+    protected static long ttl = 30000L;
+    protected static long responseMsgTTL = 30000L;
+
+    protected ServletContext sc;
+
 //	protected String xmlrequest;
 //	protected String xmlresponse;
 //
@@ -69,12 +73,14 @@ public class ServletBase extends HttpServlet {
 	 */
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		ServletContext sc = config.getServletContext();
+		sc = config.getServletContext();
 		this.broker = sc.getInitParameter("broker");
 		this.usernameSonic = sc.getInitParameter("usernameSonic");
 		this.passwordSonic = sc.getInitParameter("passwordSonic");
 		this.queue = sc.getInitParameter("queue");
 		this.connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
+		this.ttl = Long.parseLong(sc.getInitParameter("TTL")); // JMS parameter
+		this.responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL")); // JMS parameter
 	}
 
 	/**

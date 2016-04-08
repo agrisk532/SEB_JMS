@@ -122,7 +122,7 @@ public class CheckAuthenticationCode extends ServletBase {
 			System.out.println("CheckAuthenticationCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
 			System.out.println("CheckAuthenticationCode created Connector at: " + Connector.getTimestamp());
   			c.SetHeader(dc.GetHeader());
   			c.start();
@@ -163,11 +163,13 @@ public class CheckAuthenticationCode extends ServletBase {
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.println(jmse.getMessage());
+        	sc.log("CheckAuthenticationCode servlet JMSException: " + jmse.getMessage(), jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	    	System.out.println(e.getMessage());
+        	sc.log("CheckAuthenticationCode servlet JAXBException: " + e.getMessage(), e);	    	
 	    }
 	}
 }

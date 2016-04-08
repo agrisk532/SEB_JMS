@@ -18,6 +18,8 @@ public class MyServletContextListener implements ServletContextListener
 	private String passwordSonic;
 	private String queue;
 	private long connectionTimeout;
+    private long ttl = 30000L;
+    private long responseMsgTTL = 30000L;
 	private ServletContext sc;
 	private long pingPongInterval;
 	private String pingPongStatusFileName;
@@ -37,6 +39,8 @@ public class MyServletContextListener implements ServletContextListener
     	passwordSonic = sc.getInitParameter("passwordSonic");
     	queue = sc.getInitParameter("queue");
     	connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
+    	ttl = Long.parseLong(sc.getInitParameter("ttl"));
+    	responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL"));
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
     	
@@ -46,7 +50,10 @@ public class MyServletContextListener implements ServletContextListener
     	System.out.println("password: " + passwordSonic);
     	System.out.println("queue: " + queue);
     	System.out.println("connectionTimeout: " + connectionTimeout);
+    	System.out.println("JMS Message Property TTL : " + ttl);
+    	System.out.println("JMS Message Property responseMsgTTL : " + responseMsgTTL);
     	System.out.println("PingPongInterval: " + pingPongInterval);
+    	System.out.println("PingPongStatusFileName: " + pingPongStatusFileName);
     	System.out.println();
 
 	   	int delay = 1000;
@@ -62,7 +69,7 @@ public class MyServletContextListener implements ServletContextListener
 	   	
 	   	try
 	   	{
-	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout);
+	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL);
 	   	}
 	   	catch(javax.xml.bind.JAXBException e)
 	   	{

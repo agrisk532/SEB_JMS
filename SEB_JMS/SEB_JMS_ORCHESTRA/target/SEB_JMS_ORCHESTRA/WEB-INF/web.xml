@@ -28,6 +28,14 @@
     <param-value>30000</param-value>
 </context-param>
 <context-param>
+    <param-name>TTL</param-name>
+    <param-value>30000</param-value>
+</context-param>
+<context-param>
+    <param-name>responseMsgTTL</param-name>
+    <param-value>30000</param-value>
+</context-param>
+<context-param>
     <param-name>pingPongStatusFileName</param-name>
     <param-value>PingPongStatusFile.txt</param-value>
 </context-param>

@@ -116,7 +116,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
 			System.out.println("FindCustomerByPhoneOrPersonalCode created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(fc.GetHeader());
 			c.start();
@@ -167,7 +167,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("GiveDigipassChallenge sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
 			System.out.println("GiveDigipassChallenge created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(dc.GetHeader());
 			c.start();
@@ -213,16 +213,19 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.println(jmse.getMessage());
+        	sc.log("FindCustomerByPhoneOrPersonalCode servlet JMSException: " + jmse.getMessage(), jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	    	System.out.println(e.getMessage());
+	    	sc.log("FindCustomerByPhoneOrPersonalCode servlet JAXBException: " + e.getMessage(), e);
 	    }
         catch (java.io.IOException e)
         {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	    	System.out.println(e.getMessage());
+	    	sc.log("FindCustomerByPhoneOrPersonalCode servlet IOException: " + e.getMessage(), e);
         }
 	}
 }

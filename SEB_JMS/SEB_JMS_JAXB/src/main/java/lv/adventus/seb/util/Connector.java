@@ -21,8 +21,10 @@ public class Connector {
 	private static String username;
 	private static String password;
 	private static String sQueue;
-	private static HttpServletResponse response; // servlet response writer
 	private static long connectionTimeout; // response wait connectionTimeout
+	private static long ttl; // JMS parameter
+	private static long responseMsgTTL; // JMS parameter
+	private static HttpServletResponse response; // servlet response writer
 	
     public javax.jms.QueueConnection connect = null;
     public javax.jms.QueueSession session = null;
@@ -34,7 +36,8 @@ public class Connector {
     
 	private static final long serialVersionUID = 1L;
 	
-	public Connector(String broker, String username, String password, String sQueue, HttpServletResponse res, long connectionTimeout) throws java.io.IOException
+	public Connector(String broker, String username, String password, String sQueue, HttpServletResponse res, long connectionTimeout,
+			long ttl, long responseMsgTTL) throws java.io.IOException
 	
 	{
 		this.broker = broker;
@@ -43,6 +46,8 @@ public class Connector {
 		this.sQueue = sQueue;
 		this.response = res;
 		this.connectionTimeout = connectionTimeout;
+		this.ttl = ttl;
+		this.responseMsgTTL = responseMsgTTL;
 	}
 	
     public void start() throws javax.jms.JMSException
@@ -98,8 +103,8 @@ public class Connector {
 			msg.setStringProperty("officerId", this.msgHeader.getOfficerId());
 			msg.setStringProperty("serviceName", this.msgHeader.getServiceName());
 			msg.setBooleanProperty("xsdBasedMessage", this.msgHeader.isXsdBasedRequest());
-			msg.setStringProperty("TTL", String.valueOf(this.connectionTimeout));
-			msg.setStringProperty("responseMsgTTL", String.valueOf(this.connectionTimeout));
+			msg.setStringProperty("TTL", String.valueOf(this.ttl));
+			msg.setStringProperty("responseMsgTTL", String.valueOf(this.responseMsgTTL));
 		}
 		// Instead of sending, we will use the QueueRequestor.
 		System.out.println("Request to SonicMQ sent at: " + Connector.getTimestamp());

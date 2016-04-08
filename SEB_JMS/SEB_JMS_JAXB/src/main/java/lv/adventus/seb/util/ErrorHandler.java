@@ -74,5 +74,9 @@ public class ErrorHandler
 				Utility.ServletResponse(response, servletOut);
 			}
 		}
+		else
+		{
+			System.out.println("No errors in the received message. All is ok.");
+		}
 	}
 }
