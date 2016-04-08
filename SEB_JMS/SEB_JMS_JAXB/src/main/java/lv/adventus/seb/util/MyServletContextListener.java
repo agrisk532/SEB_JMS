@@ -79,7 +79,7 @@ public class MyServletContextListener implements ServletContextListener
 	   		return;
 	   	}
 
-	   	timer.scheduleAtFixedRate(this.task, delay, pingPongInterval);
+	   	timer.schedule(this.task, delay, pingPongInterval);
 	   	shared.put("timer", timer);
 	   	shared.put("PingPongUID", String.valueOf(UUID.randomUUID())); // unique uid for PingPong, Genesys connection id for other servlets
 	   	shared.put("PingPongStatusFileName", pingPongStatusFileName);
