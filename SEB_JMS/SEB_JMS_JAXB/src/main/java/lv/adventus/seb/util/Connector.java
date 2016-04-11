@@ -191,7 +191,8 @@ public class Connector {
 //    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
 		System.out.println("Connector unmarshaling started at: " + Connector.getTimestamp());
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
-    	ErrorHandler.SendErrors(response, usr);
+    	if(response != null)	// for PingPongTimerTask() that it do not send output to non-existing servlet 
+    		ErrorHandler.SendErrors(response, usr);
   		return this.usr;
     }
     
