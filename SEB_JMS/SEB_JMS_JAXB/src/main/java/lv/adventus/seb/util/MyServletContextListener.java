@@ -39,7 +39,7 @@ public class MyServletContextListener implements ServletContextListener
     	passwordSonic = sc.getInitParameter("passwordSonic");
     	queue = sc.getInitParameter("queue");
     	connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
-    	ttl = Long.parseLong(sc.getInitParameter("ttl"));
+    	ttl = Long.parseLong(sc.getInitParameter("TTL"));
     	responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL"));
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
