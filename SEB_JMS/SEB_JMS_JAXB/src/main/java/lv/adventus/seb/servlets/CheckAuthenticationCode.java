@@ -79,8 +79,8 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	String pr = "";
 	    	if(digipassCode==null)  pr += "digipasscode ";
 	    	if(challengeCode==null) pr += "challengecode ";
-	    	if(connectionId==null)  pr += "connectionId ";
-	    	if(userName==null) 		pr += "userName ";
+	    	if(connectionId==null)  pr += "connid ";
+	    	if(userName==null) 		pr += "username ";
 
 	    	System.out.println("Expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
@@ -91,8 +91,8 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	System.out.println("CheckAuthenticationCode received HTTP GET parameters:");
 	    	System.out.println("digipasscode = " + digipassCode);
 	    	System.out.println("challengecode = " + challengeCode);
-	    	System.out.println("connectionId = " + connectionId);
-	    	System.out.println("userName = " + userName);
+	    	System.out.println("connid = " + connectionId);
+	    	System.out.println("username = " + userName);
 	    }
 
 		 // check PingPong service result
