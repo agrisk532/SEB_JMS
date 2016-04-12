@@ -69,8 +69,8 @@ public class CheckAuthenticationCode extends ServletBase {
 	    
 	    digipassCode = request.getParameter("digipasscode");
 	    challengeCode = request.getParameter("challengecode");
-	    connectionId = request.getParameter("connectionId");
-	    userName = request.getParameter("userName");
+	    connectionId = request.getParameter("connid");
+	    userName = request.getParameter("username");
 
 	    // check HTTP GET request parameters
 
