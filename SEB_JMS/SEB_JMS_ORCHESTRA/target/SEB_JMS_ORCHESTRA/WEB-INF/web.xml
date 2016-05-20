@@ -4,38 +4,47 @@
 
 <web-app>
 <context-param>
+	<description>JMS broker:port</description>
     <param-name>broker</param-name>
     <param-value>awebs.ad4.seb.net:6526</param-value>
 </context-param>
 <context-param>
+	<description>JMS username</description>
     <param-name>usernameSonic</param-name>
     <param-value>tester1</param-value>
 </context-param>
 <context-param>
+	<description>JMS password</description>
     <param-name>passwordSonic</param-name>
     <param-value>tester</param-value>
 </context-param>
 <context-param>
+	<description>JMS queue</description>
     <param-name>queue</param-name>
     <param-value>SEB_SERVICES</param-value>
 </context-param>
 <context-param>
+	<description>time in ms to wait for a reply on temporary queue. If 0, blocks indefinitely until a message arrives</description>
     <param-name>connectionTimeout</param-name>
     <param-value>60000</param-value>
 </context-param>
 <context-param>
+	<description>interval between PingPong messages, in ms</description>
     <param-name>pingPongInterval</param-name>
     <param-value>30000</param-value>
 </context-param>
 <context-param>
+	<description>JMS Message attribute TTL, in ms</description>
     <param-name>TTL</param-name>
     <param-value>30000</param-value>
 </context-param>
 <context-param>
+	<description>JMS Message attribute responseMsgTTL, in ms</description>
     <param-name>responseMsgTTL</param-name>
     <param-value>30000</param-value>
 </context-param>
 <context-param>
+	<description>file with PingPong status (for NMS), contains 0 - no services available, 1 - ok</description>
     <param-name>pingPongStatusFileName</param-name>
     <param-value>PingPongStatusFile.txt</param-value>
 </context-param>
