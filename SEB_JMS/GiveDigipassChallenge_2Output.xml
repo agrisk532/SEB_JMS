@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <UnifiedServiceResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <unifiedServiceHeader>
-    <requestId>cca482bddf-5a20-319a-aa39-14f270d6610f</requestId>
+    <requestId>cc00a8027af2d3e97401</requestId>
     <serviceName>contactcenter.GiveDigipassChallenge_2</serviceName>
-    <userId>F85354</userId>
+    <userId>M00013</userId>
     <officerId>admin</officerId>
     <xsdBasedRequest>false</xsdBasedRequest>
     <responseIsCompressed>false</responseIsCompressed>
@@ -12,23 +12,23 @@
     <brand/>
     <channel>ContactCenter</channel>
     <clientId/>
-    <countryCode>EE</countryCode>
+    <countryCode>LV</countryCode>
     <department>0</department>
     <homeBackend/>
     <info/>
-    <language>EE</language>
+    <language>LV</language>
     <numberOfRModules>0</numberOfRModules>
     <representativeId/>
     <representativeCustomerId/>
     <sessionKey/>
-    <timeStamp>2016-01-25T11:14:22.483</timeStamp>
+    <timeStamp>2016-09-01T16:21:13.936</timeStamp>
   </unifiedServiceHeader>
 <unifiedServiceBody>
-<contactcenter:GiveChallengeResponse xmlns:contactcenter="http://www.seb.ee/contactcenter">
-    <contactcenter:customerId>F85354</contactcenter:customerId>
-    <contactcenter:challengeCode>1904</contactcenter:challengeCode>
-    <contactcenter:username>florida</contactcenter:username>
-    <contactcenter:idCode>38207031078</contactcenter:idCode>
-  </contactcenter:GiveChallengeResponse>
-</unifiedServiceBody>
-</UnifiedServiceResponse>
+<contactcenter:contactcenter.GiveDigipassChallenge_2_Output xmlns:cmn="http://www.seb.ee/common" xmlns:contactcenter="http://www.seb.ee/contactcenter">
+<contactcenter:GiveChallengeResponse>
+    <contactcenter:customerId>M00013</contactcenter:customerId>
+    <contactcenter:challengeCode>5654</contactcenter:challengeCode>
+    <contactcenter:username>Raa1234</contactcenter:username>
+    <contactcenter:idCode>240987-10007</contactcenter:idCode>  </contactcenter:GiveChallengeResponse>
+</contactcenter:contactcenter.GiveDigipassChallenge_2_Output>
+</unifiedServiceBody></UnifiedServiceResponse>

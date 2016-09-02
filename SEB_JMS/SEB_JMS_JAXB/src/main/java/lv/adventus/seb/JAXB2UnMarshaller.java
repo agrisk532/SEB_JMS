@@ -20,12 +20,12 @@ public class JAXB2UnMarshaller {
 
     	JAXBContext jaxbContext = JAXBContext.newInstance(UnifiedServiceResponse.class);
     	Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
-    	InputStream isMain = this.getClass().getResourceAsStream( "src/main/resources/contactcenter.xsd" );
-    	InputStream isImport = this.getClass().getResourceAsStream( "src/main/resources/integration.xsd" );
-    	Source imp = new StreamSource( isImport );
-    	Source main = new StreamSource( isMain  );
+//    	InputStream isMain = this.getClass().getResourceAsStream( "src/main/resources/contactcenter.xsd" );
+//    	InputStream isImport = this.getClass().getResourceAsStream( "src/main/resources/integration.xsd" );
+//    	Source imp = new StreamSource( isImport );
+//    	Source main = new StreamSource( isMain  );
 //
-    	Source[] schemaFiles = new Source[] { imp, main };
+//    	Source[] schemaFiles = new Source[] { imp, main };
 //
       //SchemaFactory sf = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
       //Schema schema = sf.newSchema( schemaFiles );
@@ -103,9 +103,9 @@ public class JAXB2UnMarshaller {
 	}
   
   public static void main(String[] argv) {
-    File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
+    //File xmlDocument = new File("CheckAuthenticationCode_2Output.xml");
     //File xmlDocument = new File("FindCustomerByPhoneOrPersonalCode_2Output2.xml");
-    //File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
+    File xmlDocument = new File("GiveDigipassChallenge_2Output.xml");
 //	  File xmlDocument = new File("PingPong_2Output.xml");
     System.out.println(xmlDocument.exists()); // prints true if a file exists at that location
     System.out.println(xmlDocument.getAbsoluteFile());// prints "c:\\eclipse\\eclipse.ini"
@@ -114,26 +114,26 @@ public class JAXB2UnMarshaller {
     UnifiedServiceResponse usr = jaxbUnmarshaller.unMarshall(xmlDocument);
     System.out.println(usr.getUnifiedServiceHeader().getRequestId());
     
-//	ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-//    String customerId = gco.getGiveChallengeResponse().getCustomerId();
-//	String challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
-//	String userName = gco.getGiveChallengeResponse().getUsername();
-//	String idCode = gco.getGiveChallengeResponse().getIdCode();
-//	System.out.println("Answer from JMS Broker:");
-//	System.out.println("GiveDigipassChallenge: customerId = " + customerId);
-//	System.out.println("GiveDigipassChallenge: challengeCode = " + challengeCode);
-//	System.out.println("GiveDigipassChallenge: userName = " + userName);
-//	System.out.println("GiveDigipassChallenge: idCode = " + idCode);
+	ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
+    String customerId = gco.getGiveChallengeResponse().getCustomerId();
+	String challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
+	String userName = gco.getGiveChallengeResponse().getUsername();
+	String idCode = gco.getGiveChallengeResponse().getIdCode();
+	System.out.println("Answer from JMS Broker:");
+	System.out.println("GiveDigipassChallenge: customerId = " + customerId);
+	System.out.println("GiveDigipassChallenge: challengeCode = " + challengeCode);
+	System.out.println("GiveDigipassChallenge: userName = " + userName);
+	System.out.println("GiveDigipassChallenge: idCode = " + idCode);
 
-		ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-
-		String authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
-		String userName = cac.getAuthenticationResponse().getUsername();
-		String challengeCode = cac.getAuthenticationResponse().getChallengeCode();
-		System.out.println("Answer from JMS Broker:");
-	    System.out.println("CheckAuthenticationCode: digipasscode = " + authenticationCode);
-	    System.out.println("CheckAuthenticationCode: challengecode = " + challengeCode);
-	    System.out.println("CheckAuthenticationCode: username = " + userName);
+//		ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
+//
+//		String authenticationCode = cac.getAuthenticationResponse().getAuthenticationCode();
+//		String userName = cac.getAuthenticationResponse().getUsername();
+//		String challengeCode = cac.getAuthenticationResponse().getChallengeCode();
+//		System.out.println("Answer from JMS Broker:");
+//	    System.out.println("CheckAuthenticationCode: digipasscode = " + authenticationCode);
+//	    System.out.println("CheckAuthenticationCode: challengecode = " + challengeCode);
+//	    System.out.println("CheckAuthenticationCode: username = " + userName);
     
 		UnifiedServiceErrors errors = usr.getUnifiedServiceErrors();
 		if(errors != null)
