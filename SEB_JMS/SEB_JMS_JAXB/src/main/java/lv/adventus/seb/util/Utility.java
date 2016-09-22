@@ -17,8 +17,8 @@ public class Utility
 	public static void ServletResponse(HttpServletResponse response, String content) throws java.io.IOException
 	{
 		PrintWriter out = response.getWriter();
-		out.print(content); // without CRLF for Genesys
-		out.flush();
+		out.print(content); // without CRLF for Genesys ( out.print() instead of out.prinln() )
+		//out.flush();
 	}
 	
 	public static boolean CheckPingPongStatus(HttpServletRequest request, HttpServletResponse response, String callerFunction) throws java.io.IOException

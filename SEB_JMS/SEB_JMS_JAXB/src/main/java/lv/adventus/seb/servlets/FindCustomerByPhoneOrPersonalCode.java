@@ -1,4 +1,4 @@
-package lv.adventus.seb.servlets;
+ package lv.adventus.seb.servlets;
 
 import java.io.ByteArrayInputStream;
 
@@ -67,13 +67,18 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		Connector c;
 
 		System.out.println("FindCustomerByPhoneOrPersonalCode http request received at: " + Connector.getTimestamp());
-		response.setContentType("text/plain; charset=UTF-8");
-	    PrintWriter out = response.getWriter();
+
+		// set all response headers here
+		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
+		response.setHeader("Cache-Control", "no-cache");
+
+	    //PrintWriter out = response.getWriter(); // will be done later 
+
 	    String userId = request.getParameter("id");
 	    String connId = "cc" + request.getParameter("connid");
-	    
+
 	    // check http request parameters
-	    
+
 	    if (userId==null || connId==null)
 	    {
 	    	String pr = "";
@@ -88,7 +93,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
 	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
 	    }
-	    
+
 	 // check PingPong service result
 
 	    if(Utility.CheckPingPongStatus(request, response, "FindCustomerByPhoneOrPersonalCode") == false)
@@ -135,7 +140,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
-		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in servlet response from c.query()
+		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in c.query()
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);

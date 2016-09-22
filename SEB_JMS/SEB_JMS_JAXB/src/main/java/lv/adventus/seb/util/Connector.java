@@ -3,7 +3,6 @@ package lv.adventus.seb.util;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -24,8 +23,7 @@ public class Connector {
 	private static long connectionTimeout; // response wait connectionTimeout
 	private static long ttl; // JMS parameter
 	private static long responseMsgTTL; // JMS parameter
-	private static HttpServletResponse response; // servlet response writer
-	
+
     public javax.jms.QueueConnection connect = null;
     public javax.jms.QueueSession session = null;
     public lv.adventus.seb.util.QueueRequestor requestor = null;
@@ -33,6 +31,7 @@ public class Connector {
     public progress.message.jclient.XMLMessage msg;
     public lv.adventus.seb.UnifiedServiceHeader msgHeader;
     public lv.adventus.seb.UnifiedServiceResponse usr;
+    public HttpServletResponse response;
     
 	private static final long serialVersionUID = 1L;
 	

@@ -65,13 +65,12 @@ public class ErrorHandler
 					  System.out.println("Connector: inside general error. No VALIDATIONERROR.");
 					  servletOut = new String("error:" + errClass);
 				  }
+				  Utility.ServletResponse(response, servletOut);
 				}
 				else
 				{
 					System.out.println("ErrorHandler.HandleErrors: Servlet out stream is null");
-					servletOut = new String("error:TECHNICALERROR");
 				}
-				Utility.ServletResponse(response, servletOut);
 			}
 		}
 		else

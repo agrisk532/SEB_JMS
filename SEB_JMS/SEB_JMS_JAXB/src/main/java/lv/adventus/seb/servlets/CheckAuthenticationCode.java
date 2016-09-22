@@ -64,8 +64,12 @@ public class CheckAuthenticationCode extends ServletBase {
 		PrintWriter out;
 
 		System.out.println("CheckAuthenticationCode http request received at: " + Connector.getTimestamp());
-		response.setContentType("text/plain; charset=UTF-8");
-	    out = response.getWriter();
+
+		// set all response headers here
+		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
+		response.setHeader("Cache-Control", "no-cache");
+
+	    //PrintWriter out = response.getWriter(); // will be done later 
 	    
 	    digipassCode = request.getParameter("digipasscode");
 	    challengeCode = request.getParameter("challengecode");
