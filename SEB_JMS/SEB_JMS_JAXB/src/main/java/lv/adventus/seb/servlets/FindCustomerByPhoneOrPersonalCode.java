@@ -159,7 +159,13 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    System.out.println("FindCustomerByPhoneOrPersonalCode: userPhoneNumber = " + userPhoneNumber);
 
 /////////// invoke GiveDigipassChallenge service
-		
+
+		    if(Utility.CheckPingPongStatus(request, response, "GiveDigipassChallenge") == false)
+		    {
+	 			Utility.ServletResponse(response,"error:TECHNICALERROR");
+		    	return;
+		    }
+		    
 	    	System.out.println("GiveDigipassChallenge processing started at: " + Connector.getTimestamp());
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
