@@ -54,6 +54,7 @@ public class Connector {
     	javax.jms.QueueConnectionFactory factory;
     	System.out.println("Connector.start() beginning at: " + Connector.getTimestamp());
         factory = (new progress.message.jclient.QueueConnectionFactory (broker));
+        System.out.println("Connector.start() ConnectionFactory created at: " + Connector.getTimestamp());
         connect = factory.createQueueConnection (username, password);
         System.out.println("Connector.start() created connection at: " + Connector.getTimestamp());
         session = connect.createQueueSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);

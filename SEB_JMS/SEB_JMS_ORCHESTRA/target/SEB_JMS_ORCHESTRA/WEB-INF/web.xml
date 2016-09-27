@@ -6,7 +6,7 @@
 <context-param>
 	<description>JMS broker:port</description>
     <param-name>broker</param-name>
-    <param-value>awebs.ad4.seb.net:6526</param-value>
+    <param-value>sonic1.flv.baltic.seb.net:2526</param-value>
 </context-param>
 <context-param>
 	<description>JMS username</description>
