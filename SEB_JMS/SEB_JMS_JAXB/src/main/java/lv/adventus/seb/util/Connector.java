@@ -52,14 +52,20 @@ public class Connector {
     public void start() throws javax.jms.JMSException
     {
     	javax.jms.QueueConnectionFactory factory;
+    	System.out.println("Connector.start() beginning at: " + Connector.getTimestamp());
         factory = (new progress.message.jclient.QueueConnectionFactory (broker));
         connect = factory.createQueueConnection (username, password);
+        System.out.println("Connector.start() created connection at: " + Connector.getTimestamp());
         session = connect.createQueueSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
+        System.out.println("Connector.start() created session at: " + Connector.getTimestamp());
         // Create the Queue and QueueRequestor for sending requests.
         javax.jms.Queue queue = null;
         queue = session.createQueue (sQueue);
+        System.out.println("Connector.start() created queue at: " + Connector.getTimestamp());
         requestor = new lv.adventus.seb.util.QueueRequestor(session, queue);
+        System.out.println("Connector.start() created queue requestor at: " + Connector.getTimestamp());
         connect.start();
+        System.out.println("Connector.start() started at: " + Connector.getTimestamp());
     }
     
     public lv.adventus.seb.util.QueueRequestor getRequestor()
