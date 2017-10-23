@@ -1,9 +1,11 @@
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\util\QueueRequestor.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\CheckAuthenticationCode.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceResponse.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\GiveDigipassChallenge_2.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\ContactcenterFindCustomerByPhoneOrPersonalCode2Output.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceErrors.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\GiveDigipassChallenge.java
+C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\servlets\FindCustomerByPhoneOrPersonalCode_2.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\JAXB2Marshaller.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\target\generated-sources\xjc\lv\adventus\seb\UnifiedServiceHeader.java
 C:\Users\agrisk\GIT_Repos\SEB_JMS\SEB_JMS\SEB_JMS_JAXB\src\main\java\lv\adventus\seb\FindCustomerByPhoneOrPersonalCode.java

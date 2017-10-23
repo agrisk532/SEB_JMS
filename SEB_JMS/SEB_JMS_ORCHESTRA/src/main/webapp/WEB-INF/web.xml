@@ -4,49 +4,49 @@
 
 <web-app>
 <context-param>
-	<description>JMS broker:port</description>
     <param-name>broker</param-name>
     <param-value>sonic1.flv.baltic.seb.net:2526</param-value>
+   	<description>JMS broker:port</description>
 </context-param>
 <context-param>
-	<description>JMS username</description>
     <param-name>usernameSonic</param-name>
     <param-value>tester1</param-value>
+	<description>JMS username</description>
 </context-param>
 <context-param>
-	<description>JMS password</description>
     <param-name>passwordSonic</param-name>
     <param-value>tester</param-value>
+	<description>JMS password</description>
 </context-param>
 <context-param>
-	<description>JMS queue</description>
     <param-name>queue</param-name>
     <param-value>SEB_SERVICES</param-value>
+	<description>JMS queue</description>
 </context-param>
 <context-param>
-	<description>time in ms to wait for a reply on temporary queue. If 0, blocks indefinitely until a message arrives</description>
     <param-name>connectionTimeout</param-name>
     <param-value>60000</param-value>
+	<description>time in ms to wait for a reply on temporary queue. If 0, blocks indefinitely until a message arrives</description>
 </context-param>
 <context-param>
-	<description>interval between PingPong messages, in ms</description>
     <param-name>pingPongInterval</param-name>
     <param-value>30000</param-value>
+   	<description>interval between PingPong messages, in ms</description>
 </context-param>
 <context-param>
-	<description>JMS Message attribute TTL, in ms</description>
     <param-name>TTL</param-name>
     <param-value>30000</param-value>
+	<description>JMS Message attribute TTL, in ms</description>
 </context-param>
 <context-param>
-	<description>JMS Message attribute responseMsgTTL, in ms</description>
     <param-name>responseMsgTTL</param-name>
     <param-value>30000</param-value>
+	<description>JMS Message attribute responseMsgTTL, in ms</description>
 </context-param>
 <context-param>
-	<description>file with PingPong status (for NMS), contains 0 - no services available, 1 - ok</description>
     <param-name>pingPongStatusFileName</param-name>
     <param-value>PingPongStatusFile.txt</param-value>
+	<description>file with PingPong status (for NMS), contains 0 - no services available, 1 - ok</description>    
 </context-param>
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
@@ -58,6 +58,16 @@
     <servlet-class>lv.adventus.seb.servlets.CheckAuthenticationCode</servlet-class>
     <load-on-startup>3</load-on-startup>
 </servlet>
+<servlet>
+    <servlet-name>FindCustomerByPhoneOrPersonalCode_2</servlet-name>
+    <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode_2</servlet-class>
+    <load-on-startup>3</load-on-startup>
+</servlet>
+<servlet>
+    <servlet-name>GiveDigipassChallenge_2</servlet-name>
+    <servlet-class>lv.adventus.seb.servlets.GiveDigipassChallenge_2</servlet-class>
+    <load-on-startup>3</load-on-startup>
+</servlet>
 <servlet-mapping>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <url-pattern>/GetChallengeCodeByPersonalCode</url-pattern>
@@ -65,6 +75,18 @@
 <servlet-mapping>
     <servlet-name>CheckAuthenticationCode</servlet-name>
     <url-pattern>/CheckAuthenticationCode</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>FindCustomerByPhoneOrPersonalCode_2</servlet-name>
+    <url-pattern>/FindCustomerByPhoneOrPersonalCode_2</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>GiveDigipassChallenge_2</servlet-name>
+    <url-pattern>/GiveDigipassChallenge_2</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>CheckAuthenticationCode</servlet-name>
+    <url-pattern>/CheckAuthenticationCode_2</url-pattern>
 </servlet-mapping>
 <listener>
     <listener-class>lv.adventus.seb.util.MyServletContextListener</listener-class>

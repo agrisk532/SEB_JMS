@@ -9,7 +9,9 @@ lv\adventus\seb\JAXB2UnMarshaller.class
 lv\adventus\seb\package-info.class
 lv\adventus\seb\UnifiedServiceResponse.class
 lv\adventus\seb\FindCustomerQuery.class
+lv\adventus\seb\servlets\GiveDigipassChallenge_2.class
 lv\adventus\seb\AuthenticationQuery.class
+lv\adventus\seb\servlets\FindCustomerByPhoneOrPersonalCode_2.class
 lv\adventus\seb\UnifiedServiceBody.class
 lv\adventus\seb\ContactcenterCheckAuthenticationCode2Input.class
 lv\adventus\seb\Error.class
