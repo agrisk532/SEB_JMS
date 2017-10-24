@@ -64,7 +64,8 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 		UnifiedServiceResponse usr;
 		Connector c;
 
-		System.out.println("GiveDigipassChallenge_2 http request received at: " + Connector.getTimestamp());
+		String requestURI = request.getRequestURI().substring(1);	// remove slash
+		System.out.println(requestURI + " http request received at: " + Connector.getTimestamp());
 
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -84,15 +85,15 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 	    	if(idCode == null) pr += "idCode ";
 	    	if(connId == null) pr += "connId ";
 	    	if(customerId == null) pr += "customerId ";
-	    	System.out.println("Expected parameter not received from HTTP GET request: " + pr);
+	    	System.out.println(requestURI + ": Expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	System.out.println("GiveDigipassChallenge_2: idCode = " + idCode);
-	    	System.out.println("GiveDigipassChallenge_2: connid = " + connId);
-	    	System.out.println("GiveDigipassChallenge_2: customerId = " + customerId);
+	    	System.out.println(requestURI + ": idCode = " + idCode);
+	    	System.out.println(requestURI + ": connid = " + connId);
+	    	System.out.println(requestURI + ": customerId = " + customerId);
 	    }
 
 	    try
@@ -100,13 +101,13 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 	    	
 /////////// invoke GiveDigipassChallenge service
 
-		    if(Utility.CheckPingPongStatus(request, response, "GiveDigipassChallenge_2") == false)
+		    if(Utility.CheckPingPongStatus(request, response, requestURI) == false)
 		    {
 	 			Utility.ServletResponse(response,"error:TECHNICALERROR");
 		    	return;
 		    }
 		    
-	    	System.out.println("GiveDigipassChallenge_2 processing started at: " + Connector.getTimestamp());
+	    	System.out.println(requestURI + " processing started at: " + Connector.getTimestamp());
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
@@ -115,25 +116,25 @@ public class GiveDigipassChallenge_2 extends ServletBase {
   	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
-			System.out.println("GiveDigipassChallenge_2 sent this XML:");
+			System.out.println(requestURI + " sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
-			System.out.println("GiveDigipassChallenge_2 created Connector at: " + Connector.getTimestamp());
+			System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(dc.GetHeader());
 			c.start();
-			System.out.println("GiveDigipassChallenge_2 started Connector at: " + Connector.getTimestamp());
+			System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
 			c.createMessage();
-			System.out.println("GiveDigipassChallenge_2 Connector query begins at: " + Connector.getTimestamp());
+			System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
 		    usr = c.query(xmlrequest);
-		    System.out.println("GiveDigipassChallenge_2 Connector query ends at: " + Connector.getTimestamp());
-  			System.out.println("GiveDigipassChallenge_2 Exit from Connector started at: " + Connector.getTimestamp());
+		    System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
+  			System.out.println(requestURI + " Exit from Connector started at: " + Connector.getTimestamp());
 		    c.exit();
-	  		System.out.println("GiveDigipassChallenge_2 Exit from Connector completed at: " + Connector.getTimestamp());
+	  		System.out.println(requestURI + " Exit from Connector completed at: " + Connector.getTimestamp());
 
 		    if(usr == null)
 		    {
-		    	System.out.println("GiveDigipassChallenge_2: query returned null.");
+		    	System.out.println(requestURI + ": query returned null.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -141,41 +142,41 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in servlet response from c.query()
   			
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			System.out.println("GiveDigipassChallenge_2 response body extracted at: " + Connector.getTimestamp());
+  			System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
   			customerId = gco.getGiveChallengeResponse().getCustomerId();
   			challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			userName = gco.getGiveChallengeResponse().getUsername();
   			idCode = gco.getGiveChallengeResponse().getIdCode();
 
-  			System.out.println("Answer from JMS Broker:");
-  			System.out.println("GiveDigipassChallenge: customerId = " + customerId);
-  			System.out.println("GiveDigipassChallenge: challengeCode = " + challengeCode);
-  			System.out.println("GiveDigipassChallenge: userName = " + userName);
-  			System.out.println("GiveDigipassChallenge: idCode = " + idCode);
+  			System.out.println(requestURI + ": Answer from JMS Broker:");
+  			System.out.println(requestURI + ": customerId = " + customerId);
+  			System.out.println(requestURI + ": challengeCode = " + challengeCode);
+  			System.out.println(requestURI + ": userName = " + userName);
+  			System.out.println(requestURI + ": idCode = " + idCode);
 
-  			System.out.println("GiveDigipassChallenge servlet output started at: " + Connector.getTimestamp());
+  			System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
   			Utility.ServletResponse(response, "customerId:" + customerId + "|username:" + userName +
   					  "|idCode:" + idCode +  
   					  "|challengeCode:" + challengeCode);
-  			System.out.println("GiveDigipassChallenge_2 servlet output completed at: " + Connector.getTimestamp());
+  			System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	System.out.println(jmse.getMessage());
-        	sc.log("GiveDigipassChallenge_2 servlet JMSException: " + jmse.getMessage(), jmse);
+        	sc.log(requestURI + " servlet JMSException: " + jmse.getMessage(), jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	    	System.out.println(e.getMessage());
-	    	sc.log("GiveDigipassChallenge_2 servlet JAXBException: " + e.getMessage(), e);
+	    	sc.log(requestURI + " servlet JAXBException: " + e.getMessage(), e);
 	    }
         catch (java.io.IOException e)
         {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	    	System.out.println(e.getMessage());
-	    	sc.log("GiveDigipassChallenge_2 servlet IOException: " + e.getMessage(), e);
+	    	sc.log(requestURI + " servlet IOException: " + e.getMessage(), e);
         }
 	}
 }

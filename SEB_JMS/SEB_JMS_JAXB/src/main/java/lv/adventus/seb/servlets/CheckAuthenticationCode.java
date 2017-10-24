@@ -58,26 +58,28 @@ public class CheckAuthenticationCode extends ServletBase {
 		String userName;
 		String digipassCode;
 		String connectionId;
-		String requestURI;
 
 		Connector c;
 		UnifiedServiceResponse usr;
-		PrintWriter out;
 
+	    String requestURI = request.getRequestURI().substring(1);	// remove slash
+	    System.out.println(requestURI + " http request received at: " + Connector.getTimestamp());
+	    
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
 		response.setHeader("Cache-Control", "no-cache");
 
-	    //PrintWriter out = response.getWriter(); // will be done later 
-	    
 	    digipassCode = request.getParameter("digipasscode");
+	    if(digipassCode == null)
+	    	digipassCode = request.getParameter("digipassCode");
+	    
 	    challengeCode = request.getParameter("challengecode");
+	    if(challengeCode == null)
+	    	challengeCode = request.getParameter("challengeCode");
+	    
 	    connectionId = request.getParameter("connid");
 	    userName = request.getParameter("username");
-	    requestURI = request.getRequestURI().substring(1);	// remove slash
 
-	    System.out.println(requestURI + " http request received at: " + Connector.getTimestamp());
-	    
 	    // check HTTP GET request parameters
 
 	    if (digipassCode==null || challengeCode == null || connectionId==null || userName==null)
