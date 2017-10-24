@@ -121,7 +121,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
 			System.out.println("FindCustomerByPhoneOrPersonalCode created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(fc.GetHeader());
 			c.start();
@@ -178,7 +178,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			System.out.println("GiveDigipassChallenge sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
 			System.out.println("GiveDigipassChallenge created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(dc.GetHeader());
 			c.start();

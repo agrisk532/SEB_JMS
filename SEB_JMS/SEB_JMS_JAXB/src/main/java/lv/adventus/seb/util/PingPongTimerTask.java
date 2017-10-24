@@ -66,7 +66,7 @@ class PingPongTimerTask extends TimerTask
 			System.out.println("PingPongService sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
-			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout,ttl,responseMsgTTL);
+			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout,ttl,responseMsgTTL,false);
 			System.out.println("PingPongTimerTask created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(pps.GetHeader());
 			c.start();

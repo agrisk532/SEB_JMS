@@ -130,7 +130,7 @@ public class CheckAuthenticationCode extends ServletBase {
 			System.out.println(requestURI + " sent this XML:");
 			System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
 			System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
   			c.SetHeader(dc.GetHeader());
   			c.start();

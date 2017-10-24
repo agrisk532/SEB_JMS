@@ -29,7 +29,7 @@ public class Utility
 
  		if(pp == null || pp.booleanValue() == false)
  		{
- 			System.out.println(callerFunction + ": PingPong returns 0. Processing stopped.");
+ 			System.out.println(callerFunction + ": PingPong returns 0. Processing stopped at " + Connector.getTimestamp());
  			return false;
  		}
  		else
