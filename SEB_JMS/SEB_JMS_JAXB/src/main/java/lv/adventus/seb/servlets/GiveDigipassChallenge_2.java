@@ -156,7 +156,7 @@ public class GiveDigipassChallenge_2 extends ServletBase {
   			System.out.println("GiveDigipassChallenge servlet output started at: " + Connector.getTimestamp());
   			Utility.ServletResponse(response, "customerId:" + customerId + "|username:" + userName +
   					  "|idCode:" + idCode +  
-  					  "|challengecode:" + challengeCode);
+  					  "|challengeCode:" + challengeCode);
   			System.out.println("GiveDigipassChallenge_2 servlet output completed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)

@@ -72,7 +72,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 
 	    //PrintWriter out = response.getWriter(); // will be done later 
 
-	    String userId = request.getParameter("id");
+	    String userId = request.getParameter("idCode");
 	    String connId = "cc" + request.getParameter("connid");
 
 	    // check http request parameters
@@ -80,7 +80,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	    if (userId==null || connId==null)
 	    {
 	    	String pr = "";
-	    	if(userId == null) pr += "userId ";
+	    	if(userId == null) pr += "idCode ";
 	    	if(connId == null) pr += "connId ";
 	    	System.out.println("Expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
@@ -88,7 +88,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	    }
 	    else
 	    {
-	    	System.out.println("FindCustomerByPhoneOrPersonalCode_2: id = " + userId);
+	    	System.out.println("FindCustomerByPhoneOrPersonalCode_2: idCode = " + userId);
 	    	System.out.println("FindCustomerByPhoneOrPersonalCode_2: connid = " + connId);
 	    }
 
