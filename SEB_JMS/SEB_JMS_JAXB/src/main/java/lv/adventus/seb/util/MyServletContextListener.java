@@ -23,6 +23,7 @@ public class MyServletContextListener implements ServletContextListener
 	private ServletContext sc;
 	private long pingPongInterval;
 	private String pingPongStatusFileName;
+	private boolean debug;
 	private ConcurrentHashMap<String, Object> shared;
 
     public MyServletContextListener()
@@ -43,6 +44,7 @@ public class MyServletContextListener implements ServletContextListener
     	responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL"));
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
+    	debug = Boolean.parseBoolean(sc.getInitParameter("debug"));
     	
     	System.out.println("ServletContext parameters:");
     	System.out.println("broker: " + broker);
@@ -54,6 +56,7 @@ public class MyServletContextListener implements ServletContextListener
     	System.out.println("JMS Message Property responseMsgTTL : " + responseMsgTTL);
     	System.out.println("PingPongInterval: " + pingPongInterval);
     	System.out.println("PingPongStatusFileName: " + pingPongStatusFileName);
+    	System.out.println("Debug log format: " + debug);
     	System.out.println();
 
 	   	int delay = 1000;
@@ -69,7 +72,7 @@ public class MyServletContextListener implements ServletContextListener
 	   	
 	   	try
 	   	{
-	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL);
+	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL, debug);
 	   	}
 	   	catch(javax.xml.bind.JAXBException e)
 	   	{

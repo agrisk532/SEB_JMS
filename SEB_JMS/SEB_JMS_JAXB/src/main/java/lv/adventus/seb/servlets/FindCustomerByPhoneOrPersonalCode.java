@@ -118,21 +118,21 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
   			// print XML
-			System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
-			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
+			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			System.out.println("FindCustomerByPhoneOrPersonalCode created Connector at: " + Connector.getTimestamp());
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, debug);
+			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(fc.GetHeader());
 			c.start();
-			System.out.println("FindCustomerByPhoneOrPersonalCode started Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode started Connector at: " + Connector.getTimestamp());
 			c.createMessage();
-			System.out.println("FindCustomerByPhoneOrPersonalCode Connector query begins at: " + Connector.getTimestamp());
+			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Connector query begins at: " + Connector.getTimestamp());
 		    usr = c.query(xmlrequest);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode Connector query ends at: " + Connector.getTimestamp());
-  			System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector started at: " + Connector.getTimestamp());
+		    if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Connector query ends at: " + Connector.getTimestamp());
+		    if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector started at: " + Connector.getTimestamp());
 	  		c.exit();
-	  		System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector completed at: " + Connector.getTimestamp());
+	  		if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector completed at: " + Connector.getTimestamp());
 
 		    if(usr == null)
 		    {
@@ -144,7 +144,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode response body extracted at: " + Connector.getTimestamp());
+			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode response body extracted at: " + Connector.getTimestamp());
 		    customerId = fco.getFindCustomerResponse().getCustomerId();
 		    idCode = fco.getFindCustomerResponse().getIdCode();
 		    firstName = fco.getFindCustomerResponse().getFirstName();
@@ -175,21 +175,21 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
-			System.out.println("GiveDigipassChallenge sent this XML:");
-			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+  			if(debug)System.out.println("GiveDigipassChallenge sent this XML:");
+  			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			System.out.println("GiveDigipassChallenge created Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println("GiveDigipassChallenge created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(dc.GetHeader());
 			c.start();
-			System.out.println("GiveDigipassChallenge started Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println("GiveDigipassChallenge started Connector at: " + Connector.getTimestamp());
 			c.createMessage();
-			System.out.println("GiveDigipassChallenge Connector query begins at: " + Connector.getTimestamp());
+			if(debug)System.out.println("GiveDigipassChallenge Connector query begins at: " + Connector.getTimestamp());
 		    usr = c.query(xmlrequest);
-		    System.out.println("GiveDigipassChallenge Connector query ends at: " + Connector.getTimestamp());
-  			System.out.println("GiveDigipassChallenge Exit from Connector started at: " + Connector.getTimestamp());
+		    if(debug)System.out.println("GiveDigipassChallenge Connector query ends at: " + Connector.getTimestamp());
+		    if(debug)System.out.println("GiveDigipassChallenge Exit from Connector started at: " + Connector.getTimestamp());
 		    c.exit();
-	  		System.out.println("GiveDigipassChallenge Exit from Connector completed at: " + Connector.getTimestamp());
+		    if(debug)System.out.println("GiveDigipassChallenge Exit from Connector completed at: " + Connector.getTimestamp());
 
 		    if(usr == null)
 		    {
@@ -201,7 +201,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in servlet response from c.query()
   			
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			System.out.println("GiveDigipassChallenge response body extracted at: " + Connector.getTimestamp());
+  			if(debug)System.out.println("GiveDigipassChallenge response body extracted at: " + Connector.getTimestamp());
   			customerId = gco.getGiveChallengeResponse().getCustomerId();
   			challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			userName = gco.getGiveChallengeResponse().getUsername();
@@ -213,12 +213,12 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			System.out.println("GiveDigipassChallenge: userName = " + userName);
   			System.out.println("GiveDigipassChallenge: idCode = " + idCode);
 
-  			System.out.println("GiveDigipassChallenge servlet output started at: " + Connector.getTimestamp());
+  			if(debug)System.out.println("GiveDigipassChallenge servlet output started at: " + Connector.getTimestamp());
   			Utility.ServletResponse(response, "customerId:" + customerId + "|username:" + userName +
   					  "|idCode:" + idCode + "|firstName:" + firstName + 
   					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber + 
   					  "|challengecode:" + challengeCode);
-  			System.out.println("GiveDigipassChallenge servlet output completed at: " + Connector.getTimestamp());
+  			if(debug)System.out.println("GiveDigipassChallenge servlet output completed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {

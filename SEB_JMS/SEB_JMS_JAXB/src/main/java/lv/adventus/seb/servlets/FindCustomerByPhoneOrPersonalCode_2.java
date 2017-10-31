@@ -117,21 +117,21 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
   			// print XML
-			System.out.println(requestURI + " sent this XML:");
-			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug)System.out.println(requestURI + " sent this XML:");
+			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(fc.GetHeader());
 			c.start();
-			System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
 			c.createMessage();
-			System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
+			if(debug)System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
 		    usr = c.query(xmlrequest);
-		    System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
-  			System.out.println(requestURI + " Exit from Connector started at: " + Connector.getTimestamp());
+		    if(debug)System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
+		    if(debug)System.out.println(requestURI + " Exit from Connector started at: " + Connector.getTimestamp());
 	  		c.exit();
-	  		System.out.println(requestURI + " Exit from Connector completed at: " + Connector.getTimestamp());
+	  		if(debug)System.out.println(requestURI + " Exit from Connector completed at: " + Connector.getTimestamp());
 
 		    if(usr == null)
 		    {
@@ -143,7 +143,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-		    System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
+			if(debug)System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
 		    customerId = fco.getFindCustomerResponse().getCustomerId();
 		    idCode = fco.getFindCustomerResponse().getIdCode();
 		    firstName = fco.getFindCustomerResponse().getFirstName();
@@ -157,11 +157,11 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 		    System.out.println("lastName = " + lastName);
 		    System.out.println("userPhoneNumber = " + userPhoneNumber);
 		    
-  			System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
+		    if(debug)System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
   			Utility.ServletResponse(response, "customerId:" + customerId + 
   					  "|idCode:" + idCode + "|firstName:" + firstName + 
   					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber); 
-  			System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {

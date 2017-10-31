@@ -48,6 +48,11 @@
     <param-value>PingPongStatusFile.txt</param-value>
 	<description>file with PingPong status (for NMS), contains 0 - no services available, 1 - ok</description>    
 </context-param>
+<context-param>
+    <param-name>debug</param-name>
+    <param-value>0</param-value>
+	<description>false: normal log; true: debug log</description>    
+</context-param>
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode</servlet-class>

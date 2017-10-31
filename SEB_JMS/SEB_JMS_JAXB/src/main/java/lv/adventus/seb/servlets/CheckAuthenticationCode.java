@@ -112,7 +112,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    }
 	    
 	 // PingPong ok, we continue
-
+	    
 	    try
 		{
 
@@ -127,21 +127,21 @@ public class CheckAuthenticationCode extends ServletBase {
   			dc.SetBody(digipassCode,challengeCode,userName);
   			xmlrequest = dc.Marshal();
   			// print XML
-			System.out.println(requestURI + " sent this XML:");
-			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug) System.out.println(requestURI + " sent this XML:");
+			if(debug) System.out.println(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, debug);
+			if(debug)System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
   			c.SetHeader(dc.GetHeader());
   			c.start();
-  			System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
   			c.createMessage();
-  			System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
   			usr = c.query(xmlrequest);
-  			System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
-  			System.out.println(requestURI + " exit from Connector started at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " exit from Connector started at: " + Connector.getTimestamp());
   			c.exit();
-  			System.out.println(requestURI + " exit from Connector completed at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " exit from Connector completed at: " + Connector.getTimestamp());
 
 		    if(usr == null)
 		    {
@@ -153,7 +153,7 @@ public class CheckAuthenticationCode extends ServletBase {
   			if(usr.getUnifiedServiceErrors() != null) return; // errors already returned in servlet response from c.query()
 
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
   			digipassCode = cac.getAuthenticationResponse().getAuthenticationCode();
   			userName = cac.getAuthenticationResponse().getUsername();
   			challengeCode = cac.getAuthenticationResponse().getChallengeCode();
@@ -163,9 +163,9 @@ public class CheckAuthenticationCode extends ServletBase {
       	    System.out.println(requestURI + ": challengecode = " + challengeCode);
       	    System.out.println(requestURI + ": userName = " + userName);
 
-      	    System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
+      	    if(debug)System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
       	    Utility.ServletResponse(response, "result:OK");
-  			System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
+  			if(debug)System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
         }
         catch (javax.jms.JMSException jmse)
         {

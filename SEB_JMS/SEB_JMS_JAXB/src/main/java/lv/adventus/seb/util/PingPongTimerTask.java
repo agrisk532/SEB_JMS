@@ -26,9 +26,10 @@ class PingPongTimerTask extends TimerTask
 
 	private ServletContext sc;
 	private long timesCalled;
+	private boolean debug;
 	
 	public PingPongTimerTask(ServletContext sc, String broker, String username, String password,
-			String queue, long timeout, long ttl, long responseMsgTTL) throws javax.xml.bind.JAXBException
+			String queue, long timeout, long ttl, long responseMsgTTL, boolean debug) throws javax.xml.bind.JAXBException
 	{
 		this.sc = sc;
 		this.broker = broker;
@@ -39,7 +40,7 @@ class PingPongTimerTask extends TimerTask
 		this.ttl = ttl;
 		this.responseMsgTTL = responseMsgTTL;
 		this.timesCalled = 0;
-
+		this.debug = debug;
 	}
 	
 	@Override
@@ -63,21 +64,21 @@ class PingPongTimerTask extends TimerTask
 
 			xmlrequest = pps.Marshal();
 			// print XML
-			System.out.println("PingPongService sent this XML:");
-			System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug)System.out.println("PingPongService sent this XML:");
+			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
 
 			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout,ttl,responseMsgTTL,false);
-			System.out.println("PingPongTimerTask created Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println("PingPongTimerTask created Connector at: " + Connector.getTimestamp());
 			c.SetHeader(pps.GetHeader());
 			c.start();
-			System.out.println("PingPongTimerTask started Connector at: " + Connector.getTimestamp());
+			if(debug)System.out.println("PingPongTimerTask started Connector at: " + Connector.getTimestamp());
 			c.createMessage();
-			System.out.println("PingPongTimerTask Connector query begins at: " + Connector.getTimestamp());
+			if(debug)System.out.println("PingPongTimerTask Connector query begins at: " + Connector.getTimestamp());
 			usr = c.query(xmlrequest);
-			System.out.println("PingPongTimerTask Connector query ends at: " + Connector.getTimestamp());
-  			System.out.println("PingPongTimerTask Exit from Connector started at: " + Connector.getTimestamp());
+			if(debug)System.out.println("PingPongTimerTask Connector query ends at: " + Connector.getTimestamp());
+			if(debug)System.out.println("PingPongTimerTask Exit from Connector started at: " + Connector.getTimestamp());
 	  		c.exit();
-	  		System.out.println("PingPongTimerTask Exit from Connector completed at: " + Connector.getTimestamp());
+	  		if(debug)System.out.println("PingPongTimerTask Exit from Connector completed at: " + Connector.getTimestamp());
 
 		    if(usr == null)
 		    {
