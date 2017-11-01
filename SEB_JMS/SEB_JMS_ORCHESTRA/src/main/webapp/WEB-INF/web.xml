@@ -50,7 +50,7 @@
 </context-param>
 <context-param>
     <param-name>debug</param-name>
-    <param-value>0</param-value>
+    <param-value>false</param-value>
 	<description>false: normal log; true: debug log</description>    
 </context-param>
 <servlet>
