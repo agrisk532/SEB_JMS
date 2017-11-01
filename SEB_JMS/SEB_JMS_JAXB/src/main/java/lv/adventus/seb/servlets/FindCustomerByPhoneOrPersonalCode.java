@@ -1,4 +1,4 @@
- package lv.adventus.seb.servlets;
+package lv.adventus.seb.servlets;
 
 import java.io.ByteArrayInputStream;
 
@@ -41,7 +41,7 @@ import lv.adventus.seb.ContactcenterGiveDigipassChallenge2Output;
  */
 public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	
-
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(FindCustomerByPhoneOrPersonalCode.class);
     /**
      * Default constructor. 
      */
@@ -66,7 +66,8 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		UnifiedServiceResponse usr;
 		Connector c;
 
-		System.out.println("FindCustomerByPhoneOrPersonalCode http request received at: " + Connector.getTimestamp());
+		String requestURI = request.getRequestURI().substring(1);	// remove slash
+		LOGGER.info("http request received");
 
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -84,14 +85,14 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	String pr = "";
 	    	if(userId == null) pr += "userId ";
 	    	if(connId == null) pr += "connId ";
-	    	System.out.println("Expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + "Expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	System.out.println("FindCustomerByPhoneOrPersonalCode: id = " + userId);
-	    	System.out.println("FindCustomerByPhoneOrPersonalCode: connid = " + connId);
+	    	LOGGER.info(requestURI + " :id = " + userId);
+	    	LOGGER.info(requestURI + " :connid = " + connId);
 	    }
 
 	 // check PingPong service result
@@ -109,7 +110,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	
 /////////// invoke FindCustomerByPhoneOrPersonalCode service
 
-	    	System.out.println("FindCustomerByPhoneOrPersonalCode processing started at: " + Connector.getTimestamp());
+	    	LOGGER.info(requestURI + "processing started");
 			lv.adventus.seb.FindCustomerByPhoneOrPersonalCode fc = new lv.adventus.seb.FindCustomerByPhoneOrPersonalCode();
 			fc.SetHeader();
 			fc.SetHeaderUserId(userId);
@@ -118,25 +119,25 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
   			// print XML
-			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode sent this XML:");
-			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug)LOGGER.debug(requestURI + " sent this XML:");
+			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
 
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, debug);
-			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode created Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " created Connector");
 			c.SetHeader(fc.GetHeader());
 			c.start();
-			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode started Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " started Connector");
 			c.createMessage();
-			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Connector query begins at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Connector query ends at: " + Connector.getTimestamp());
-		    if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector started at: " + Connector.getTimestamp());
+		    if(debug)LOGGER.debug(requestURI + " Connector query ends");
+		    if(debug)LOGGER.debug(requestURI + " Exit from Connector started");
 	  		c.exit();
-	  		if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode Exit from Connector completed at: " + Connector.getTimestamp());
+	  		if(debug)LOGGER.debug(requestURI + " Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	System.out.println("FindCustomerByPhoneOrPersonalCode: query returned null.");
+		    	LOGGER.error("JMS service query returned null.");
 		    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -144,19 +145,19 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-			if(debug)System.out.println("FindCustomerByPhoneOrPersonalCode response body extracted at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " response body extracted");
 		    customerId = fco.getFindCustomerResponse().getCustomerId();
 		    idCode = fco.getFindCustomerResponse().getIdCode();
 		    firstName = fco.getFindCustomerResponse().getFirstName();
 		    lastName = fco.getFindCustomerResponse().getLastName();
 		    userPhoneNumber = fco.getFindCustomerResponse().getUserPhoneNumber();
 
-		    System.out.println("Answer from JMS Broker:");
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: customerId = " + customerId);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: idCode = " + idCode);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: firstName = " + firstName);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: lastName = " + lastName);
-		    System.out.println("FindCustomerByPhoneOrPersonalCode: userPhoneNumber = " + userPhoneNumber);
+		    LOGGER.info(requestURI + "Answer from JMS Broker:");
+		    LOGGER.info(requestURI + " :customerId = " + customerId);
+		    LOGGER.info(requestURI + " :idCode = " + idCode);
+		    LOGGER.info(requestURI + " :firstName = " + firstName);
+		    LOGGER.info(requestURI + " :lastName = " + lastName);
+		    LOGGER.info(requestURI + " :userPhoneNumber = " + userPhoneNumber);
 
 /////////// invoke GiveDigipassChallenge service
 
@@ -166,7 +167,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    	return;
 		    }
 		    
-	    	System.out.println("GiveDigipassChallenge processing started at: " + Connector.getTimestamp());
+	    	LOGGER.info(requestURI + "GiveDigipassChallenge processing started");
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
@@ -175,25 +176,25 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
-  			if(debug)System.out.println("GiveDigipassChallenge sent this XML:");
-  			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
+  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge sent this XML:");
+  			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
   			
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			if(debug)System.out.println("GiveDigipassChallenge created Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge created Connector");
 			c.SetHeader(dc.GetHeader());
 			c.start();
-			if(debug)System.out.println("GiveDigipassChallenge started Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge started Connector");
 			c.createMessage();
-			if(debug)System.out.println("GiveDigipassChallenge Connector query begins at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)System.out.println("GiveDigipassChallenge Connector query ends at: " + Connector.getTimestamp());
-		    if(debug)System.out.println("GiveDigipassChallenge Exit from Connector started at: " + Connector.getTimestamp());
+		    if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Connector query ends");
+		    if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Exit from Connector started");
 		    c.exit();
-		    if(debug)System.out.println("GiveDigipassChallenge Exit from Connector completed at: " + Connector.getTimestamp());
+		    if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	System.out.println("GiveDigipassChallenge: query returned null.");
+		    	LOGGER.error(requestURI + "GiveDigipassChallenge: query returned null.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -201,42 +202,39 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in servlet response from c.query()
   			
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			if(debug)System.out.println("GiveDigipassChallenge response body extracted at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge response body extracted");
   			customerId = gco.getGiveChallengeResponse().getCustomerId();
   			challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			userName = gco.getGiveChallengeResponse().getUsername();
   			idCode = gco.getGiveChallengeResponse().getIdCode();
 
-  			System.out.println("Answer from JMS Broker:");
-  			System.out.println("GiveDigipassChallenge: customerId = " + customerId);
-  			System.out.println("GiveDigipassChallenge: challengeCode = " + challengeCode);
-  			System.out.println("GiveDigipassChallenge: userName = " + userName);
-  			System.out.println("GiveDigipassChallenge: idCode = " + idCode);
+  			LOGGER.info(requestURI + "Answer from JMS Broker:");
+  			LOGGER.info("GiveDigipassChallenge: customerId = " + customerId);
+  			LOGGER.info("GiveDigipassChallenge: challengeCode = " + challengeCode);
+  			LOGGER.info("GiveDigipassChallenge: userName = " + userName);
+  			LOGGER.info("GiveDigipassChallenge: idCode = " + idCode);
 
-  			if(debug)System.out.println("GiveDigipassChallenge servlet output started at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge servlet output started");
   			Utility.ServletResponse(response, "customerId:" + customerId + "|username:" + userName +
   					  "|idCode:" + idCode + "|firstName:" + firstName + 
   					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber + 
   					  "|challengecode:" + challengeCode);
-  			if(debug)System.out.println("GiveDigipassChallenge servlet output completed at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
-        	System.out.println(jmse.getMessage());
-        	sc.log("FindCustomerByPhoneOrPersonalCode servlet JMSException: " + jmse.getMessage(), jmse);
+        	LOGGER.error(jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
-	    	System.out.println(e.getMessage());
-	    	sc.log("FindCustomerByPhoneOrPersonalCode servlet JAXBException: " + e.getMessage(), e);
+	    	LOGGER.error(e);
 	    }
         catch (java.io.IOException e)
         {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
-	    	System.out.println(e.getMessage());
-	    	sc.log("FindCustomerByPhoneOrPersonalCode servlet IOException: " + e.getMessage(), e);
+	    	LOGGER.error(e);
         }
 	}
 }

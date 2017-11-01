@@ -40,7 +40,7 @@ import lv.adventus.seb.ContactcenterCheckAuthenticationCode2Output;
  */
 public class CheckAuthenticationCode extends ServletBase {
 	
-
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CheckAuthenticationCode.class);
     /**
      * Default constructor. 
      */
@@ -63,7 +63,7 @@ public class CheckAuthenticationCode extends ServletBase {
 		UnifiedServiceResponse usr;
 
 	    String requestURI = request.getRequestURI().substring(1);	// remove slash
-	    System.out.println(requestURI + " http request received at: " + Connector.getTimestamp());
+	    LOGGER.info(requestURI + " http request received");
 	    
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -90,17 +90,17 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(connectionId==null)  pr += "connid ";
 	    	if(userName==null) 		pr += "username ";
 
-	    	System.out.println(requestURI + " expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + " expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	System.out.println(requestURI + " received HTTP GET parameters:");
-	    	System.out.println("digipasscode = " + digipassCode);
-	    	System.out.println("challengecode = " + challengeCode);
-	    	System.out.println("connid = " + connectionId);
-	    	System.out.println("username = " + userName);
+	    	LOGGER.info(requestURI + " received HTTP GET parameters:");
+	    	LOGGER.info("digipasscode = " + digipassCode);
+	    	LOGGER.info("challengecode = " + challengeCode);
+	    	LOGGER.info("connid = " + connectionId);
+	    	LOGGER.info("username = " + userName);
 	    }
 
 		 // check PingPong service result
@@ -118,7 +118,7 @@ public class CheckAuthenticationCode extends ServletBase {
 
 /////////// invoke CheckAuthenticationCode service
 		
-	    	System.out.println(requestURI + " processing started at: " + Connector.getTimestamp());
+	    	LOGGER.info(requestURI + " processing started");
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
   			dc.SetHeaderUserId(userName);
@@ -127,25 +127,25 @@ public class CheckAuthenticationCode extends ServletBase {
   			dc.SetBody(digipassCode,challengeCode,userName);
   			xmlrequest = dc.Marshal();
   			// print XML
-			if(debug) System.out.println(requestURI + " sent this XML:");
-			if(debug) System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug) LOGGER.debug(requestURI + " sent this XML:");
+			if(debug) LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
   			
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, debug);
-			if(debug)System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " created Connector");
   			c.SetHeader(dc.GetHeader());
   			c.start();
-  			if(debug)System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " started Connector");
   			c.createMessage();
-  			if(debug)System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " Connector query begins");
   			usr = c.query(xmlrequest);
-  			if(debug)System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
-  			if(debug)System.out.println(requestURI + " exit from Connector started at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " Connector query ends");
+  			if(debug)LOGGER.debug(requestURI + " exit from Connector started");
   			c.exit();
-  			if(debug)System.out.println(requestURI + " exit from Connector completed at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	System.out.println(requestURI + ": query returned null.");
+		    	LOGGER.error(requestURI + ": query returned null.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -153,31 +153,29 @@ public class CheckAuthenticationCode extends ServletBase {
   			if(usr.getUnifiedServiceErrors() != null) return; // errors already returned in servlet response from c.query()
 
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			if(debug)System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " response body extracted");
   			digipassCode = cac.getAuthenticationResponse().getAuthenticationCode();
   			userName = cac.getAuthenticationResponse().getUsername();
   			challengeCode = cac.getAuthenticationResponse().getChallengeCode();
 
-  			System.out.println(requestURI + ": answer from JMS Broker:");
-      	    System.out.println(requestURI + ": digipasscode = " + digipassCode);
-      	    System.out.println(requestURI + ": challengecode = " + challengeCode);
-      	    System.out.println(requestURI + ": userName = " + userName);
+  			LOGGER.info(requestURI + ": answer from JMS Broker:");
+      	    LOGGER.info(requestURI + ": digipasscode = " + digipassCode);
+      	    LOGGER.info(requestURI + ": challengecode = " + challengeCode);
+      	    LOGGER.info(requestURI + ": userName = " + userName);
 
-      	    if(debug)System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
+      	    if(debug)LOGGER.debug(requestURI + " servlet output started");
       	    Utility.ServletResponse(response, "result:OK");
-  			if(debug)System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
-        	System.out.println(jmse.getMessage());
-        	sc.log(requestURI + " servlet JMSException: " + jmse.getMessage(), jmse);
+        	LOGGER.error(jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
-	    	System.out.println(e.getMessage());
-        	sc.log(requestURI + " servlet JAXBException: " + e.getMessage(), e);	    	
+	    	LOGGER.error(e);
 	    }
 	}
 }

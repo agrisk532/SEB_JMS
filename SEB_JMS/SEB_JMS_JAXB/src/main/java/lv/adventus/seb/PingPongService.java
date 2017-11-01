@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 public class PingPongService extends ServicesBase
 {
 	private PingPong pp;
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(PingPongService.class);
 	
 	public PingPongService() throws JAXBException
 	{
@@ -41,11 +42,11 @@ public class PingPongService extends ServicesBase
 		  }
 		  catch (JAXBException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 		  catch (IOException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 	  }
 }

@@ -11,6 +11,8 @@ public class MultipartMessageUtility {
 	private Connector connector;
 	private String xmlResponse;
 	private String partMessage;
+	
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MultipartMessageUtility.class);
 
 	public MultipartMessageUtility()
 	{
@@ -28,7 +30,7 @@ public class MultipartMessageUtility {
 		if(xmlResponse.length() > 0) return xmlResponse;
 		else
 		{
-			System.out.println("XML response is null length.");
+			LOGGER.error("XML response is null length.");
 			return null;
 		}
 			
@@ -39,74 +41,67 @@ public class MultipartMessageUtility {
      */
     public void onMessage( javax.jms.Message aMessage) throws javax.jms.JMSException
     {
-        System.out.println();
 
         if (aMessage instanceof MultipartMessage)
         {
-            System.out.println( "received MutipartMessage.... "  );
+            LOGGER.debug( "received MutipartMessage.... "  );
             unpackMM(aMessage, 0);
         }
         else
         {
-            System.out.println("Received a JMS message.");
-            System.out.println("Received not a MultipartMessage....Cannot continue.");
+            LOGGER.debug("Received a JMS message.");
+            LOGGER.error("Received not a MultipartMessage....Cannot continue.");
         }
     }
 
     private void unpackMM(javax.jms.Message aMessage, int depth) throws javax.jms.JMSException
     {
         int n = depth;
-        System.out.println();
-        indent(n); System.out.println("******* Beginning of MultipartMessage ******");
-        System.out.println();
+        indent(n); LOGGER.debug("******* Beginning of MultipartMessage ******");
 
-
-        indent(n); System.out.println("Extend_type property = " + aMessage.getStringProperty(Constants.EXTENDED_TYPE));
+        indent(n); LOGGER.debug("Extend_type property = " + aMessage.getStringProperty(Constants.EXTENDED_TYPE));
         MultipartMessage mm = (MultipartMessage)aMessage;
         int partCount = mm.getPartCount();
 
-        indent(n); System.out.println("partCount of this MultipartMessage = " + partCount);
+        indent(n); LOGGER.debug("partCount of this MultipartMessage = " + partCount);
         for (int i = 0; i < partCount; i++)
         {
-            System.out.println();
-            indent(n); System.out.println("--------Beginning of part " + (i+1));
+            indent(n); LOGGER.debug("--------Beginning of part " + (i+1));
             Part part = mm.getPart(i);
-            indent(n); System.out.println("Part.contentType = " + part.getHeader().getContentType());
-            indent(n); System.out.println("Part.contentId = " + part.getHeader().getContentId());
+            indent(n); LOGGER.debug("Part.contentType = " + part.getHeader().getContentType());
+            indent(n); LOGGER.debug("Part.contentId = " + part.getHeader().getContentId());
  
             if (mm.isMessagePart(i))
             {
                 javax.jms.Message msg = mm.getMessageFromPart(i);
                 if (msg instanceof MultipartMessage)
                 {
-                	System.out.println("MM: in MM part");
+                	LOGGER.debug("MM: in MM part");
                     unpackMM(msg, ++depth);
                 }
                 else
                 {
                     if(part.getHeader().getContentId().equals("XMLResponse"))
                     {
-                    	//System.out.println("MM: in XML part");
+                    	//LOGGER.info("MM: in XML part");
                     	unpackJMSMessage(msg, n);
                     	xmlResponse = partMessage;
                     }
                     else
                     {
-                    	System.out.println("MM: in not XML part");
+                    	LOGGER.debug("MM: in not XML part");
                     	unpackJMSMessage(msg, n);
                     }
                 }
             }
             else
             {
-            	System.out.println("MM: in other part");
+            	LOGGER.debug("MM: in other part");
                 unpackPart(part, n);
             }
-            indent(n); System.out.println("--------end of part " + (i+1));
-            System.out.println();
+            indent(n); LOGGER.debug("--------end of part " + (i+1));
         }
-        indent(n); System.out.println("******* End of MultipartMessage ******");
-        System.out.println();
+        indent(n); LOGGER.debug("******* End of MultipartMessage ******");
     }
 
 
@@ -125,22 +120,22 @@ public class MultipartMessageUtility {
         if (aMessage instanceof progress.message.jclient.XMLMessage)
         {
             progress.message.jclient.XMLMessage msg = (progress.message.jclient.XMLMessage)aMessage;
-            indent(depth); System.out.println( "content in XMLmessage... " + msg.getText());
+            indent(depth); LOGGER.debug( "content in XMLmessage... " + msg.getText());
             partMessage = msg.getText();
         }
         else if (aMessage instanceof TextMessage)   
         {
             javax.jms.TextMessage tmsg = (javax.jms.TextMessage) aMessage;
-            indent(depth); System.out.println( "content in TextMessage... " + tmsg.getText() );
+            indent(depth); LOGGER.debug( "content in TextMessage... " + tmsg.getText() );
         }
         else if (aMessage instanceof BytesMessage)
         {
             javax.jms.BytesMessage bmsg = (javax.jms.BytesMessage) aMessage;
-            indent(depth); System.out.println( "content in Bytesmessage... " + bmsg.readUTF());
+            indent(depth); LOGGER.debug( "content in Bytesmessage... " + bmsg.readUTF());
         }
         else
         {
-            indent(depth); System.out.println( "a JMS message... ");
+            indent(depth); LOGGER.debug( "a JMS message... ");
         }
     }
 
@@ -149,9 +144,8 @@ public class MultipartMessageUtility {
         byte[] content = part.getContentBytes();
         int size = content.length;
         String s = new String(content);
-        indent(depth); System.out.println( "...size :  " + size);
-        indent(depth); System.out.println( "...content :  ");
-        System.out.println();
-        indent(depth); System.out.println(s);
+        indent(depth); LOGGER.debug( "...size :  " + size);
+        indent(depth); LOGGER.debug( "...content :  ");
+        indent(depth); LOGGER.debug(s);
     }
 }

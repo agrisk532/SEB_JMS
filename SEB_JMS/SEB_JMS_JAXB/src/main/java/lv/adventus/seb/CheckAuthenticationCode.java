@@ -6,6 +6,8 @@ import javax.xml.bind.JAXBException;
 public class CheckAuthenticationCode extends ServicesBase
 {
 	private AuthenticationQuery aq;
+	
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CheckAuthenticationCode.class);
 
 	public CheckAuthenticationCode() throws JAXBException
 	{
@@ -48,11 +50,11 @@ public class CheckAuthenticationCode extends ServicesBase
 		  }
 		  catch (JAXBException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 		  catch (IOException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 	  }
 }

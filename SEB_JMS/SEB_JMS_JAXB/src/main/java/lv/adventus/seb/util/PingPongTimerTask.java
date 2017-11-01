@@ -28,6 +28,8 @@ class PingPongTimerTask extends TimerTask
 	private long timesCalled;
 	private boolean debug;
 	
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(PingPongTimerTask.class);
+	
 	public PingPongTimerTask(ServletContext sc, String broker, String username, String password,
 			String queue, long timeout, long ttl, long responseMsgTTL, boolean debug) throws javax.xml.bind.JAXBException
 	{
@@ -64,25 +66,25 @@ class PingPongTimerTask extends TimerTask
 
 			xmlrequest = pps.Marshal();
 			// print XML
-			if(debug)System.out.println("PingPongService sent this XML:");
-			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug)LOGGER.debug("PingPongService sent this XML:");
+			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
 
 			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout,ttl,responseMsgTTL,false);
-			if(debug)System.out.println("PingPongTimerTask created Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug("PingPongTimerTask created Connector");
 			c.SetHeader(pps.GetHeader());
 			c.start();
-			if(debug)System.out.println("PingPongTimerTask started Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug("PingPongTimerTask started Connector");
 			c.createMessage();
-			if(debug)System.out.println("PingPongTimerTask Connector query begins at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug("PingPongTimerTask Connector query begins");
 			usr = c.query(xmlrequest);
-			if(debug)System.out.println("PingPongTimerTask Connector query ends at: " + Connector.getTimestamp());
-			if(debug)System.out.println("PingPongTimerTask Exit from Connector started at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug("PingPongTimerTask Connector query ends");
+			if(debug)LOGGER.debug("PingPongTimerTask Exit from Connector started");
 	  		c.exit();
-	  		if(debug)System.out.println("PingPongTimerTask Exit from Connector completed at: " + Connector.getTimestamp());
+	  		if(debug)LOGGER.debug("PingPongTimerTask Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	System.out.println("PingPongTimerTask: Connector query returned null.");
+		    	LOGGER.error("PingPongTimerTask: Connector query returned null. Cannot continue.");
 				shared.put("PingPong", Boolean.FALSE);
 				Utility.stringToFile("0",pingPongStatusFileName); // for Zabbix
 				return;
@@ -90,7 +92,7 @@ class PingPongTimerTask extends TimerTask
 
 			if(usr.getUnifiedServiceErrors() != null)
 			{
-				System.out.println("PingPongTimerTask: PingPong service returned Errors.");
+				LOGGER.error("PingPongTimerTask: PingPong service returned Errors. Cannot continue.");
 				shared.put("PingPong", Boolean.FALSE);
 				Utility.stringToFile("0",pingPongStatusFileName); // for Zabbix
 				return;
@@ -99,28 +101,22 @@ class PingPongTimerTask extends TimerTask
 			PingPong pp = (PingPong) usr.getUnifiedServiceBody().getAny().get(0);
 			pongMessage = pp.getPongMessage();
 
-			System.out.println("Answer from JMS Broker:");
-			System.out.println("system.PingPong_1: pongMessage = " + pongMessage);
+			LOGGER.debug("Answer from JMS Broker:");
+			LOGGER.debug("system.PingPong_1: pongMessage = " + pongMessage);
 			shared.put("PingPong", Boolean.TRUE);
 			Utility.stringToFile("1",pingPongStatusFileName);	// for Zabbix
 		}
 		catch (javax.jms.JMSException e)
 		{
-			System.out.println("JMS exception in PingPongTimerTask()");
-			//e.printStackTrace();
-			sc.log("JMS exception in PingPongTimerTask()", e);
+			LOGGER.error("JMS exception in PingPongTimerTask()", e);
 		}
 		catch (javax.xml.bind.JAXBException e)
 		{
-			System.out.println("JAXB exception in PingPongTimerTask()");
-			//e.printStackTrace();
-			sc.log("JAXB exception in PingPongTimerTask()", e);
+			LOGGER.error("JAXB exception in PingPongTimerTask()", e);
 		}
         catch (java.io.IOException e)
         {
-        	System.out.println("IO exception in PingPongTimerTask()");
-        	//e.printStackTrace();
-        	sc.log("IO exception in PingPongTimerTask()", e);
+        	LOGGER.error("IO exception in PingPongTimerTask()", e);
         }
 	}
 }

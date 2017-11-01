@@ -53,6 +53,10 @@
     <param-value>false</param-value>
 	<description>false: normal log; true: debug log</description>    
 </context-param>
+<context-param>
+    <param-name>log4j-config-location</param-name>
+    <param-value>WEB-INF/log4j.properties</param-value>
+</context-param>
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode</servlet-class>

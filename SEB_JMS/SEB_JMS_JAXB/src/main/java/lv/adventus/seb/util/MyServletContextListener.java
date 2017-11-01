@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.apache.log4j.PropertyConfigurator;
 
 public class MyServletContextListener implements ServletContextListener
 {
@@ -25,6 +26,8 @@ public class MyServletContextListener implements ServletContextListener
 	private String pingPongStatusFileName;
 	private boolean debug;
 	private ConcurrentHashMap<String, Object> shared;
+	
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MyServletContextListener.class);
 
     public MyServletContextListener()
     {
@@ -34,7 +37,12 @@ public class MyServletContextListener implements ServletContextListener
     public void contextInitialized(ServletContextEvent sce)
     {
 	   	sc = sce.getServletContext();
-	   	System.out.println("*********ServletContextListener started*********");
+	   	
+        String log4jConfigFile = sc.getInitParameter("log4j-config-location");
+        String fullPath = sc.getRealPath("") + java.io.File.separator + log4jConfigFile;
+        PropertyConfigurator.configure(fullPath);
+	   	
+	   	LOGGER.info("ServletContextListener started");
     	broker = sc.getInitParameter("broker");
     	usernameSonic = sc.getInitParameter("usernameSonic");
     	passwordSonic = sc.getInitParameter("passwordSonic");
@@ -46,18 +54,17 @@ public class MyServletContextListener implements ServletContextListener
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
     	debug = Boolean.parseBoolean(sc.getInitParameter("debug"));
     	
-    	System.out.println("ServletContext parameters:");
-    	System.out.println("broker: " + broker);
-    	System.out.println("username: " + usernameSonic);
-    	System.out.println("password: " + passwordSonic);
-    	System.out.println("queue: " + queue);
-    	System.out.println("connectionTimeout: " + connectionTimeout);
-    	System.out.println("JMS Message Property TTL : " + ttl);
-    	System.out.println("JMS Message Property responseMsgTTL : " + responseMsgTTL);
-    	System.out.println("PingPongInterval: " + pingPongInterval);
-    	System.out.println("PingPongStatusFileName: " + pingPongStatusFileName);
-    	System.out.println("Debug log format: " + debug);
-    	System.out.println();
+    	LOGGER.info("ServletContext parameters:");
+    	LOGGER.info("broker: " + broker);
+    	LOGGER.info("username: " + usernameSonic);
+    	LOGGER.info("password: " + passwordSonic);
+    	LOGGER.info("queue: " + queue);
+    	LOGGER.info("connectionTimeout: " + connectionTimeout);
+    	LOGGER.info("JMS Message Property TTL : " + ttl);
+    	LOGGER.info("JMS Message Property responseMsgTTL : " + responseMsgTTL);
+    	LOGGER.info("PingPongInterval: " + pingPongInterval);
+    	LOGGER.info("PingPongStatusFileName: " + pingPongStatusFileName);
+    	LOGGER.info("Debug log format: " + debug);
 
 	   	int delay = 1000;
 	   	Timer timer = new Timer();
@@ -76,8 +83,8 @@ public class MyServletContextListener implements ServletContextListener
 	   	}
 	   	catch(javax.xml.bind.JAXBException e)
 	   	{
-	   		System.out.println("PingPong service exception. Could not create the timer task");
-	   		System.out.println("PingPong service won't be used.");
+	   		LOGGER.fatal("PingPong service exception. Could not create the PingPongTimerTask.");
+	   		LOGGER.fatal("PingPong service won't be used.");
 	   		shared.put("PingPong", Boolean.FALSE);
 	   		return;
 	   	}
@@ -106,9 +113,8 @@ public class MyServletContextListener implements ServletContextListener
     	}
         catch (java.io.IOException e)
         {
-        	System.out.println("java.io.IOException: ");
-        	System.out.println(e);
+        	LOGGER.error("java.io.IOException: ",e);
         }
-    	System.out.println("ServletContextListener destroyed");
+    	LOGGER.info("ServletContextListener destroyed");
     }
 }

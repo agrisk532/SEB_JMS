@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 public class GiveDigipassChallenge extends ServicesBase
 {
 	private GiveDigipassQuery dq;
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(GiveDigipassChallenge.class);
 
 	public GiveDigipassChallenge() throws JAXBException
 	{
@@ -45,11 +46,11 @@ public class GiveDigipassChallenge extends ServicesBase
 		  }
 		  catch (JAXBException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 		  catch (IOException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 	  }
 }

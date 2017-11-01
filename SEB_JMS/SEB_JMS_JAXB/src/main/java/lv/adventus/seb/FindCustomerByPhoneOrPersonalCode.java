@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 public class FindCustomerByPhoneOrPersonalCode extends ServicesBase
 {
 	private FindCustomerQuery fcq;
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(FindCustomerByPhoneOrPersonalCode.class);
 
 	public FindCustomerByPhoneOrPersonalCode() throws JAXBException
 	{
@@ -46,11 +47,11 @@ public class FindCustomerByPhoneOrPersonalCode extends ServicesBase
 		  }
 		  catch (JAXBException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 		  catch (IOException e)
 		  {
-			  System.out.println(e.getMessage());
+			  LOGGER.error(e.getMessage());
 		  }
 	  }
 }

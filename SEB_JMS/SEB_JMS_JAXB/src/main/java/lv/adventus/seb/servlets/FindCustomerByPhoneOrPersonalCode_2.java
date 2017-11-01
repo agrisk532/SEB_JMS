@@ -36,12 +36,14 @@ import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.ContactcenterFindCustomerByPhoneOrPersonalCode2Output;
 import lv.adventus.seb.ContactcenterGiveDigipassChallenge2Output;
 
+
 /**
  * Servlet implementation class FindCustomerByPhoneOrPersonalCode_2
  */
 public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	
 
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(FindCustomerByPhoneOrPersonalCode_2.class);
     /**
      * Default constructor. 
      */
@@ -65,7 +67,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 		Connector c;
 
 	    String requestURI = request.getRequestURI().substring(1);	// remove slash
-		System.out.println(requestURI + " http request received at: " + Connector.getTimestamp());
+		LOGGER.info(requestURI + " http request received");
 
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -83,14 +85,14 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	    	String pr = "";
 	    	if(userId == null) pr += "idCode ";
 	    	if(connId == null) pr += "connId ";
-	    	System.out.println(requestURI + ": Expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr);
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	System.out.println(requestURI + ": idCode = " + userId);
-	    	System.out.println(requestURI + ": connid = " + connId);
+	    	LOGGER.info(requestURI + ": idCode = " + userId);
+	    	LOGGER.info(requestURI + ": connid = " + connId);
 	    }
 
 	 // check PingPong service result
@@ -108,7 +110,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	    	
 /////////// invoke FindCustomerByPhoneOrPersonalCode_2 service
 
-	    	System.out.println(requestURI + " processing started at: " + Connector.getTimestamp());
+	    	LOGGER.info(requestURI + " processing started");
 			lv.adventus.seb.FindCustomerByPhoneOrPersonalCode fc = new lv.adventus.seb.FindCustomerByPhoneOrPersonalCode();
 			fc.SetHeader();
 			fc.SetHeaderUserId(userId);
@@ -117,25 +119,25 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
   			// print XML
-			if(debug)System.out.println(requestURI + " sent this XML:");
-			if(debug)System.out.println(XMLUtility.prettyFormat(xmlrequest));
+			if(debug)LOGGER.debug(requestURI + " sent this XML:");
+			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
 
 			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			if(debug)System.out.println(requestURI + " created Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " created Connector");
 			c.SetHeader(fc.GetHeader());
 			c.start();
-			if(debug)System.out.println(requestURI + " started Connector at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " started Connector");
 			c.createMessage();
-			if(debug)System.out.println(requestURI + " Connector query begins at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)System.out.println(requestURI + " Connector query ends at: " + Connector.getTimestamp());
-		    if(debug)System.out.println(requestURI + " Exit from Connector started at: " + Connector.getTimestamp());
+		    if(debug)LOGGER.debug(requestURI + " Connector query ends");
+		    if(debug)LOGGER.debug(requestURI + " Exit from Connector started");
 	  		c.exit();
-	  		if(debug)System.out.println(requestURI + " Exit from Connector completed at: " + Connector.getTimestamp());
+	  		if(debug)LOGGER.debug(requestURI + " Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	System.out.println(requestURI + ": query returned null.");
+		    	LOGGER.error(requestURI + ": query returned null.");
 		    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -143,43 +145,40 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-			if(debug)System.out.println(requestURI + " response body extracted at: " + Connector.getTimestamp());
+			if(debug)LOGGER.debug(requestURI + " response body extracted");
 		    customerId = fco.getFindCustomerResponse().getCustomerId();
 		    idCode = fco.getFindCustomerResponse().getIdCode();
 		    firstName = fco.getFindCustomerResponse().getFirstName();
 		    lastName = fco.getFindCustomerResponse().getLastName();
 		    userPhoneNumber = fco.getFindCustomerResponse().getUserPhoneNumber();
 
-		    System.out.println(requestURI + ": Answer from JMS Broker:");
-		    System.out.println("customerId = " + customerId);
-		    System.out.println("idCode = " + idCode);
-		    System.out.println("firstName = " + firstName);
-		    System.out.println("lastName = " + lastName);
-		    System.out.println("userPhoneNumber = " + userPhoneNumber);
+		    LOGGER.info(requestURI + ": Answer from JMS Broker:");
+		    LOGGER.info("customerId = " + customerId);
+		    LOGGER.info("idCode = " + idCode);
+		    LOGGER.info("firstName = " + firstName);
+		    LOGGER.info("lastName = " + lastName);
+		    LOGGER.info("userPhoneNumber = " + userPhoneNumber);
 		    
-		    if(debug)System.out.println(requestURI + " servlet output started at: " + Connector.getTimestamp());
+		    if(debug)LOGGER.debug(requestURI + " servlet output started");
   			Utility.ServletResponse(response, "customerId:" + customerId + 
   					  "|idCode:" + idCode + "|firstName:" + firstName + 
   					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber); 
-  			if(debug)System.out.println(requestURI + " servlet output completed at: " + Connector.getTimestamp());
+  			if(debug)LOGGER.debug(requestURI + " servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
-        	System.out.println(jmse.getMessage());
-        	sc.log(requestURI + " servlet JMSException: " + jmse.getMessage(), jmse);
+        	LOGGER.error(jmse);
         }
 	    catch (javax.xml.bind.JAXBException e)
 	    {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
-	    	System.out.println(e.getMessage());
-	    	sc.log(requestURI + " servlet JAXBException: " + e.getMessage(), e);
+	    	LOGGER.error(e);
 	    }
         catch (java.io.IOException e)
         {
 	    	Utility.ServletResponse(response, "error:TECHNICALERROR");
-	    	System.out.println(e.getMessage());
-	    	sc.log(requestURI + " servlet IOException: " + e.getMessage(), e);
+	    	LOGGER.error(e);
         }
 	}
 }

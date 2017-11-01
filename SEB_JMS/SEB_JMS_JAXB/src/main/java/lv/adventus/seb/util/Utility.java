@@ -14,6 +14,8 @@ import lv.adventus.seb.UnifiedServiceErrors;
 
 public class Utility
 {
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(Utility.class);
+	
 	public static void ServletResponse(HttpServletResponse response, String content) throws java.io.IOException
 	{
 		PrintWriter out = response.getWriter();
@@ -29,12 +31,12 @@ public class Utility
 
  		if(pp == null || pp.booleanValue() == false)
  		{
- 			System.out.println(callerFunction + ": PingPong returns 0. Processing stopped at " + Connector.getTimestamp());
+ 			LOGGER.error(callerFunction + ": PingPong returns 0. Processing stopped.");
  			return false;
  		}
  		else
  		{
- 			System.out.println(callerFunction + ": PingPong returns 1. Processing continues.");
+ 			LOGGER.info(callerFunction + ": PingPong returns 1. Processing continues.");
  			return true;
  		}
 	}

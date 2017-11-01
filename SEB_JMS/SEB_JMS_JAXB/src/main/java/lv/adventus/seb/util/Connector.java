@@ -36,6 +36,8 @@ public class Connector {
     
 	private static final long serialVersionUID = 1L;
 	
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(Connector.class);
+	
 	public Connector(String broker, String username, String password, String sQueue, HttpServletResponse res, long connectionTimeout,
 			long ttl, long responseMsgTTL, boolean debug) throws java.io.IOException
 	
@@ -54,21 +56,21 @@ public class Connector {
     public void start() throws javax.jms.JMSException
     {
     	javax.jms.QueueConnectionFactory factory;
-    	if(debug) System.out.println("Connector.start() beginning at: " + Connector.getTimestamp());
+    	if(debug) LOGGER.debug("Started");
         factory = (new progress.message.jclient.QueueConnectionFactory (broker));
-        if(debug) System.out.println("Connector.start() ConnectionFactory created at: " + Connector.getTimestamp());
+        if(debug) LOGGER.debug("ConnectionFactory created");
         connect = factory.createQueueConnection (username, password);
-        if(debug) System.out.println("Connector.start() created connection at: " + Connector.getTimestamp());
+        if(debug) LOGGER.debug("Created connection");
         session = connect.createQueueSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
-        if(debug) System.out.println("Connector.start() created session at: " + Connector.getTimestamp());
+        if(debug) LOGGER.debug("Created session");
         // Create the Queue and QueueRequestor for sending requests.
         javax.jms.Queue queue = null;
         queue = session.createQueue (sQueue);
-        if(debug) System.out.println("Connector.start() created queue at: " + Connector.getTimestamp());
+        if(debug) LOGGER.debug("Created queue");
         requestor = new lv.adventus.seb.util.QueueRequestor(session, queue);
-        if(debug) System.out.println("Connector.start() created queue requestor at: " + Connector.getTimestamp());
+        if(debug) LOGGER.debug("Created queue requestor");
         connect.start();
-        if(debug) System.out.println("Connector.start() started at: " + Connector.getTimestamp());
+        if(debug) LOGGER.debug("Connector started");
     }
     
     public lv.adventus.seb.util.QueueRequestor getRequestor()
@@ -101,7 +103,7 @@ public class Connector {
     
     public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException, java.io.IOException 
     {
-    	if(debug) System.out.println("Connector query started at: " + Connector.getTimestamp());
+    	if(debug) LOGGER.debug("Entering Connector.query()");
 		msg.setText( xmlrequest );
 		if(this.msgHeader != null)
 		{
@@ -115,9 +117,9 @@ public class Connector {
 			msg.setStringProperty("responseMsgTTL", String.valueOf(this.responseMsgTTL));
 		}
 		// Instead of sending, we will use the QueueRequestor.
-		if(debug) System.out.println("Request to SonicMQ sent at: " + Connector.getTimestamp());
+		if(debug) LOGGER.debug("Request to SonicMQ sent");
 		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
-		if(debug) System.out.println("Response from SonicMQ received at: " + Connector.getTimestamp());
+		if(debug) LOGGER.debug("Response from SonicMQ received");
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
@@ -126,12 +128,12 @@ public class Connector {
 		mmu.onMessage(responseMsg);
 		xmlresponse = mmu.getXMLMessage();
 		
-//		System.out.println("XML Response:");
-//		System.out.println(xmlresponse);
+//		LOGGER.info("XML Response:");
+//		LOGGER.info(xmlresponse);
 		
 		if(xmlresponse.length() == 0)
 		{
-			System.out.println("xmlresponse is null length. Cannot continue." + Connector.getTimestamp());
+			LOGGER.error("xmlresponse from SonicMQ is zero length. Cannot continue.");
 			return null;
 		}
 		
@@ -143,8 +145,8 @@ public class Connector {
 	    int pos = xmlresponse.indexOf("UnifiedServiceResponse") + (new String("UnifiedServiceResponse")).length();
 	    int pos2 = xmlresponse.indexOf(">", pos);
 	    
-//		System.out.println("pos: " + pos);
-//		System.out.println("pos2: " + pos2);
+//		LOGGER.info("pos: " + pos);
+//		LOGGER.info("pos2: " + pos2);
 	    
 	    xmlresponse =
 	    	  xmlresponse.replace(xmlresponse.substring(pos, pos2), " xmlns=\"http://www.seb.ee/integration\"");
@@ -191,13 +193,13 @@ public class Connector {
 //		    xmlresponse = sb.toString(); 
 //	    }
 
-//		System.out.println("Connector XML:");
-//		System.out.println(XMLUtility.prettyFormat(xmlresponse));
+//		LOGGER.info("Connector XML:");
+//		LOGGER.info(XMLUtility.prettyFormat(xmlresponse));
 	    
 	    // unmarshal
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
-//    	System.out.println("Stream available bytes: " + String.valueOf(stream.available()));
-		if(debug) System.out.println("Connector unmarshaling started at: " + Connector.getTimestamp());
+//    	LOGGER.info("Stream available bytes: " + String.valueOf(stream.available()));
+		if(debug) LOGGER.debug("Connector unmarshaling started");
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
     	if(response != null)	// for PingPongTimerTask() that it do not send output to non-existing servlet 
     		ErrorHandler.SendErrors(response, usr);
