@@ -67,7 +67,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 		Connector c;
 
 	    String requestURI = request.getRequestURI().substring(1);	// remove slash
-		LOGGER.info(requestURI + " http request received");
+		LOGGER.info(requestURI + " HTTP request received");
 
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -85,14 +85,15 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	    	String pr = "";
 	    	if(userId == null) pr += "idCode ";
 	    	if(connId == null) pr += "connId ";
-	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr + ". Processing stopped.");
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	LOGGER.info(requestURI + ": idCode = " + userId);
-	    	LOGGER.info(requestURI + ": connid = " + connId);
+	    	LOGGER.info(requestURI + " received HTTP GET parameters:");
+	    	LOGGER.info("idCode = " + userId);
+	    	LOGGER.info("connid = " + connId);
 	    }
 
 	 // check PingPong service result
@@ -119,25 +120,25 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
   			// print XML
-			if(debug)LOGGER.debug(requestURI + " sent this XML:");
-			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
+			LOGGER.debug(requestURI + " sent this XML:");
+			LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			if(debug)LOGGER.debug(requestURI + " created Connector");
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			LOGGER.debug(requestURI + " created Connector");
 			c.SetHeader(fc.GetHeader());
 			c.start();
-			if(debug)LOGGER.debug(requestURI + " started Connector");
+			LOGGER.debug(requestURI + " started Connector");
 			c.createMessage();
-			if(debug)LOGGER.debug(requestURI + " Connector query begins");
+			LOGGER.debug(requestURI + " Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)LOGGER.debug(requestURI + " Connector query ends");
-		    if(debug)LOGGER.debug(requestURI + " Exit from Connector started");
+		    LOGGER.debug(requestURI + " Connector query ends");
+		    LOGGER.debug(requestURI + " Exit from Connector started");
 	  		c.exit();
-	  		if(debug)LOGGER.debug(requestURI + " Exit from Connector completed");
+	  		LOGGER.debug(requestURI + " Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	LOGGER.error(requestURI + ": query returned null.");
+		    	LOGGER.error(requestURI + ": JMS UnifiedServiceResponse is null. Processing stopped.");
 		    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -145,7 +146,7 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-			if(debug)LOGGER.debug(requestURI + " response body extracted");
+			LOGGER.debug(requestURI + " UnifiedServiceResponse body extracted");
 		    customerId = fco.getFindCustomerResponse().getCustomerId();
 		    idCode = fco.getFindCustomerResponse().getIdCode();
 		    firstName = fco.getFindCustomerResponse().getFirstName();
@@ -159,11 +160,11 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 		    LOGGER.info("lastName = " + lastName);
 		    LOGGER.info("userPhoneNumber = " + userPhoneNumber);
 		    
-		    if(debug)LOGGER.debug(requestURI + " servlet output started");
+		    LOGGER.debug(requestURI + " servlet output started");
   			Utility.ServletResponse(response, "customerId:" + customerId + 
   					  "|idCode:" + idCode + "|firstName:" + firstName + 
   					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber); 
-  			if(debug)LOGGER.debug(requestURI + " servlet output completed");
+  			LOGGER.debug(requestURI + " servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {

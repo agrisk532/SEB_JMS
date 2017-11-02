@@ -67,7 +67,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		Connector c;
 
 		String requestURI = request.getRequestURI().substring(1);	// remove slash
-		LOGGER.info("http request received");
+		LOGGER.info("HTTP request received");
 
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -85,14 +85,15 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	String pr = "";
 	    	if(userId == null) pr += "userId ";
 	    	if(connId == null) pr += "connId ";
-	    	LOGGER.error(requestURI + "Expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr + ". Processing stopped.");
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	LOGGER.info(requestURI + " :id = " + userId);
-	    	LOGGER.info(requestURI + " :connid = " + connId);
+	    	LOGGER.info(requestURI + " received HTTP GET parameters:");
+	    	LOGGER.info("id = " + userId);
+	    	LOGGER.info("connid = " + connId);
 	    }
 
 	 // check PingPong service result
@@ -110,7 +111,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 	    	
 /////////// invoke FindCustomerByPhoneOrPersonalCode service
 
-	    	LOGGER.info(requestURI + "processing started");
+	    	LOGGER.info(requestURI + "Part1. processing started");
 			lv.adventus.seb.FindCustomerByPhoneOrPersonalCode fc = new lv.adventus.seb.FindCustomerByPhoneOrPersonalCode();
 			fc.SetHeader();
 			fc.SetHeaderUserId(userId);
@@ -119,25 +120,25 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
   			// print XML
-			if(debug)LOGGER.debug(requestURI + " sent this XML:");
-			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
+			LOGGER.debug(requestURI + " sent this XML:");
+			LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
 
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, debug);
-			if(debug)LOGGER.debug(requestURI + " created Connector");
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			LOGGER.debug(requestURI + " created Connector");
 			c.SetHeader(fc.GetHeader());
 			c.start();
-			if(debug)LOGGER.debug(requestURI + " started Connector");
+			LOGGER.debug(requestURI + " started Connector");
 			c.createMessage();
-			if(debug)LOGGER.debug(requestURI + " Connector query begins");
+			LOGGER.debug(requestURI + " Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)LOGGER.debug(requestURI + " Connector query ends");
-		    if(debug)LOGGER.debug(requestURI + " Exit from Connector started");
+		    LOGGER.debug(requestURI + " Connector query ends");
+		    LOGGER.debug(requestURI + " Exit from Connector started");
 	  		c.exit();
-	  		if(debug)LOGGER.debug(requestURI + " Exit from Connector completed");
+	  		LOGGER.debug(requestURI + " Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	LOGGER.error("JMS service query returned null.");
+		    	LOGGER.error(requestURI + ": JMS UnifiedServiceResponse is null. Processing stopped.");
 		    	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -145,19 +146,19 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 
 			ContactcenterFindCustomerByPhoneOrPersonalCode2Output fco =
 			    	  (ContactcenterFindCustomerByPhoneOrPersonalCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-			if(debug)LOGGER.debug(requestURI + " response body extracted");
+			LOGGER.debug(requestURI + " response body extracted");
 		    customerId = fco.getFindCustomerResponse().getCustomerId();
 		    idCode = fco.getFindCustomerResponse().getIdCode();
 		    firstName = fco.getFindCustomerResponse().getFirstName();
 		    lastName = fco.getFindCustomerResponse().getLastName();
 		    userPhoneNumber = fco.getFindCustomerResponse().getUserPhoneNumber();
 
-		    LOGGER.info(requestURI + "Answer from JMS Broker:");
-		    LOGGER.info(requestURI + " :customerId = " + customerId);
-		    LOGGER.info(requestURI + " :idCode = " + idCode);
-		    LOGGER.info(requestURI + " :firstName = " + firstName);
-		    LOGGER.info(requestURI + " :lastName = " + lastName);
-		    LOGGER.info(requestURI + " :userPhoneNumber = " + userPhoneNumber);
+		    LOGGER.info(requestURI + ": Answer from JMS Broker:");
+		    LOGGER.info("customerId = " + customerId);
+		    LOGGER.info("idCode = " + idCode);
+		    LOGGER.info("firstName = " + firstName);
+		    LOGGER.info("lastName = " + lastName);
+		    LOGGER.info("userPhoneNumber = " + userPhoneNumber);
 
 /////////// invoke GiveDigipassChallenge service
 
@@ -167,7 +168,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    	return;
 		    }
 		    
-	    	LOGGER.info(requestURI + "GiveDigipassChallenge processing started");
+	    	LOGGER.info(requestURI + "Part2. GiveDigipassChallenge processing started");
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
@@ -176,25 +177,25 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
-  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge sent this XML:");
-  			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
-  			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge created Connector");
+  			LOGGER.debug(requestURI + "GiveDigipassChallenge sent this XML:");
+  			LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
+
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			LOGGER.debug(requestURI + "GiveDigipassChallenge created Connector");
 			c.SetHeader(dc.GetHeader());
 			c.start();
-			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge started Connector");
+			LOGGER.debug(requestURI + "GiveDigipassChallenge started Connector");
 			c.createMessage();
-			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Connector query begins");
+			LOGGER.debug(requestURI + "GiveDigipassChallenge Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Connector query ends");
-		    if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Exit from Connector started");
+		    LOGGER.debug(requestURI + "GiveDigipassChallenge Connector query ends");
+		    LOGGER.debug(requestURI + "GiveDigipassChallenge Exit from Connector started");
 		    c.exit();
-		    if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge Exit from Connector completed");
+		    LOGGER.debug(requestURI + "GiveDigipassChallenge Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	LOGGER.error(requestURI + "GiveDigipassChallenge: query returned null.");
+		    	LOGGER.error(requestURI + ": JMS GiveDigipassChallenge UnifiedServiceResponse is null. Processing stopped.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -202,7 +203,7 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
 		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in servlet response from c.query()
   			
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge response body extracted");
+  			LOGGER.debug(requestURI + "GiveDigipassChallenge response body extracted");
   			customerId = gco.getGiveChallengeResponse().getCustomerId();
   			challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			userName = gco.getGiveChallengeResponse().getUsername();
@@ -214,12 +215,12 @@ public class FindCustomerByPhoneOrPersonalCode extends ServletBase {
   			LOGGER.info("GiveDigipassChallenge: userName = " + userName);
   			LOGGER.info("GiveDigipassChallenge: idCode = " + idCode);
 
-  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge servlet output started");
+  			LOGGER.debug(requestURI + "GiveDigipassChallenge servlet output started");
   			Utility.ServletResponse(response, "customerId:" + customerId + "|username:" + userName +
   					  "|idCode:" + idCode + "|firstName:" + firstName + 
   					  "|lastName:" + lastName + "|userPhoneNumber:" + userPhoneNumber + 
   					  "|challengecode:" + challengeCode);
-  			if(debug)LOGGER.debug(requestURI + "GiveDigipassChallenge servlet output completed");
+  			LOGGER.debug(requestURI + "GiveDigipassChallenge servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {

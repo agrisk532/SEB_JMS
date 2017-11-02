@@ -36,25 +36,25 @@ public class CheckAuthenticationCode extends ServicesBase
 	      aq.setUsername("florida");
 	}
 	
-	  public static void main(String[] argv)
-	  {
-		  try
-		  {
-			  //String xmlDocument = "FindCustomerByPhoneOrPersonalCode_2Input2.xml";
-			  //String xmlDocument = "GiveDigipassChallenge_2Input2.xml";
-			  String xmlDocument = "CheckAuthenticationCode_2Input2.xml";
-			  CheckAuthenticationCode ac = new CheckAuthenticationCode();
-			  ac.SetHeader();
-			  ac.SetBody();
-			  ac.Marshal(xmlDocument);
-		  }
-		  catch (JAXBException e)
-		  {
-			  LOGGER.error(e.getMessage());
-		  }
-		  catch (IOException e)
-		  {
-			  LOGGER.error(e.getMessage());
-		  }
-	  }
+	public static void main(String[] argv)
+	{
+		try
+		{
+			//String xmlDocument = "FindCustomerByPhoneOrPersonalCode_2Input2.xml";
+			//String xmlDocument = "GiveDigipassChallenge_2Input2.xml";
+			String xmlDocument = "CheckAuthenticationCode_2Input2.xml";
+			CheckAuthenticationCode ac = new CheckAuthenticationCode();
+			ac.SetHeader();
+			ac.SetBody();
+			ac.Marshal(xmlDocument);
+		}
+		catch (JAXBException e)
+		{
+			LOGGER.error(e);
+		}
+		catch (IOException e)
+		{
+			LOGGER.error(e);
+		}
+	}
 }

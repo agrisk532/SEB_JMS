@@ -49,7 +49,6 @@ public class MultipartMessageUtility {
         }
         else
         {
-            LOGGER.debug("Received a JMS message.");
             LOGGER.error("Received not a MultipartMessage....Cannot continue.");
         }
     }
@@ -57,19 +56,25 @@ public class MultipartMessageUtility {
     private void unpackMM(javax.jms.Message aMessage, int depth) throws javax.jms.JMSException
     {
         int n = depth;
-        indent(n); LOGGER.debug("******* Beginning of MultipartMessage ******");
+        //indent(n);
+        LOGGER.debug("******* Beginning of MultipartMessage ******");
 
-        indent(n); LOGGER.debug("Extend_type property = " + aMessage.getStringProperty(Constants.EXTENDED_TYPE));
+        //indent(n);
+        LOGGER.debug("Extend_type property = " + aMessage.getStringProperty(Constants.EXTENDED_TYPE));
         MultipartMessage mm = (MultipartMessage)aMessage;
         int partCount = mm.getPartCount();
 
-        indent(n); LOGGER.debug("partCount of this MultipartMessage = " + partCount);
+        //indent(n);
+        LOGGER.debug("partCount of this MultipartMessage = " + partCount);
         for (int i = 0; i < partCount; i++)
         {
-            indent(n); LOGGER.debug("--------Beginning of part " + (i+1));
+            //indent(n);
+        	LOGGER.debug("--------Beginning of part " + (i+1));
             Part part = mm.getPart(i);
-            indent(n); LOGGER.debug("Part.contentType = " + part.getHeader().getContentType());
-            indent(n); LOGGER.debug("Part.contentId = " + part.getHeader().getContentId());
+            //indent(n);
+            LOGGER.debug("Part.contentType = " + part.getHeader().getContentType());
+            //indent(n);
+            LOGGER.debug("Part.contentId = " + part.getHeader().getContentId());
  
             if (mm.isMessagePart(i))
             {
@@ -99,19 +104,21 @@ public class MultipartMessageUtility {
             	LOGGER.debug("MM: in other part");
                 unpackPart(part, n);
             }
-            indent(n); LOGGER.debug("--------end of part " + (i+1));
+            //indent(n);
+            LOGGER.debug("--------end of part " + (i+1));
         }
-        indent(n); LOGGER.debug("******* End of MultipartMessage ******");
+        //indent(n);
+        LOGGER.debug("******* End of MultipartMessage ******");
     }
 
 
-    private void indent(int num)
-    {
-        for (int i = 0; i < num; i++)
-        {
-            System.out.print("\t");
-        }
-    }
+//    private void indent(int num)
+//    {
+//        for (int i = 0; i < num; i++)
+//        {
+//            System.out.print("\t");
+//        }
+//    }
 
     private void unpackJMSMessage(javax.jms.Message aMessage, int depth) throws javax.jms.JMSException
     {
@@ -120,22 +127,26 @@ public class MultipartMessageUtility {
         if (aMessage instanceof progress.message.jclient.XMLMessage)
         {
             progress.message.jclient.XMLMessage msg = (progress.message.jclient.XMLMessage)aMessage;
-            indent(depth); LOGGER.debug( "content in XMLmessage... " + msg.getText());
+            //indent(depth);
+            LOGGER.debug( "content in XMLmessage... " + msg.getText());
             partMessage = msg.getText();
         }
         else if (aMessage instanceof TextMessage)   
         {
             javax.jms.TextMessage tmsg = (javax.jms.TextMessage) aMessage;
-            indent(depth); LOGGER.debug( "content in TextMessage... " + tmsg.getText() );
+            //indent(depth);
+            LOGGER.debug( "content in TextMessage... " + tmsg.getText() );
         }
         else if (aMessage instanceof BytesMessage)
         {
             javax.jms.BytesMessage bmsg = (javax.jms.BytesMessage) aMessage;
-            indent(depth); LOGGER.debug( "content in Bytesmessage... " + bmsg.readUTF());
+            //indent(depth);
+            LOGGER.debug( "content in Bytesmessage... " + bmsg.readUTF());
         }
         else
         {
-            indent(depth); LOGGER.debug( "a JMS message... ");
+            //indent(depth);
+        	LOGGER.debug( "a JMS message... ");
         }
     }
 
@@ -144,8 +155,11 @@ public class MultipartMessageUtility {
         byte[] content = part.getContentBytes();
         int size = content.length;
         String s = new String(content);
-        indent(depth); LOGGER.debug( "...size :  " + size);
-        indent(depth); LOGGER.debug( "...content :  ");
-        indent(depth); LOGGER.debug(s);
+        //indent(depth);
+        LOGGER.debug( "...size :  " + size);
+        //indent(depth);
+        LOGGER.debug( "...content :  ");
+        //indent(depth);
+        LOGGER.debug(s);
     }
 }

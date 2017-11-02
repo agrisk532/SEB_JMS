@@ -43,7 +43,6 @@ public class ServletBase extends HttpServlet {
     protected static long connectionTimeout = 60000L;
     protected static long ttl = 30000L;
     protected static long responseMsgTTL = 30000L;
-    protected static boolean debug = false;
 
     protected ServletContext sc;
 
@@ -82,7 +81,6 @@ public class ServletBase extends HttpServlet {
 		this.connectionTimeout = Long.parseLong(sc.getInitParameter("connectionTimeout"));
 		this.ttl = Long.parseLong(sc.getInitParameter("TTL")); // JMS parameter
 		this.responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL")); // JMS parameter
-		this.debug = Boolean.parseBoolean(sc.getInitParameter("debug"));
 	}
 
 	/**

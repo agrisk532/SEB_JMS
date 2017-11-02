@@ -32,14 +32,13 @@ public class Connector {
     public lv.adventus.seb.UnifiedServiceHeader msgHeader;
     public lv.adventus.seb.UnifiedServiceResponse usr;
     public HttpServletResponse response;
-    public boolean debug; // true for additional output in log file
     
 	private static final long serialVersionUID = 1L;
 	
 	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(Connector.class);
 	
 	public Connector(String broker, String username, String password, String sQueue, HttpServletResponse res, long connectionTimeout,
-			long ttl, long responseMsgTTL, boolean debug) throws java.io.IOException
+			long ttl, long responseMsgTTL) throws java.io.IOException
 	
 	{
 		this.broker = broker;
@@ -50,27 +49,26 @@ public class Connector {
 		this.connectionTimeout = connectionTimeout;
 		this.ttl = ttl;
 		this.responseMsgTTL = responseMsgTTL;
-		this.debug = debug;
 	}
 	
     public void start() throws javax.jms.JMSException
     {
     	javax.jms.QueueConnectionFactory factory;
-    	if(debug) LOGGER.debug("Started");
+    	LOGGER.debug("Started");
         factory = (new progress.message.jclient.QueueConnectionFactory (broker));
-        if(debug) LOGGER.debug("ConnectionFactory created");
+        LOGGER.debug("ConnectionFactory created");
         connect = factory.createQueueConnection (username, password);
-        if(debug) LOGGER.debug("Created connection");
+        LOGGER.debug("Created connection");
         session = connect.createQueueSession(false,javax.jms.Session.AUTO_ACKNOWLEDGE);
-        if(debug) LOGGER.debug("Created session");
+        LOGGER.debug("Created session");
         // Create the Queue and QueueRequestor for sending requests.
         javax.jms.Queue queue = null;
         queue = session.createQueue (sQueue);
-        if(debug) LOGGER.debug("Created queue");
+        LOGGER.debug("Created queue");
         requestor = new lv.adventus.seb.util.QueueRequestor(session, queue);
-        if(debug) LOGGER.debug("Created queue requestor");
+        LOGGER.debug("Created queue requestor");
         connect.start();
-        if(debug) LOGGER.debug("Connector started");
+        LOGGER.debug("Connector started");
     }
     
     public lv.adventus.seb.util.QueueRequestor getRequestor()
@@ -103,7 +101,7 @@ public class Connector {
     
     public UnifiedServiceResponse query(String xmlrequest) throws javax.jms.JMSException, javax.xml.bind.JAXBException, java.io.IOException 
     {
-    	if(debug) LOGGER.debug("Entering Connector.query()");
+    	LOGGER.debug("Entering Connector.query()");
 		msg.setText( xmlrequest );
 		if(this.msgHeader != null)
 		{
@@ -117,9 +115,9 @@ public class Connector {
 			msg.setStringProperty("responseMsgTTL", String.valueOf(this.responseMsgTTL));
 		}
 		// Instead of sending, we will use the QueueRequestor.
-		if(debug) LOGGER.debug("Request to SonicMQ sent");
+		LOGGER.debug("Request to SonicMQ sent");
 		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
-		if(debug) LOGGER.debug("Response from SonicMQ received");
+		LOGGER.debug("Response from SonicMQ received");
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
@@ -133,7 +131,7 @@ public class Connector {
 		
 		if(xmlresponse.length() == 0)
 		{
-			LOGGER.error("xmlresponse from SonicMQ is zero length. Cannot continue.");
+			LOGGER.error("xmlresponse from JMS broker is zero length. Cannot continue.");
 			return null;
 		}
 		
@@ -199,7 +197,7 @@ public class Connector {
 	    // unmarshal
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
 //    	LOGGER.info("Stream available bytes: " + String.valueOf(stream.available()));
-		if(debug) LOGGER.debug("Connector unmarshaling started");
+		LOGGER.debug("Connector unmarshaling started");
     	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
     	if(response != null)	// for PingPongTimerTask() that it do not send output to non-existing servlet 
     		ErrorHandler.SendErrors(response, usr);

@@ -46,11 +46,11 @@ public class GiveDigipassChallenge extends ServicesBase
 		  }
 		  catch (JAXBException e)
 		  {
-			  LOGGER.error(e.getMessage());
+			  LOGGER.error(e);
 		  }
 		  catch (IOException e)
 		  {
-			  LOGGER.error(e.getMessage());
+			  LOGGER.error(e);
 		  }
 	  }
 }

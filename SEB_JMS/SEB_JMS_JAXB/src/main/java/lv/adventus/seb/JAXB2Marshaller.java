@@ -10,8 +10,11 @@ import java.io.IOException;
 
 public class JAXB2Marshaller {
 
-  public void generateXMLDocument(File xmlDocument) {
-    try {
+	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(JAXB2Marshaller.class);
+	
+	public void generateXMLDocument(File xmlDocument) {
+    
+	try {
 
       JAXBContext jaxbContext = JAXBContext.newInstance("lv.adventus.seb");
       Marshaller marshaller = jaxbContext.createMarshaller();
@@ -91,12 +94,12 @@ public class JAXB2Marshaller {
 	  fileWriter.close();
    }
     catch (IOException e) {
-      System.err.println(e.toString());
+      LOGGER.error(e);
 
     }
     catch (JAXBException e) {
 
-      System.err.println(e.toString());
+      LOGGER.error(e);
 
     }
 

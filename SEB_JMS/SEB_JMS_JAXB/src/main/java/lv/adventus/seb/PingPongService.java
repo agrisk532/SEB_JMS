@@ -42,11 +42,11 @@ public class PingPongService extends ServicesBase
 		  }
 		  catch (JAXBException e)
 		  {
-			  LOGGER.error(e.getMessage());
+			  LOGGER.error(e);
 		  }
 		  catch (IOException e)
 		  {
-			  LOGGER.error(e.getMessage());
+			  LOGGER.error(e);
 		  }
 	  }
 }

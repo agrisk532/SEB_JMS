@@ -83,11 +83,11 @@ public class JAXB2UnMarshaller {
 	    }
 	    catch (JAXBException e)
 	    {
-	    	LOGGER.error(e.getMessage());
+	    	LOGGER.error(e);
 	    }
 	    catch (IOException e)
 	    {
-	    	LOGGER.error(e.getMessage());
+	    	LOGGER.error(e);
 	    }
 	    
 	    return usr;

@@ -24,7 +24,6 @@ public class MyServletContextListener implements ServletContextListener
 	private ServletContext sc;
 	private long pingPongInterval;
 	private String pingPongStatusFileName;
-	private boolean debug;
 	private ConcurrentHashMap<String, Object> shared;
 	
 	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MyServletContextListener.class);
@@ -52,7 +51,6 @@ public class MyServletContextListener implements ServletContextListener
     	responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL"));
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
-    	debug = Boolean.parseBoolean(sc.getInitParameter("debug"));
     	
     	LOGGER.info("ServletContext parameters:");
     	LOGGER.info("broker: " + broker);
@@ -64,7 +62,6 @@ public class MyServletContextListener implements ServletContextListener
     	LOGGER.info("JMS Message Property responseMsgTTL : " + responseMsgTTL);
     	LOGGER.info("PingPongInterval: " + pingPongInterval);
     	LOGGER.info("PingPongStatusFileName: " + pingPongStatusFileName);
-    	LOGGER.info("Debug log format: " + debug);
 
 	   	int delay = 1000;
 	   	Timer timer = new Timer();
@@ -79,12 +76,12 @@ public class MyServletContextListener implements ServletContextListener
 	   	
 	   	try
 	   	{
-	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL, debug);
+	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL);
 	   	}
 	   	catch(javax.xml.bind.JAXBException e)
 	   	{
-	   		LOGGER.fatal("PingPong service exception. Could not create the PingPongTimerTask.");
-	   		LOGGER.fatal("PingPong service won't be used.");
+	   		LOGGER.error("PingPong service exception. Could not create the PingPongTimerTask.");
+	   		LOGGER.error("Processing not possible.");
 	   		shared.put("PingPong", Boolean.FALSE);
 	   		return;
 	   	}
@@ -113,7 +110,7 @@ public class MyServletContextListener implements ServletContextListener
     	}
         catch (java.io.IOException e)
         {
-        	LOGGER.error("java.io.IOException: ",e);
+        	LOGGER.error(e);
         }
     	LOGGER.info("ServletContextListener destroyed");
     }

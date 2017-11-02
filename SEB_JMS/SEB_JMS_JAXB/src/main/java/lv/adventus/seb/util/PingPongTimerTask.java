@@ -26,12 +26,11 @@ class PingPongTimerTask extends TimerTask
 
 	private ServletContext sc;
 	private long timesCalled;
-	private boolean debug;
 	
 	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(PingPongTimerTask.class);
 	
 	public PingPongTimerTask(ServletContext sc, String broker, String username, String password,
-			String queue, long timeout, long ttl, long responseMsgTTL, boolean debug) throws javax.xml.bind.JAXBException
+			String queue, long timeout, long ttl, long responseMsgTTL) throws javax.xml.bind.JAXBException
 	{
 		this.sc = sc;
 		this.broker = broker;
@@ -42,7 +41,6 @@ class PingPongTimerTask extends TimerTask
 		this.ttl = ttl;
 		this.responseMsgTTL = responseMsgTTL;
 		this.timesCalled = 0;
-		this.debug = debug;
 	}
 	
 	@Override
@@ -66,21 +64,21 @@ class PingPongTimerTask extends TimerTask
 
 			xmlrequest = pps.Marshal();
 			// print XML
-			if(debug)LOGGER.debug("PingPongService sent this XML:");
-			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
+			LOGGER.debug("PingPongService sent this XML:");
+			LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
 
-			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout,ttl,responseMsgTTL,false);
-			if(debug)LOGGER.debug("PingPongTimerTask created Connector");
+			Connector c = new Connector(broker,usernameSonic,passwordSonic,queue,null,connectionTimeout,ttl,responseMsgTTL);
+			LOGGER.debug("PingPongTimerTask created Connector");
 			c.SetHeader(pps.GetHeader());
 			c.start();
-			if(debug)LOGGER.debug("PingPongTimerTask started Connector");
+			LOGGER.debug("PingPongTimerTask started Connector");
 			c.createMessage();
-			if(debug)LOGGER.debug("PingPongTimerTask Connector query begins");
+			LOGGER.debug("PingPongTimerTask Connector query begins");
 			usr = c.query(xmlrequest);
-			if(debug)LOGGER.debug("PingPongTimerTask Connector query ends");
-			if(debug)LOGGER.debug("PingPongTimerTask Exit from Connector started");
+			LOGGER.debug("PingPongTimerTask Connector query ends");
+			LOGGER.debug("PingPongTimerTask Exit from Connector started");
 	  		c.exit();
-	  		if(debug)LOGGER.debug("PingPongTimerTask Exit from Connector completed");
+	  		LOGGER.debug("PingPongTimerTask Exit from Connector completed");
 
 		    if(usr == null)
 		    {
@@ -108,15 +106,15 @@ class PingPongTimerTask extends TimerTask
 		}
 		catch (javax.jms.JMSException e)
 		{
-			LOGGER.error("JMS exception in PingPongTimerTask()", e);
+			LOGGER.error(e);
 		}
 		catch (javax.xml.bind.JAXBException e)
 		{
-			LOGGER.error("JAXB exception in PingPongTimerTask()", e);
+			LOGGER.error(e);
 		}
         catch (java.io.IOException e)
         {
-        	LOGGER.error("IO exception in PingPongTimerTask()", e);
+        	LOGGER.error(e);
         }
 	}
 }

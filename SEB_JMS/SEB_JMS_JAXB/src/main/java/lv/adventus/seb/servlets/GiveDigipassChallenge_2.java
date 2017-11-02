@@ -65,7 +65,7 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 		Connector c;
 
 		String requestURI = request.getRequestURI().substring(1);	// remove slash
-		LOGGER.info(requestURI + " http request received");
+		LOGGER.info(requestURI + " HTTP request received");
 
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -85,15 +85,16 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 	    	if(idCode == null) pr += "idCode ";
 	    	if(connId == null) pr += "connId ";
 	    	if(customerId == null) pr += "customerId ";
-	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr + ". Processing stopped.");
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
 	    else
 	    {
-	    	LOGGER.info(requestURI + ": idCode = " + idCode);
-	    	LOGGER.info(requestURI + ": connid = " + connId);
-	    	LOGGER.info(requestURI + ": customerId = " + customerId);
+	    	LOGGER.info(requestURI + " received HTTP GET parameters:");
+	    	LOGGER.info("idCode = " + idCode);
+	    	LOGGER.info("connid = " + connId);
+	    	LOGGER.info("customerId = " + customerId);
 	    }
 
 	    try
@@ -107,7 +108,7 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 		    	return;
 		    }
 		    
-	    	LOGGER.info(requestURI + " processing started at: " + Connector.getTimestamp());
+	    	LOGGER.info(requestURI + " processing started");
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
@@ -116,25 +117,25 @@ public class GiveDigipassChallenge_2 extends ServletBase {
   	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();
   			// print XML
-  			if(debug)LOGGER.debug(requestURI + " sent this XML:");
-  			if(debug)LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
+  			LOGGER.debug(requestURI + " sent this XML:");
+  			LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, false);
-			if(debug)LOGGER.debug(requestURI + " created Connector");
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			LOGGER.debug(requestURI + " created Connector");
 			c.SetHeader(dc.GetHeader());
 			c.start();
-			if(debug)LOGGER.debug(requestURI + " started Connector");
+			LOGGER.debug(requestURI + " started Connector");
 			c.createMessage();
-			if(debug)LOGGER.debug(requestURI + " Connector query begins");
+			LOGGER.debug(requestURI + " Connector query begins");
 		    usr = c.query(xmlrequest);
-		    if(debug)LOGGER.debug(requestURI + " Connector query ends");
-		    if(debug)LOGGER.debug(requestURI + " Exit from Connector started");
+		    LOGGER.debug(requestURI + " Connector query ends");
+		    LOGGER.debug(requestURI + " Exit from Connector started");
 		    c.exit();
-		    if(debug)LOGGER.debug(requestURI + " Exit from Connector completed");
+		    LOGGER.debug(requestURI + " Exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	LOGGER.error(requestURI + ": query returned null.");
+		    	LOGGER.error(requestURI + ": JMS UnifiedServiceResponse is null. Processing stopped.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -142,23 +143,23 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 		    if(usr.getUnifiedServiceErrors() != null) return;  // errors already returned in servlet response from c.query()
   			
   			ContactcenterGiveDigipassChallenge2Output gco = (ContactcenterGiveDigipassChallenge2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			if(debug)LOGGER.debug(requestURI + " response body extracted");
+  			LOGGER.debug(requestURI + " response body extracted");
   			customerId = gco.getGiveChallengeResponse().getCustomerId();
   			challengeCode = gco.getGiveChallengeResponse().getChallengeCode(); 
   			userName = gco.getGiveChallengeResponse().getUsername();
   			idCode = gco.getGiveChallengeResponse().getIdCode();
 
-  			LOGGER.info(requestURI + ": Answer from JMS Broker:");
-  			LOGGER.info(requestURI + ": customerId = " + customerId);
-  			LOGGER.info(requestURI + ": challengeCode = " + challengeCode);
-  			LOGGER.info(requestURI + ": userName = " + userName);
-  			LOGGER.info(requestURI + ": idCode = " + idCode);
+  			LOGGER.info(requestURI + "Answer from JMS Broker:");
+  			LOGGER.info("customerId = " + customerId);
+  			LOGGER.info("challengeCode = " + challengeCode);
+  			LOGGER.info("userName = " + userName);
+  			LOGGER.info("idCode = " + idCode);
 
-  			if(debug)LOGGER.debug(requestURI + " servlet output started");
+  			LOGGER.debug(requestURI + " servlet output started");
   			Utility.ServletResponse(response, "customerId:" + customerId + "|username:" + userName +
   					  "|idCode:" + idCode +  
   					  "|challengeCode:" + challengeCode);
-  			if(debug)LOGGER.debug(requestURI + " servlet output completed");
+  			LOGGER.debug(requestURI + " servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {

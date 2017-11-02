@@ -63,7 +63,7 @@ public class CheckAuthenticationCode extends ServletBase {
 		UnifiedServiceResponse usr;
 
 	    String requestURI = request.getRequestURI().substring(1);	// remove slash
-	    LOGGER.info(requestURI + " http request received");
+	    LOGGER.info(requestURI + " HTTP request received");
 	    
 		// set all response headers here
 		response.setContentType("text/plain; charset=UTF-8");  // this must be set before response.getWriter()
@@ -90,7 +90,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	if(connectionId==null)  pr += "connid ";
 	    	if(userName==null) 		pr += "username ";
 
-	    	LOGGER.error(requestURI + " expected parameter not received from HTTP GET request: " + pr);
+	    	LOGGER.error(requestURI + " Expected parameter not received from HTTP GET request: " + pr + ". Processing stopped.");
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
@@ -127,25 +127,25 @@ public class CheckAuthenticationCode extends ServletBase {
   			dc.SetBody(digipassCode,challengeCode,userName);
   			xmlrequest = dc.Marshal();
   			// print XML
-			if(debug) LOGGER.debug(requestURI + " sent this XML:");
-			if(debug) LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
+			LOGGER.debug(requestURI + " sent this XML:");
+			LOGGER.debug(XMLUtility.prettyFormat(xmlrequest));
   			
-			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL, debug);
-			if(debug)LOGGER.debug(requestURI + " created Connector");
+			c = new Connector(broker,usernameSonic,passwordSonic,queue, response, connectionTimeout, ttl, responseMsgTTL);
+			LOGGER.debug(requestURI + " created Connector");
   			c.SetHeader(dc.GetHeader());
   			c.start();
-  			if(debug)LOGGER.debug(requestURI + " started Connector");
+  			LOGGER.debug(requestURI + " started Connector");
   			c.createMessage();
-  			if(debug)LOGGER.debug(requestURI + " Connector query begins");
+  			LOGGER.debug(requestURI + " Connector query begins");
   			usr = c.query(xmlrequest);
-  			if(debug)LOGGER.debug(requestURI + " Connector query ends");
-  			if(debug)LOGGER.debug(requestURI + " exit from Connector started");
+  			LOGGER.debug(requestURI + " Connector query ends");
+  			LOGGER.debug(requestURI + " exit from Connector started");
   			c.exit();
-  			if(debug)LOGGER.debug(requestURI + " exit from Connector completed");
+  			LOGGER.debug(requestURI + " exit from Connector completed");
 
 		    if(usr == null)
 		    {
-		    	LOGGER.error(requestURI + ": query returned null.");
+		    	LOGGER.error(requestURI + ": JMS UnifiedServiceResponse is null. Processing stopped.");
 	        	Utility.ServletResponse(response, "error:TECHNICALERROR");
 	 			return;
 		    }
@@ -153,19 +153,19 @@ public class CheckAuthenticationCode extends ServletBase {
   			if(usr.getUnifiedServiceErrors() != null) return; // errors already returned in servlet response from c.query()
 
   			ContactcenterCheckAuthenticationCode2Output cac = (ContactcenterCheckAuthenticationCode2Output) usr.getUnifiedServiceBody().getAny().get(0);
-  			if(debug)LOGGER.debug(requestURI + " response body extracted");
+  			LOGGER.debug(requestURI + " UnifiedServiceResponse body extracted");
   			digipassCode = cac.getAuthenticationResponse().getAuthenticationCode();
   			userName = cac.getAuthenticationResponse().getUsername();
   			challengeCode = cac.getAuthenticationResponse().getChallengeCode();
 
-  			LOGGER.info(requestURI + ": answer from JMS Broker:");
-      	    LOGGER.info(requestURI + ": digipasscode = " + digipassCode);
-      	    LOGGER.info(requestURI + ": challengecode = " + challengeCode);
-      	    LOGGER.info(requestURI + ": userName = " + userName);
+  			LOGGER.info(requestURI + ": Answer from JMS Broker:");
+      	    LOGGER.info("digipasscode = " + digipassCode);
+      	    LOGGER.info("challengecode = " + challengeCode);
+      	    LOGGER.info("userName = " + userName);
 
-      	    if(debug)LOGGER.debug(requestURI + " servlet output started");
+      	    LOGGER.debug(requestURI + " servlet output started");
       	    Utility.ServletResponse(response, "result:OK");
-  			if(debug)LOGGER.debug(requestURI + " servlet output completed");
+  			LOGGER.debug(requestURI + " servlet output completed");
         }
         catch (javax.jms.JMSException jmse)
         {

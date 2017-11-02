@@ -36,7 +36,7 @@ public class Utility
  		}
  		else
  		{
- 			LOGGER.info(callerFunction + ": PingPong returns 1. Processing continues.");
+ 			LOGGER.debug(callerFunction + ": PingPong returns 1. Processing continues.");
  			return true;
  		}
 	}
