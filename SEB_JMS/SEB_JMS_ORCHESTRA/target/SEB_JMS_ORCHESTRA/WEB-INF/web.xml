@@ -3,6 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+<!-- 
 <context-param>
     <param-name>broker</param-name>
     <param-value>sonic1.flv.baltic.seb.net:2526</param-value>
@@ -52,6 +53,7 @@
     <param-name>log4j-config-location</param-name>
     <param-value>WEB-INF/log4j.properties</param-value>
 </context-param>
+-->
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>
     <servlet-class>lv.adventus.seb.servlets.FindCustomerByPhoneOrPersonalCode</servlet-class>
