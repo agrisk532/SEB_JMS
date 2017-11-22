@@ -10,6 +10,8 @@ import javax.xml.bind.Unmarshaller;
 
 import lv.adventus.seb.UnifiedServiceErrors;
 import lv.adventus.seb.UnifiedServiceResponse;
+import progress.message.jclient.BytesMessage;
+import progress.message.jclient.TextMessage;
 
 import java.util.Date;
 import java.sql.Timestamp;
@@ -117,14 +119,44 @@ public class Connector {
 		// Instead of sending, we will use the QueueRequestor.
 		LOGGER.debug("Request to SonicMQ sent");
 		javax.jms.Message responseMsg = this.getRequestor().request(msg, this.connectionTimeout);
-		LOGGER.debug("Response from SonicMQ received");
+
 		if(responseMsg == null)
 		{
 			throw new javax.jms.JMSException("No response from JMS broker");
 		}
+
+		LOGGER.debug("Response from SonicMQ received:");
+		//////
+        if (responseMsg instanceof progress.message.jclient.XMLMessage)
+        {
+            progress.message.jclient.XMLMessage msg = (progress.message.jclient.XMLMessage)responseMsg;
+            LOGGER.debug( "content in XMLmessage... " + msg.getText());
+        }
+        else if (responseMsg instanceof TextMessage)   
+        {
+            javax.jms.TextMessage tmsg = (javax.jms.TextMessage)responseMsg;
+            LOGGER.debug( "content in TextMessage... " + tmsg.getText() );
+        }
+        else if (responseMsg instanceof BytesMessage)
+        {
+            javax.jms.BytesMessage bmsg = (javax.jms.BytesMessage)responseMsg;
+            LOGGER.debug( "content in Bytesmessage... " + bmsg.readUTF());
+        }
+        else
+        {
+        	LOGGER.debug( "a JMS message... ");
+        }		
+
+		
+		
 		MultipartMessageUtility mmu = new MultipartMessageUtility(this); 
 		mmu.onMessage(responseMsg);
 		xmlresponse = mmu.getXMLMessage();
+
+		
+		//////
+		//LOGGER.debug(responseBody);
+
 		
 //		LOGGER.info("XML Response:");
 //		LOGGER.info(xmlresponse);
