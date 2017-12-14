@@ -24,6 +24,7 @@ public class MyServletContextListener implements ServletContextListener
 	private ServletContext sc;
 	private long pingPongInterval;
 	private String pingPongStatusFileName;
+	private String pingPongOnOff = "1";  // 1 - on, 0 - off
 	private ConcurrentHashMap<String, Object> shared;
 	
 	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MyServletContextListener.class);
@@ -51,6 +52,7 @@ public class MyServletContextListener implements ServletContextListener
     	responseMsgTTL = Long.parseLong(sc.getInitParameter("responseMsgTTL"));
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
+    	pingPongOnOff = sc.getInitParameter("PingPongOnOff");
     	
     	LOGGER.info("ServletContext parameters:");
     	LOGGER.info("broker: " + broker);
@@ -62,7 +64,13 @@ public class MyServletContextListener implements ServletContextListener
     	LOGGER.info("JMS Message Property responseMsgTTL : " + responseMsgTTL);
     	LOGGER.info("PingPongInterval: " + pingPongInterval);
     	LOGGER.info("PingPongStatusFileName: " + pingPongStatusFileName);
-
+    	LOGGER.info("PingPongOnOff: " + pingPongOnOff);
+    	
+    	if(pingPongOnOff.equals("0"))
+    	{
+    		LOGGER.info("!!!!!!! PingPong service not used !!!!!!!");
+    	}
+    	
 	   	int delay = 1000;
 	   	Timer timer = new Timer();
 
@@ -74,22 +82,37 @@ public class MyServletContextListener implements ServletContextListener
 	   	    sc.setAttribute("sharedData", shared);
 	   	}
 	   	
+	   	shared.put("PingPong", Boolean.TRUE);
+	   	shared.put("PingPongOnOff", pingPongOnOff);
+	   	
 	   	try
 	   	{
-	   		this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL);
+	   		Utility.stringToFile("1", pingPongStatusFileName);	// for Zabbix
 	   	}
-	   	catch(javax.xml.bind.JAXBException e)
-	   	{
-	   		LOGGER.error("PingPong service exception. Could not create the PingPongTimerTask.");
-	   		LOGGER.error("Processing not possible.");
-	   		shared.put("PingPong", Boolean.FALSE);
-	   		return;
-	   	}
+        catch (java.io.IOException e)
+        {
+        	LOGGER.error(e);
+        }
 
-	   	timer.schedule(this.task, delay, pingPongInterval);
-	   	shared.put("timer", timer);
-	   	shared.put("PingPongUID", String.valueOf(UUID.randomUUID())); // unique uid for PingPong, Genesys connection id for other servlets
-	   	shared.put("PingPongStatusFileName", pingPongStatusFileName);
+	   	if(!pingPongOnOff.equals("0"))
+	   	{
+	   		try
+	   		{
+	   			this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL);
+	   		}
+	   		catch(javax.xml.bind.JAXBException e)
+	   		{
+	   			LOGGER.error("PingPong service exception. Could not create the PingPongTimerTask.");
+	   			LOGGER.error("Processing not possible.");
+	   			shared.put("PingPong", Boolean.FALSE);
+	   			return;
+	   		}
+	   		
+	   		timer.schedule(this.task, delay, pingPongInterval);
+	   		shared.put("timer", timer);
+	   		shared.put("PingPongUID", String.valueOf(UUID.randomUUID())); // unique uid for PingPong, Genesys connection id for other servlets
+	   		shared.put("PingPongStatusFileName", pingPongStatusFileName);
+	   	}
 	}
     
 

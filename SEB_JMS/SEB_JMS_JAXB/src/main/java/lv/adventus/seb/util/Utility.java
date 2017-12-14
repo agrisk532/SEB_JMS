@@ -36,8 +36,16 @@ public class Utility
  		}
  		else
  		{
- 			LOGGER.debug(callerFunction + ": PingPong returns 1. Processing continues.");
- 			return true;
+ 			String s = (String)shared.get("PingPongOnOff");
+ 			if(s.equals("0"))
+ 			{
+ 				LOGGER.debug(callerFunction + ": PingPong disabled. Processing continues.");
+ 			}
+ 			else
+ 			{	
+ 				LOGGER.debug(callerFunction + ": PingPong returns 1. Processing continues.");
+ 			}
+			return true;
  		}
 	}
 	
