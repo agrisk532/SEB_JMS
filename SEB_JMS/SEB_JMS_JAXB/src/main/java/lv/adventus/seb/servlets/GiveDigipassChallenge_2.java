@@ -113,6 +113,8 @@ public class GiveDigipassChallenge_2 extends ServletBase {
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
   			dc.SetHeaderRequestId(connId + "1");  // to make requestId unique
+  			dc.SetHeaderCountryCode(countryCode);
+  			dc.SetHeaderLanguage(language);
   			dc.SetBody();
   	 		dc.SetBody(customerId, idCode);
   			xmlrequest = dc.Marshal();

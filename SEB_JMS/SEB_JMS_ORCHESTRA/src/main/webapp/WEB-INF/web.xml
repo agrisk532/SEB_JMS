@@ -58,6 +58,14 @@
     <param-value>1</param-value>
     <description> 0 - PingPong service not used, 1 - PingPong service used</description>
 </context-param>
+<context-param>
+    <param-name>CountryCode</param-name>
+    <param-value>LV</param-value>
+</context-param>
+<context-param>
+    <param-name>Language</param-name>
+    <param-value>LV</param-value>
+</context-param>
 -->
 <servlet>
     <servlet-name>FindCustomerByPhoneOrPersonalCode</servlet-name>

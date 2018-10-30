@@ -90,6 +90,16 @@ public class ServicesBase {
 		header.setRequestId(rid);
 	}
 	
+	public void SetHeaderCountryCode(String s)
+	{
+		header.setCountryCode(s);
+	}
+	
+	public void SetHeaderLanguage(String s)
+	{
+		header.setLanguage(s);
+	}
+	
 	public void Marshal(String xmlDocument) throws IOException, JAXBException
 	{
 	      request.setUnifiedServiceHeader(header);

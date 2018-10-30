@@ -23,6 +23,8 @@ class PingPongTimerTask extends TimerTask
 	private long connectionTimeout;
 	private long ttl; // JMS parameter
 	private long responseMsgTTL; // JMS parameter
+	private String countryCode;
+	private String language;
 
 	private ServletContext sc;
 	private long timesCalled;
@@ -30,7 +32,7 @@ class PingPongTimerTask extends TimerTask
 	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(PingPongTimerTask.class);
 	
 	public PingPongTimerTask(ServletContext sc, String broker, String username, String password,
-			String queue, long timeout, long ttl, long responseMsgTTL) throws javax.xml.bind.JAXBException
+			String queue, long timeout, long ttl, long responseMsgTTL, String countryCode, String language) throws javax.xml.bind.JAXBException
 	{
 		this.sc = sc;
 		this.broker = broker;
@@ -41,6 +43,8 @@ class PingPongTimerTask extends TimerTask
 		this.ttl = ttl;
 		this.responseMsgTTL = responseMsgTTL;
 		this.timesCalled = 0;
+		this.countryCode = countryCode;
+		this.language = language;
 	}
 	
 	@Override
@@ -60,6 +64,8 @@ class PingPongTimerTask extends TimerTask
 			pps = new lv.adventus.seb.PingPongService();
 			pps.SetHeader();
 			pps.SetHeaderRequestId(uid);
+			pps.SetHeaderCountryCode(this.countryCode);
+			pps.SetHeaderLanguage(this.language);
 			pps.SetBody("Test", "");
 
 			xmlrequest = pps.Marshal();

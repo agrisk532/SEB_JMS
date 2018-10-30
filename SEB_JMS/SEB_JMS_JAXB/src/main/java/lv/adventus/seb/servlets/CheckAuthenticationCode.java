@@ -123,6 +123,8 @@ public class CheckAuthenticationCode extends ServletBase {
   			dc.SetHeader();
   			dc.SetHeaderUserId(userName);
   			dc.SetHeaderRequestId(connectionId + "2");
+  			dc.SetHeaderCountryCode(countryCode);
+  			dc.SetHeaderLanguage(language);
   			dc.SetBody();
   			dc.SetBody(digipassCode,challengeCode,userName);
   			xmlrequest = dc.Marshal();

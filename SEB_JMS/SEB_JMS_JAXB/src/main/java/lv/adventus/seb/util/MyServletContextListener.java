@@ -25,6 +25,8 @@ public class MyServletContextListener implements ServletContextListener
 	private long pingPongInterval;
 	private String pingPongStatusFileName;
 	private String pingPongOnOff = "1";  // 1 - on, 0 - off
+	private String countryCode = "LV";
+	private String language = "LV";
 	private ConcurrentHashMap<String, Object> shared;
 	
 	static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MyServletContextListener.class);
@@ -53,6 +55,8 @@ public class MyServletContextListener implements ServletContextListener
     	pingPongInterval = Long.parseLong(sc.getInitParameter("pingPongInterval"));
     	pingPongStatusFileName = sc.getInitParameter("pingPongStatusFileName");
     	pingPongOnOff = sc.getInitParameter("PingPongOnOff");
+    	countryCode = sc.getInitParameter("CountryCode");
+    	language = sc.getInitParameter("Language");
     	
     	LOGGER.info("ServletContext parameters:");
     	LOGGER.info("broker: " + broker);
@@ -65,6 +69,8 @@ public class MyServletContextListener implements ServletContextListener
     	LOGGER.info("PingPongInterval: " + pingPongInterval);
     	LOGGER.info("PingPongStatusFileName: " + pingPongStatusFileName);
     	LOGGER.info("PingPongOnOff: " + pingPongOnOff);
+    	LOGGER.info("CountryCode: " + countryCode);
+    	LOGGER.info("Language: " + language);
     	
     	if(pingPongOnOff.equals("0"))
     	{
@@ -98,7 +104,7 @@ public class MyServletContextListener implements ServletContextListener
 	   	{
 	   		try
 	   		{
-	   			this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL);
+	   			this.task = new PingPongTimerTask(sc,broker,usernameSonic,passwordSonic,queue, connectionTimeout, ttl, responseMsgTTL, countryCode, language);
 	   		}
 	   		catch(javax.xml.bind.JAXBException e)
 	   		{

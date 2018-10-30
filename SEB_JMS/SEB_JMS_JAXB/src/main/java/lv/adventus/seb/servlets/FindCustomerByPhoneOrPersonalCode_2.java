@@ -116,6 +116,8 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 			fc.SetHeader();
 			fc.SetHeaderUserId(userId);
 			fc.SetHeaderRequestId(connId);
+  			fc.SetHeaderCountryCode(countryCode);
+  			fc.SetHeaderLanguage(language);
 			fc.SetBody();
 			fc.SetBody(userId, "");
 			xmlrequest = fc.Marshal();
