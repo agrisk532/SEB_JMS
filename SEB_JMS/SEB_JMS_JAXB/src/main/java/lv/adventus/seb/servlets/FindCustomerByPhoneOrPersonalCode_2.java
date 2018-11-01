@@ -77,24 +77,37 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 
 	    String userId = request.getParameter("idCode");
 	    String connId = "cc" + request.getParameter("connid");
+	    String phoneNumber = request.getParameter("userPhoneNumber");
 
 	    // check http request parameters
 
-	    if (userId==null || connId==null)
+	    if(connId==null)
 	    {
-	    	String pr = "";
-	    	if(userId == null) pr += "idCode ";
-	    	if(connId == null) pr += "connId ";
-	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: " + pr + ". Processing stopped.");
+	    	LOGGER.error(requestURI + ": Expected parameter not received from HTTP GET request: connId. Processing stopped.");
         	Utility.ServletResponse(response, "error:TECHNICALERROR");
         	return;
 	    }
-	    else
+	    else if(userId==null && phoneNumber==null)
 	    {
-	    	LOGGER.info(requestURI + " received HTTP GET parameters:");
-	    	LOGGER.info("idCode = " + userId);
-	    	LOGGER.info("connid = " + connId);
+	    	LOGGER.error(requestURI + ": Both expected parameters not received from HTTP GET request: idCode, userPhoneNumber. Processing stopped.");
+        	Utility.ServletResponse(response, "error:TECHNICALERROR");
+        	return;
 	    }
+	    else if(userId == null)
+	    {
+	    	userId = "";
+	    }
+	    else if(phoneNumber == null)
+	    {
+	    	phoneNumber = "";
+	    }
+	    else
+	    {}
+
+	    LOGGER.info(requestURI + " received HTTP GET parameters:");
+    	LOGGER.info("idCode = " + userId);
+    	LOGGER.info("connid = " + connId);
+    	LOGGER.info("userPhoneNumber = " + phoneNumber);
 
 	 // check PingPong service result
 
@@ -114,12 +127,12 @@ public class FindCustomerByPhoneOrPersonalCode_2 extends ServletBase {
 	    	LOGGER.info(requestURI + " processing started");
 			lv.adventus.seb.FindCustomerByPhoneOrPersonalCode fc = new lv.adventus.seb.FindCustomerByPhoneOrPersonalCode();
 			fc.SetHeader();
-			fc.SetHeaderUserId(userId);
+			fc.SetHeaderUserId((userId == "") ? phoneNumber : userId);
 			fc.SetHeaderRequestId(connId);
   			fc.SetHeaderCountryCode(countryCode);
   			fc.SetHeaderLanguage(language);
 			fc.SetBody();
-			fc.SetBody(userId, "");
+			fc.SetBody(userId, phoneNumber);
 			xmlrequest = fc.Marshal();
   			// print XML
 			LOGGER.debug(requestURI + " sent this XML:");
