@@ -74,7 +74,7 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 	    //PrintWriter out = response.getWriter(); // will be done later 
 
 	    idCode = request.getParameter("idCode");
-	    connId = "cc" + request.getParameter("connid");
+	    connId = request.getParameter("connid");
 	    customerId = request.getParameter("customerId");
 
 	    // check http request parameters
@@ -95,6 +95,7 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 	    	LOGGER.info("idCode = " + idCode);
 	    	LOGGER.info("connid = " + connId);
 	    	LOGGER.info("customerId = " + customerId);
+	    	connId = "cc" + connId + "1";	  // to make requestId unique
 	    }
 
 	    try
@@ -112,7 +113,7 @@ public class GiveDigipassChallenge_2 extends ServletBase {
   			lv.adventus.seb.GiveDigipassChallenge dc = new lv.adventus.seb.GiveDigipassChallenge();
   			dc.SetHeader();
   			dc.SetHeaderUserId(customerId);
-  			dc.SetHeaderRequestId(connId + "1");  // to make requestId unique
+  			dc.SetHeaderRequestId(connId);
   			dc.SetHeaderCountryCode(countryCode);
   			dc.SetHeaderLanguage(language);
   			dc.SetBody();

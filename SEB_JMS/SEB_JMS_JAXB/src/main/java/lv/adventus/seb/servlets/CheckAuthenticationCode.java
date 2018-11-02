@@ -101,6 +101,7 @@ public class CheckAuthenticationCode extends ServletBase {
 	    	LOGGER.info("challengecode = " + challengeCode);
 	    	LOGGER.info("connid = " + connectionId);
 	    	LOGGER.info("username = " + userName);
+	    	connectionId = "cc" + connectionId + "2";	  // to make requestId unique
 	    }
 
 		 // check PingPong service result
@@ -122,7 +123,7 @@ public class CheckAuthenticationCode extends ServletBase {
   			lv.adventus.seb.CheckAuthenticationCode dc = new lv.adventus.seb.CheckAuthenticationCode();
   			dc.SetHeader();
   			dc.SetHeaderUserId(userName);
-  			dc.SetHeaderRequestId(connectionId + "2");
+  			dc.SetHeaderRequestId(connectionId);
   			dc.SetHeaderCountryCode(countryCode);
   			dc.SetHeaderLanguage(language);
   			dc.SetBody();
