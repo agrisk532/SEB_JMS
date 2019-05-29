@@ -230,10 +230,19 @@ public class Connector {
 		InputStream stream = new ByteArrayInputStream(xmlresponse.getBytes("UTF-8"));
 //    	LOGGER.info("Stream available bytes: " + String.valueOf(stream.available()));
 		LOGGER.debug("Connector unmarshaling started");
-    	this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
-    	if(response != null)	// for PingPongTimerTask() that it do not send output to non-existing servlet 
-    		ErrorHandler.SendErrors(response, usr);
-  		return this.usr;
+		try
+		{
+			this.usr = (UnifiedServiceResponse) unMarshaller.unmarshal(stream);
+			if(response != null)	// for PingPongTimerTask() that it do not send output to non-existing servlet 
+				ErrorHandler.SendErrors(response, usr);
+			return this.usr;
+		}
+		catch (javax.xml.bind.UnmarshalException ex)
+		{
+			LOGGER.error("Error in received data. Connection and processing terminated.");
+			this.exit();
+			return null;
+		}
     }
     
     public void SetHeader(lv.adventus.seb.UnifiedServiceHeader h)

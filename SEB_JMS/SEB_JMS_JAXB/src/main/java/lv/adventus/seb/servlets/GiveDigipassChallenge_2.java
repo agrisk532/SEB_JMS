@@ -131,11 +131,13 @@ public class GiveDigipassChallenge_2 extends ServletBase {
 			c.createMessage();
 			LOGGER.debug(requestURI + " Connector query begins");
 		    usr = c.query(xmlrequest);
-		    LOGGER.debug(requestURI + " Connector query ends");
-		    LOGGER.debug(requestURI + " Exit from Connector started");
-		    c.exit();
-		    LOGGER.debug(requestURI + " Exit from Connector completed");
-
+		    if(usr != null)
+		    {
+		    	LOGGER.debug(requestURI + " Connector query ends");
+		    	LOGGER.debug(requestURI + " Exit from Connector started");
+		    	c.exit();
+		    	LOGGER.debug(requestURI + " Exit from Connector completed");
+		    }
 		    if(usr == null)
 		    {
 		    	LOGGER.error(requestURI + ": JMS UnifiedServiceResponse is null. Processing stopped.");
