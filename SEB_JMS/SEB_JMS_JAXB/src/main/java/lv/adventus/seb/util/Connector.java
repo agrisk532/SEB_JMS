@@ -122,7 +122,10 @@ public class Connector {
 
 		if(responseMsg == null)
 		{
-			throw new javax.jms.JMSException("No response from JMS broker");
+			//throw new javax.jms.JMSException("No response from JMS broker");
+			LOGGER.error("No response from JMS broker. Connection and processing terminated.");
+			this.exit();
+			return null;
 		}
 
 		LOGGER.debug("Response from SonicMQ received:");
