@@ -1,5 +1,0 @@
-https://blog.stephencleary.com/2009/05/detection-of-half-open-dropped.html
-https://www.codeproject.com/articles/37490/detection-of-half-open-dropped-tcp-ip-socket-conne
-persistent connections sonic user guide
-connection timer in my servlet
-web.xml connection timeout. I think there was such a parameter
